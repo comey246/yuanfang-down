@@ -1,0 +1,23 @@
+google8f1f8c18b1161b96.html
+  s_cd17783713a9b8::t_b9cc0d0b50cc23 1
+scripts/build-static.mjs
+  s_cd17783713a9b8::t_b9cc0d0b50cc23 7
+static-dist/google8f1f8c18b1161b96.html
+  s_cd17783713a9b8::t_8bdca777407a9b 1
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.33-trip",
+  "base_commit_sha": "4b8c2458352853048d9fc35d414cc88f8f19cf32",
+  "prompts": {},
+  "sessions": {
+    "s_cd17783713a9b8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f4a90-13cd-7153-a055-b11351f907e3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yejiezhao <yejiezhao@trip.com>"
+    }
+  }
+}

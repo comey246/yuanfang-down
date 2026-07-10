@@ -1,0 +1,9 @@
+{
+  "name": "yuanfang-down-pages",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build:static": "node scripts/build-static.mjs"
+  }
+}

@@ -1,4 +1,8 @@
-.DS_Store
 node_modules/
 dist/
-*.log
+.next/
+.vinext/
+.wrangler/
+.env*
+!.env.example
+*.tgz

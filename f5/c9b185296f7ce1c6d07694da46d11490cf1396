@@ -1,0 +1,35 @@
+scripts/build-static.mjs
+  s_cd17783713a9b8::t_d2b7b44305f5cd 7
+index.html
+  s_cd17783713a9b8::t_d2b7b44305f5cd 9,11-36,39-93,228,239,250,261,282,286,290,294,298,325
+robots.txt
+  s_cd17783713a9b8::t_d2b7b44305f5cd 1-28
+static-dist/index.html
+  s_cd17783713a9b8::t_7fc0854728affb 9,11-36,39-93,228,239,250,261,282,286,290,294,298,325
+static-dist/sitemap.xml
+  s_cd17783713a9b8::t_7fc0854728affb 1-9
+static-dist/robots.txt
+  s_cd17783713a9b8::t_7fc0854728affb 1-28
+sitemap.xml
+  s_cd17783713a9b8::t_d2b7b44305f5cd 1-9
+llms.txt
+  s_cd17783713a9b8::t_d2b7b44305f5cd 1-19
+static-dist/llms.txt
+  s_cd17783713a9b8::t_7fc0854728affb 1-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.33-trip",
+  "base_commit_sha": "f5c9b185296f7ce1c6d07694da46d11490cf1396",
+  "prompts": {},
+  "sessions": {
+    "s_cd17783713a9b8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f4a90-13cd-7153-a055-b11351f907e3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yejiezhao <yejiezhao@trip.com>"
+    }
+  }
+}

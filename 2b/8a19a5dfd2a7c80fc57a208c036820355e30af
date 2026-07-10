@@ -1,0 +1,19 @@
+.gitignore
+  s_cd17783713a9b8::t_86b8c58e856e57 2-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.33-trip",
+  "base_commit_sha": "2b8a19a5dfd2a7c80fc57a208c036820355e30af",
+  "prompts": {},
+  "sessions": {
+    "s_cd17783713a9b8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f4a90-13cd-7153-a055-b11351f907e3",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "yejiezhao <yejiezhao@trip.com>"
+    }
+  }
+}

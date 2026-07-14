@@ -1,0 +1,21 @@
+static-dist/index.html
+  s_cd17783713a9b8::t_681868f24fb137 18
+index.html
+  s_cd17783713a9b8::t_c9378507af6409 18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.4.33-trip",
+  "base_commit_sha": "38985c2d79c89fde6545629a52e36d654aa6c957",
+  "prompts": {},
+  "sessions": {
+    "s_cd17783713a9b8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f4a90-13cd-7153-a055-b11351f907e3",
+        "model": "gpt-5.5"
+      },
+      "human_author": "yejiezhao <yejiezhao@trip.com>"
+    }
+  }
+}

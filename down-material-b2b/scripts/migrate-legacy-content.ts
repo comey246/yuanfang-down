@@ -1,6 +1,8 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { ContentStatus, Prisma, PrismaClient } from "@prisma/client";
 import {
+  legacyDataNotice,
   legacyDemoNotice,
+  legacyHistoricalClaims,
   legacyProductContent,
   legacySiteContent
 } from "../src/config/legacy-content";
@@ -72,6 +74,23 @@ async function main() {
     }
   });
 
+  const existingClaims = await prisma.siteSetting.findUnique({
+    where: { key: "legacy_claims" }
+  });
+  const existingClaimValue = existingClaims?.value as
+    { verified?: boolean } | undefined;
+  if (!existingClaimValue?.verified) {
+    await prisma.siteSetting.upsert({
+      where: { key: "legacy_claims" },
+      update: { value: legacyHistoricalClaims },
+      create: {
+        key: "legacy_claims",
+        description: "从旧站迁移的供应能力、质量与认证历史声明",
+        value: legacyHistoricalClaims
+      }
+    });
+  }
+
   let updatedProducts = 0;
   for (const [slug, content] of Object.entries(legacyProductContent)) {
     const product = await prisma.product.findUnique({ where: { slug } });
@@ -82,11 +101,43 @@ async function main() {
         coverImage: content.coverImage,
         gallery: [...content.gallery],
         summary: content.summary,
+        downClusterContent: content.downClusterContent,
         applications: [...content.applications],
-        demoNotice: legacyDemoNotice
+        sourceDescription: legacyDataNotice,
+        qualityNote: `${legacyDataNotice}；实际参数以双方确认的样品、合同及检测文件为准。`,
+        status: ContentStatus.PUBLISHED,
+        publishedAt: product.publishedAt || new Date(),
+        demoNotice: `${legacyDemoNotice}；产品参数${legacyDataNotice}`
       }
     });
     updatedProducts += 1;
+  }
+
+  let createdQuoteRows = 0;
+  for (const [slug, content] of Object.entries(legacyProductContent)) {
+    const product = await prisma.product.findUnique({ where: { slug } });
+    const productName = product?.name || slug;
+    const sourceNote = legacyHistoricalClaims.priceStatement;
+    const existingQuote = await prisma.marketQuote.findFirst({
+      where: { productName, sourceNote, deletedAt: null }
+    });
+    if (existingQuote) continue;
+    await prisma.marketQuote.create({
+      data: {
+        productName,
+        specification: `绒子含量 ${content.downClusterContent}（待核验）`,
+        priceMin: null,
+        priceMax: null,
+        unit: "待业务确认",
+        changeValue: null,
+        quoteDate: new Date(),
+        sourceNote,
+        disclaimer:
+          "旧站未提供具体价格，本记录仅保留历史报价入口，不构成行情或合同报价。",
+        published: true
+      }
+    });
+    createdQuoteRows += 1;
   }
 
   await prisma.auditLog.create({
@@ -94,17 +145,21 @@ async function main() {
       action: "MIGRATE",
       entityType: "LegacySiteContent",
       entityId: "repository-root",
-      summary: "迁移旧站品牌、联系方式及带明确演示标识的本地素材",
+      summary:
+        "迁移旧站品牌、联系方式、历史供应数据、产品区间及带明确标识的演示素材",
       metadata: {
         updatedProducts,
+        createdQuoteRows,
         preservedConfirmedSettings: true,
-        migratedUnverifiedClaims: false
+        migratedUnverifiedClaims: true,
+        claimsVerified: false,
+        numericPricesFoundInLegacySite: false
       }
     }
   });
 
   console.info(
-    `旧站内容迁移完成：企业设置已合并，更新 ${updatedProducts} 个演示产品。`
+    `旧站内容迁移完成：更新 ${updatedProducts} 个产品，新增 ${createdQuoteRows} 条无数值报价记录。`
   );
 }
 

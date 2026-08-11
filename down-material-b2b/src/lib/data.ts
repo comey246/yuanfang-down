@@ -31,6 +31,22 @@ export type SiteOptions = {
   baiduVerification: string;
 };
 
+export type LegacyClaimStat = {
+  key: string;
+  label: string;
+  value: string;
+  unit: string;
+};
+
+export type LegacyClaims = {
+  stats: LegacyClaimStat[];
+  certificationStatements: string[];
+  qualityStatement: string;
+  priceStatement: string;
+  sourceNote: string;
+  verified: boolean;
+};
+
 export const getCompanyProfile = cache(async (): Promise<CompanyProfile> => {
   await connection();
   const fallback: CompanyProfile = {
@@ -85,6 +101,34 @@ export const getSiteOptions = cache(async (): Promise<SiteOptions> => {
     };
   } catch {
     return fallback;
+  }
+});
+
+export const getLegacyClaims = cache(async (): Promise<LegacyClaims | null> => {
+  await connection();
+  if (!databaseConfigured()) return null;
+  try {
+    const prisma = getPrisma();
+    const setting = await prisma.siteSetting.findUnique({
+      where: { key: "legacy_claims" }
+    });
+    if (!setting?.value) return null;
+    const claims = setting.value as Partial<LegacyClaims>;
+    if (!Array.isArray(claims.stats) || !claims.stats.length) return null;
+    return {
+      stats: claims.stats.filter((item): item is LegacyClaimStat =>
+        Boolean(item?.key && item?.label && item?.value)
+      ),
+      certificationStatements: Array.isArray(claims.certificationStatements)
+        ? claims.certificationStatements.filter(Boolean)
+        : [],
+      qualityStatement: claims.qualityStatement || "",
+      priceStatement: claims.priceStatement || "",
+      sourceNote: claims.sourceNote || "旧站历史页面",
+      verified: claims.verified === true
+    };
+  } catch {
+    return null;
   }
 });
 

@@ -6,7 +6,9 @@ import {
 } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import {
+  legacyDataNotice,
   legacyDemoNotice,
+  legacyHistoricalClaims,
   legacyProductContent,
   legacySiteContent
 } from "../src/config/legacy-content";
@@ -71,11 +73,14 @@ async function main() {
         coverImage: legacyProduct.coverImage,
         gallery: [...legacyProduct.gallery],
         applications: [...legacyProduct.applications],
-        qualityNote: "实际质量参数以双方确认的样品、合同及检测文件为准。",
+        downClusterContent: legacyProduct.downClusterContent,
+        sourceDescription: legacyDataNotice,
+        qualityNote: `${legacyDataNotice}；实际质量参数以双方确认的样品、合同及检测文件为准。`,
         customization: true,
         sampleAvailable: true,
-        status: ContentStatus.DRAFT,
-        demoNotice: legacyDemoNotice
+        status: ContentStatus.PUBLISHED,
+        publishedAt: new Date(),
+        demoNotice: `${legacyDemoNotice}；产品参数${legacyDataNotice}`
       }
     });
   }
@@ -180,6 +185,40 @@ async function main() {
       }
     }
   });
+
+  await prisma.siteSetting.upsert({
+    where: { key: "legacy_claims" },
+    update: {},
+    create: {
+      key: "legacy_claims",
+      description: "从旧站迁移的供应能力、质量与认证历史声明",
+      value: legacyHistoricalClaims
+    }
+  });
+
+  for (const [, slug] of products) {
+    const product = legacyProductContent[slug];
+    const productName =
+      categories.find((item) => item.slug === slug)?.name || slug;
+    const sourceNote = legacyHistoricalClaims.priceStatement;
+    const existingQuote = await prisma.marketQuote.findFirst({
+      where: { productName, sourceNote, deletedAt: null }
+    });
+    if (!existingQuote) {
+      await prisma.marketQuote.create({
+        data: {
+          productName,
+          specification: `绒子含量 ${product.downClusterContent}（待核验）`,
+          unit: "待业务确认",
+          quoteDate: new Date(),
+          sourceNote,
+          disclaimer:
+            "旧站未提供具体价格，本记录仅保留历史报价入口，不构成行情或合同报价。",
+          published: true
+        }
+      });
+    }
+  }
 
   console.info(`Seed 完成。后台账号：${adminEmail}。请立即替换初始密码。`);
 }

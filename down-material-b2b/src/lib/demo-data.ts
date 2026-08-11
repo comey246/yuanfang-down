@@ -1,4 +1,7 @@
-import { legacyProductContent } from "@/config/legacy-content";
+import {
+  legacyDataNotice,
+  legacyProductContent
+} from "@/config/legacy-content";
 import type { DemoProduct } from "@/types";
 
 const shared = {
@@ -23,8 +26,7 @@ const shared = {
   leadTime: null,
   applications: [],
   customItems: [],
-  qualityNote:
-    "示例数据，发布前需替换；实际质量参数以双方确认的样品、合同及检测文件为准。",
+  qualityNote: `${legacyDataNotice}；实际质量参数以双方确认的样品、合同及检测文件为准。`,
   specifications: [],
   demo: true as const
 };

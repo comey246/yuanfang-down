@@ -317,6 +317,7 @@ export async function archiveMedia(form: FormData) {
 }
 
 export async function saveCompanySettings(form: FormData) {
+  const admin = await requireAdmin();
   const prisma = getPrisma();
   const profile = {
     companyName: text(form, "companyName") || "待填写的羽绒工厂名称",
@@ -375,6 +376,52 @@ export async function saveCompanySettings(form: FormData) {
       value: other,
       description: "SEO、首页顺序与客服脚本",
       isSensitive: true
+    }
+  });
+  const legacyClaims = {
+    stats: [
+      {
+        key: "annualSupply",
+        label: "年供应量",
+        value: text(form, "legacyAnnualSupply"),
+        unit: "吨"
+      },
+      {
+        key: "partnerFactories",
+        label: "合作工厂",
+        value: text(form, "legacyPartnerFactories"),
+        unit: "家"
+      },
+      {
+        key: "batchTests",
+        label: "批次质检",
+        value: text(form, "legacyBatchTests"),
+        unit: "批次"
+      },
+      {
+        key: "exportRegions",
+        label: "出口配套地区",
+        value: text(form, "legacyExportRegions"),
+        unit: "个"
+      }
+    ].filter((item) => item.value),
+    certificationStatements: text(form, "legacyCertificationStatements")
+      .split("\n")
+      .map((item) => item.trim())
+      .filter(Boolean),
+    qualityStatement: text(form, "legacyQualityStatement"),
+    priceStatement: text(form, "legacyPriceStatement"),
+    sourceNote: "同一 Git 仓库旧站 index.html",
+    verified: checked(form, "legacyClaimsVerified")
+  };
+  await prisma.siteSetting.upsert({
+    where: { key: "legacy_claims" },
+    update: { value: legacyClaims, updatedBy: admin.email },
+    create: {
+      key: "legacy_claims",
+      value: legacyClaims,
+      description: "从旧站迁移的供应能力、质量与认证历史声明",
+      updatedBy: admin.email
     }
   });
   await audit("UPDATE", "SiteSetting", "company_profile", "更新网站设置");

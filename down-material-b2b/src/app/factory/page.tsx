@@ -12,6 +12,7 @@ import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
+import { getLegacyClaims } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
@@ -59,7 +60,8 @@ const zones = [
   ]
 ] as const;
 
-export default function FactoryPage() {
+export default async function FactoryPage() {
+  const legacyClaims = await getLegacyClaims();
   return (
     <>
       <PageHero
@@ -68,6 +70,31 @@ export default function FactoryPage() {
         description="旧站图片已作为演示素材迁入，但不代表本工厂真实现场。本页不展示未经确认的面积、产能、员工或设备数量。"
       />
       <Container className="py-14 sm:py-20">
+        {legacyClaims ? (
+          <section className="mb-10 rounded-xl2 border border-amber-200 bg-amber-50 p-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-xl font-bold text-ink">旧站供应能力数据</h2>
+              <span className="text-xs font-bold text-amber-700">
+                {legacyClaims.verified ? "企业已确认" : "待企业核验"}
+              </span>
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {legacyClaims.stats.map((item) => (
+                <div key={item.key} className="rounded-xl bg-white p-4">
+                  <p className="text-forest-800 text-2xl font-black">
+                    {item.value}
+                    <span className="ml-1 text-sm">{item.unit}</span>
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">{item.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-xs leading-5 text-amber-900/70">
+              来源：{legacyClaims.sourceNote}
+              。这些历史数字尚无合同、台账或审计资料佐证，核验前不构成对外承诺。
+            </p>
+          </section>
+        ) : null}
         <div className="grid gap-6 md:grid-cols-2">
           {zones.map(([Icon, title, description, image], index) => (
             <article

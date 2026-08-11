@@ -25,8 +25,8 @@
     "supabase:configure": "node scripts/configure-supabase-env.mjs alxqluiwyrfezldhuzku",
     "cf:build": "CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} CLOUDFLARE_WORKERS=true opennextjs-cloudflare build",
     "cf:preview": "CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} CLOUDFLARE_WORKERS=true opennextjs-cloudflare build && CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} opennextjs-cloudflare preview",
-    "cf:deploy": "CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} CLOUDFLARE_WORKERS=true opennextjs-cloudflare build && opennextjs-cloudflare deploy -- --keep-vars",
-    "cf:upload": "CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} CLOUDFLARE_WORKERS=true opennextjs-cloudflare build && opennextjs-cloudflare upload -- --keep-vars",
+    "cf:deploy": "CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} CLOUDFLARE_WORKERS=true opennextjs-cloudflare build && CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} opennextjs-cloudflare deploy -- --keep-vars",
+    "cf:upload": "CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} CLOUDFLARE_WORKERS=true opennextjs-cloudflare build && CLOUDFLARE_HYPERDRIVE_LOCAL_CONNECTION_STRING_HYPERDRIVE=${DATABASE_URL:-postgresql://local:local@127.0.0.1:5432/local} opennextjs-cloudflare upload -- --keep-vars",
     "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "postinstall": "prisma generate"
   },

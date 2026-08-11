@@ -5,6 +5,13 @@ import {
   MediaType
 } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import {
+  legacyDataNotice,
+  legacyDemoNotice,
+  legacyHistoricalClaims,
+  legacyProductContent,
+  legacySiteContent
+} from "../src/config/legacy-content";
 
 const prisma = new PrismaClient();
 
@@ -46,10 +53,11 @@ async function main() {
     ["灰鹅绒", "grey-goose-down", "鹅绒", "灰色"],
     ["白鸭绒", "white-duck-down", "鸭绒", "白色"],
     ["灰鸭绒", "grey-duck-down", "鸭绒", "灰色"]
-  ];
+  ] as const;
 
   for (const [name, slug, species, color] of products) {
     const category = categories.find((item) => item.slug === slug);
+    const legacyProduct = legacyProductContent[slug];
     await prisma.product.upsert({
       where: { slug },
       update: {},
@@ -59,14 +67,20 @@ async function main() {
         categoryId: category?.id,
         species,
         color,
-        summary: `${name}原料示例条目，可选规格待后台补充。`,
+        summary: legacyProduct.summary,
         description:
           "本条目为网站结构演示数据。所有原料来源、参数、包装、起订量、供货能力与交付周期均须核实后填写。",
-        qualityNote: "实际质量参数以双方确认的样品、合同及检测文件为准。",
+        coverImage: legacyProduct.coverImage,
+        gallery: [...legacyProduct.gallery],
+        applications: [...legacyProduct.applications],
+        downClusterContent: legacyProduct.downClusterContent,
+        sourceDescription: legacyDataNotice,
+        qualityNote: `${legacyDataNotice}；实际质量参数以双方确认的样品、合同及检测文件为准。`,
         customization: true,
         sampleAvailable: true,
-        status: ContentStatus.DRAFT,
-        demoNotice: "示例数据，发布前需替换"
+        status: ContentStatus.PUBLISHED,
+        publishedAt: new Date(),
+        demoNotice: `${legacyDemoNotice}；产品参数${legacyDataNotice}`
       }
     });
   }
@@ -136,21 +150,75 @@ async function main() {
       key: "company_profile",
       description: "企业资料与联系方式",
       value: {
-        companyName: "待填写的羽绒工厂名称",
-        shortName: "待填写",
-        phone: "待填写",
-        mobile: "待填写",
+        companyName: legacySiteContent.companyName,
+        shortName: legacySiteContent.shortName,
+        phone: legacySiteContent.phone,
+        mobile: legacySiteContent.mobile,
         wechat: "待填写",
-        email: "待填写",
+        email: legacySiteContent.email,
         address: "待填写",
         businessHours: "周一至周六 08:30-18:00",
         icpNumber: "待备案",
         policeRecordNumber: "待备案",
-        logoUrl: "",
+        creditCode: "待填写",
+        logoUrl: legacySiteContent.logoUrl,
         wechatQrUrl: ""
       }
     }
   });
+
+  await prisma.siteSetting.upsert({
+    where: { key: "site_options" },
+    update: {},
+    create: {
+      key: "site_options",
+      description: "SEO、首页顺序与客服脚本",
+      isSensitive: true,
+      value: {
+        homeModuleOrder: "",
+        customerServiceProviderName: "待填写的国内客服平台",
+        customerServiceUrl: "",
+        customerServiceScript: "",
+        seoKeywords:
+          "远方羽绒，羽绒原料厂家，鹅绒原料供应，鸭绒原料采购，羽绒加工厂，羽绒原料报价",
+        baiduVerification: legacySiteContent.baiduVerification
+      }
+    }
+  });
+
+  await prisma.siteSetting.upsert({
+    where: { key: "legacy_claims" },
+    update: {},
+    create: {
+      key: "legacy_claims",
+      description: "从旧站迁移的供应能力、质量与认证历史声明",
+      value: legacyHistoricalClaims
+    }
+  });
+
+  for (const [, slug] of products) {
+    const product = legacyProductContent[slug];
+    const productName =
+      categories.find((item) => item.slug === slug)?.name || slug;
+    const sourceNote = legacyHistoricalClaims.priceStatement;
+    const existingQuote = await prisma.marketQuote.findFirst({
+      where: { productName, sourceNote, deletedAt: null }
+    });
+    if (!existingQuote) {
+      await prisma.marketQuote.create({
+        data: {
+          productName,
+          specification: `绒子含量 ${product.downClusterContent}（待核验）`,
+          unit: "待业务确认",
+          quoteDate: new Date(),
+          sourceNote,
+          disclaimer:
+            "旧站未提供具体价格，本记录仅保留历史报价入口，不构成行情或合同报价。",
+          published: true
+        }
+      });
+    }
+  }
 
   console.info(`Seed 完成。后台账号：${adminEmail}。请立即替换初始密码。`);
 }

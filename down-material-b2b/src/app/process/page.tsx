@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
 import { processSteps } from "@/lib/demo-data";
 import { createMetadata } from "@/lib/seo";
 
@@ -11,13 +12,25 @@ export const metadata: Metadata = createMetadata(
   "/process"
 );
 
+const processDemoImages = [
+  legacyDemoAssets.rawWhite,
+  legacyDemoAssets.sample,
+  legacyDemoAssets.quality.wash,
+  legacyDemoAssets.quality.wash,
+  legacyDemoAssets.hero,
+  legacyDemoAssets.workshop,
+  legacyDemoAssets.laboratory,
+  legacyDemoAssets.packagedWarehouse,
+  legacyDemoAssets.warehouse
+] as const;
+
 export default function ProcessPage() {
   return (
     <>
       <PageHero
         eyebrow="PRODUCTION PROCESS"
         title="生产工艺与质量控制"
-        description="以下流程为页面结构占位，工厂应在后台补充各节点的真实设备、工艺说明、图片和视频。"
+        description="以下流程和图片为页面演示内容，工厂应在后台补充各节点的真实设备、工艺说明、图片和视频。"
       />
       <Container className="py-14 sm:py-20">
         <div className="relative space-y-8 before:absolute before:bottom-10 before:left-6 before:top-10 before:w-px before:bg-forest-100 md:before:left-1/2">
@@ -30,6 +43,8 @@ export default function ProcessPage() {
                 <MediaPlaceholder
                   label={`${title}工序实拍`}
                   type={index === 2 || index === 5 ? "video" : "image"}
+                  src={processDemoImages[index]}
+                  notice={legacyDemoNotice}
                   className="min-h-64 rounded-xl2"
                 />
                 <span className="absolute -left-1 top-5 grid size-14 place-items-center rounded-full border-4 border-white bg-amber-500 text-sm font-black text-white md:left-auto md:right-[-2.45rem]">

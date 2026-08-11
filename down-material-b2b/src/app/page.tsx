@@ -23,6 +23,7 @@ import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
 import {
   articleDirections,
   advantages,
@@ -31,6 +32,7 @@ import {
 } from "@/lib/demo-data";
 import {
   getCompanyProfile,
+  getLegacyClaims,
   getMarketQuotes,
   getPublishedArticles,
   getPublishedMedia,
@@ -61,13 +63,15 @@ const processIcons = [
 ];
 
 export default async function HomePage() {
-  const [products, quotes, articles, media, profile] = await Promise.all([
-    getPublishedProducts(),
-    getMarketQuotes(),
-    getPublishedArticles(),
-    getPublishedMedia(),
-    getCompanyProfile()
-  ]);
+  const [products, quotes, articles, media, profile, legacyClaims] =
+    await Promise.all([
+      getPublishedProducts(),
+      getMarketQuotes(),
+      getPublishedArticles(),
+      getPublishedMedia(),
+      getCompanyProfile(),
+      getLegacyClaims()
+    ]);
   return (
     <>
       <section className="relative isolate overflow-hidden bg-forest-900 text-white">
@@ -75,7 +79,7 @@ export default async function HomePage() {
         <Container className="grid min-h-[650px] items-center gap-10 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-20">
           <div>
             <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/80">
-              <BadgeCheck className="size-4 text-amber-400" /> 工厂直供 ·
+              <BadgeCheck className="size-4 text-amber-400" /> 原料供应 ·
               规格沟通 · 样品确认 · 批量交付
             </p>
             <h1 className="max-w-3xl text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
@@ -123,6 +127,8 @@ export default async function HomePage() {
             <MediaPlaceholder
               label="工厂或羽绒原料首屏实拍"
               type="video"
+              src={legacyDemoAssets.hero}
+              notice={legacyDemoNotice}
               className="min-h-[420px] rounded-[1.75rem] border border-white/10 shadow-2xl"
             />
             <div className="absolute -bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-white/95 p-4 text-ink shadow-xl backdrop-blur sm:left-auto sm:w-72">
@@ -166,7 +172,7 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow="Market Quote"
               title="今日羽绒行情"
-              description="仅展示后台人工核实并发布的数据，支持按 7天、30天、90天查看趋势。本站不自动抓取第三方报价。"
+              description="仅展示后台人工维护并发布的记录；没有具体价格时明确显示联系询价。本站不自动抓取第三方报价。"
             />
             <ButtonLink href="/market" variant="outline">
               查看行情中心 <ArrowRight className="size-4" />
@@ -231,7 +237,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Raw Materials"
             title="羽绒原料分类"
-            description="初始产品用于演示内容结构，不包含未经确认的参数。后台发布真实数据后，页面将自动显示对应规格。"
+            description="旧站绒子含量区间已迁入并标记待企业核验；其余参数留空，后台发布真实数据后自动显示。"
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.slice(0, 4).map((product) => (
@@ -242,6 +248,7 @@ export default async function HomePage() {
                 <MediaPlaceholder
                   label={`${product.name}原料`}
                   src={product.coverImage}
+                  notice={product.demo ? legacyDemoNotice : undefined}
                   className="min-h-52"
                 />
                 <div className="p-5">
@@ -259,7 +266,9 @@ export default async function HomePage() {
                     {product.summary}
                   </p>
                   <p className="mt-4 text-xs text-slate-500">
-                    可选规格：待后台补充
+                    {product.downClusterContent
+                      ? `绒子含量：${product.downClusterContent}（待核验）`
+                      : "可选规格：待后台补充"}
                   </p>
                   <div className="mt-5 flex items-center justify-between">
                     <Link
@@ -324,8 +333,37 @@ export default async function HomePage() {
               <SectionHeading
                 eyebrow="Factory Capability"
                 title="工厂实力，用真实素材和数据说话"
-                description="厂房、设备、实验室、仓储和发货区域均支持后台维护。面积、产能、人员和设备数量未填写时不展示。"
+                description="旧站经营数字已按原文迁入并明确标记待核验；厂房、设备、实验室、仓储和发货资料继续由后台维护。"
               />
+              {legacyClaims ? (
+                <div className="mt-7">
+                  <p className="mb-3 text-xs font-bold text-amber-400">
+                    {legacyClaims.verified
+                      ? "企业已确认数据"
+                      : "旧站历史数据 · 待企业核验"}
+                  </p>
+                  <div className="grid grid-cols-2 gap-3">
+                    {legacyClaims.stats.map((item) => (
+                      <div
+                        key={item.key}
+                        className="rounded-xl border border-white/10 bg-white/5 p-4"
+                      >
+                        <p className="text-2xl font-black text-amber-400">
+                          {item.value}
+                          <span className="ml-1 text-sm">{item.unit}</span>
+                        </p>
+                        <p className="mt-1 text-xs text-white/65">
+                          {item.label}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="mt-3 text-xs leading-5 text-white/50">
+                    来源：{legacyClaims.sourceNote}
+                    。未核验前不构成产能或合作承诺。
+                  </p>
+                </div>
+              ) : null}
               <div className="mt-8 grid grid-cols-2 gap-3">
                 {[
                   "工厂航拍",
@@ -352,14 +390,20 @@ export default async function HomePage() {
               <MediaPlaceholder
                 label="工厂航拍"
                 type="factory"
+                src={legacyDemoAssets.workshop}
+                notice={legacyDemoNotice}
                 className="col-span-2 min-h-60 rounded-xl2"
               />
               <MediaPlaceholder
                 label="生产车间"
+                src={legacyDemoAssets.hero}
+                notice={legacyDemoNotice}
                 className="min-h-44 rounded-xl2"
               />
               <MediaPlaceholder
                 label="包装仓储"
+                src={legacyDemoAssets.warehouse}
+                notice={legacyDemoNotice}
                 className="min-h-44 rounded-xl2"
               />
             </div>
@@ -413,7 +457,7 @@ export default async function HomePage() {
               <SectionHeading
                 eyebrow="Quality Control"
                 title="质量参数清晰呈现，空值不显示"
-                description="产品参数、检测报告和认证证书分别管理。只有后台确认发布的真实资料才会出现在前台。"
+                description="旧站历史声明与正式检测报告、认证证书分开显示；正式文件只有核验并发布后才会出现在前台。"
               />
               <div className="mt-7 rounded-xl2 border border-amber-200 bg-amber-50 p-5">
                 <p className="flex items-center gap-2 font-bold text-amber-800">

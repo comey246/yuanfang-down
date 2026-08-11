@@ -59,6 +59,8 @@ const nextConfig: NextConfig = {
   }
 };
 
-initOpenNextCloudflareForDev();
+if (process.env.CLOUDFLARE_WORKERS === "true") {
+  initOpenNextCloudflareForDev();
+}
 
 export default nextConfig;

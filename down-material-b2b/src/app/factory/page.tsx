@@ -11,6 +11,8 @@ import { OnlineServiceButton } from "@/components/customer-service/online-servic
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
+import { getLegacyClaims } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
@@ -20,29 +22,81 @@ export const metadata: Metadata = createMetadata(
 );
 
 const zones = [
-  [FactoryIcon, "工厂航拍", "展示厂区边界、环境与物流动线，真实素材待上传。"],
-  [Settings2, "生产设备", "水洗、脱水、烘干、分拣设备型号和数量待核实。"],
+  [
+    FactoryIcon,
+    "工厂环境",
+    "当前图片来自旧站演示素材；厂区边界、环境与物流动线须使用真实资料替换。",
+    legacyDemoAssets.workshop
+  ],
+  [
+    Settings2,
+    "生产设备",
+    "水洗、脱水、烘干、分拣设备型号和数量待核实。",
+    legacyDemoAssets.hero
+  ],
   [
     FlaskConical,
     "检测实验室",
-    "内部检测能力、设备与操作流程待质量负责人补充。"
+    "内部检测能力、设备与操作流程待质量负责人补充。",
+    legacyDemoAssets.laboratory
   ],
-  [Warehouse, "包装仓储", "原料批次、包装、仓储与出库管理方式待补充。"],
-  [Package, "包装实拍", "包装方式、单包重量与标签规则由产品后台配置。"],
-  [Send, "发货区域", "实际发货范围、运输方式与交期不做虚构承诺。"]
+  [
+    Warehouse,
+    "包装仓储",
+    "原料批次、包装、仓储与出库管理方式待补充。",
+    legacyDemoAssets.warehouse
+  ],
+  [
+    Package,
+    "包装展示",
+    "包装方式、单包重量与标签规则由产品后台配置。",
+    legacyDemoAssets.packagedWarehouse
+  ],
+  [
+    Send,
+    "发货区域",
+    "实际发货范围、运输方式与交期不做虚构承诺。",
+    legacyDemoAssets.warehouse
+  ]
 ] as const;
 
-export default function FactoryPage() {
+export default async function FactoryPage() {
+  const legacyClaims = await getLegacyClaims();
   return (
     <>
       <PageHero
         eyebrow="FACTORY CAPABILITY"
-        title="工厂实力，以真实现场为依据"
-        description="本页不展示未经确认的厂房面积、年产能、员工数量或设备数量。后台填写并审核后再公开。"
+        title="工厂实力，以可核验资料为依据"
+        description="旧站图片已作为演示素材迁入，但不代表本工厂真实现场。本页不展示未经确认的面积、产能、员工或设备数量。"
       />
       <Container className="py-14 sm:py-20">
+        {legacyClaims ? (
+          <section className="mb-10 rounded-xl2 border border-amber-200 bg-amber-50 p-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <h2 className="text-xl font-bold text-ink">旧站供应能力数据</h2>
+              <span className="text-xs font-bold text-amber-700">
+                {legacyClaims.verified ? "企业已确认" : "待企业核验"}
+              </span>
+            </div>
+            <div className="mt-5 grid grid-cols-2 gap-4 lg:grid-cols-4">
+              {legacyClaims.stats.map((item) => (
+                <div key={item.key} className="rounded-xl bg-white p-4">
+                  <p className="text-forest-800 text-2xl font-black">
+                    {item.value}
+                    <span className="ml-1 text-sm">{item.unit}</span>
+                  </p>
+                  <p className="mt-1 text-sm text-slate-600">{item.label}</p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-xs leading-5 text-amber-900/70">
+              来源：{legacyClaims.sourceNote}
+              。这些历史数字尚无合同、台账或审计资料佐证，核验前不构成对外承诺。
+            </p>
+          </section>
+        ) : null}
         <div className="grid gap-6 md:grid-cols-2">
-          {zones.map(([Icon, title, description], index) => (
+          {zones.map(([Icon, title, description, image], index) => (
             <article
               key={title}
               className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
@@ -50,6 +104,8 @@ export default function FactoryPage() {
               <MediaPlaceholder
                 label={title}
                 type={index === 0 ? "factory" : "image"}
+                src={image}
+                notice={legacyDemoNotice}
                 className="min-h-64"
               />
               <div className="p-6">

@@ -6,12 +6,14 @@ export function MediaPlaceholder({
   label,
   type = "image",
   className,
-  src
+  src,
+  notice
 }: {
   label: string;
   type?: "image" | "video" | "factory";
   className?: string;
   src?: string | null;
+  notice?: string;
 }) {
   const Icon =
     type === "video" ? PlayCircle : type === "factory" ? Factory : ImageIcon;
@@ -30,6 +32,11 @@ export function MediaPlaceholder({
           sizes="(min-width: 1024px) 50vw, 100vw"
           className="object-cover"
         />
+        {notice ? (
+          <p className="absolute inset-x-0 bottom-0 bg-slate-950/75 px-3 py-2 text-center text-xs font-semibold text-white backdrop-blur-sm">
+            {notice}
+          </p>
+        ) : null}
       </div>
     );
   return (

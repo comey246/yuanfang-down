@@ -18,6 +18,7 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
+    "db:migrate:legacy-content": "tsx --env-file=.env scripts/migrate-legacy-content.ts",
     "db:studio": "prisma studio",
     "supabase:link": "npx --yes supabase@2.109.1 link --project-ref alxqluiwyrfezldhuzku",
     "supabase:push": "npx --yes supabase@2.109.1 db push --include-all",

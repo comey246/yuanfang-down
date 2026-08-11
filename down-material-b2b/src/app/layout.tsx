@@ -61,6 +61,7 @@ export async function generateMetadata(): Promise<Metadata> {
       images: ["/og.png"]
     },
     robots: { index: true, follow: true },
+    icons: { icon: "/brand/yuanfang-feather.svg" },
     verification: Object.keys(verificationOther).length
       ? { other: verificationOther }
       : undefined

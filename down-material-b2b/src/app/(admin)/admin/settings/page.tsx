@@ -7,8 +7,9 @@ import {
   saveCompanySettings
 } from "@/app/(admin)/admin/actions";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
+import { legacyHistoricalClaims } from "@/config/legacy-content";
 import { siteConfig } from "@/config/site";
-import type { CompanyProfile } from "@/lib/data";
+import type { CompanyProfile, LegacyClaims } from "@/lib/data";
 import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
@@ -19,18 +20,24 @@ export default async function AdminSettingsPage({
 }) {
   const prisma = getPrisma();
   const { certificate } = await searchParams;
-  const [profileSetting, optionSetting, certificates, currentCertificate] =
-    await Promise.all([
-      prisma.siteSetting.findUnique({ where: { key: "company_profile" } }),
-      prisma.siteSetting.findUnique({ where: { key: "site_options" } }),
-      prisma.certificate.findMany({
-        where: { deletedAt: null },
-        orderBy: { updatedAt: "desc" }
-      }),
-      certificate
-        ? prisma.certificate.findUnique({ where: { id: certificate } })
-        : null
-    ]);
+  const [
+    profileSetting,
+    optionSetting,
+    legacySetting,
+    certificates,
+    currentCertificate
+  ] = await Promise.all([
+    prisma.siteSetting.findUnique({ where: { key: "company_profile" } }),
+    prisma.siteSetting.findUnique({ where: { key: "site_options" } }),
+    prisma.siteSetting.findUnique({ where: { key: "legacy_claims" } }),
+    prisma.certificate.findMany({
+      where: { deletedAt: null },
+      orderBy: { updatedAt: "desc" }
+    }),
+    certificate
+      ? prisma.certificate.findUnique({ where: { id: certificate } })
+      : null
+  ]);
   const profile = {
     companyName: siteConfig.companyName,
     shortName: siteConfig.shortName,
@@ -56,6 +63,12 @@ export default async function AdminSettingsPage({
       seoKeywords?: string;
       baiduVerification?: string;
     } | null) || {};
+  const legacyClaims = {
+    ...legacyHistoricalClaims,
+    ...(legacySetting?.value as Partial<LegacyClaims> | null)
+  };
+  const legacyValue = (key: string) =>
+    legacyClaims.stats?.find((item) => item.key === key)?.value || "";
   return (
     <>
       <div>
@@ -96,6 +109,68 @@ export default async function AdminSettingsPage({
             </label>
           ))}
         </div>
+        <section className="mt-7 rounded-xl border border-amber-200 bg-amber-50 p-5">
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h2 className="font-bold">旧站历史供应与质量声明</h2>
+              <p className="mt-1 text-xs text-amber-900/70">
+                内容来自旧站；核对台账、合同、证书和报告后才能勾选“企业已核验”。
+              </p>
+            </div>
+            <label className="flex items-center gap-2 text-sm font-semibold">
+              <input
+                type="checkbox"
+                name="legacyClaimsVerified"
+                defaultChecked={legacyClaims.verified}
+                className="size-4 accent-forest-700"
+              />
+              企业已核验
+            </label>
+          </div>
+          <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {[
+              ["年供应量（吨）", "legacyAnnualSupply", "annualSupply"],
+              ["合作工厂（家）", "legacyPartnerFactories", "partnerFactories"],
+              ["批次质检（批次）", "legacyBatchTests", "batchTests"],
+              ["出口配套地区（个）", "legacyExportRegions", "exportRegions"]
+            ].map(([label, name, key]) => (
+              <label key={name} className="text-xs font-semibold">
+                {label}
+                <input
+                  name={name}
+                  defaultValue={legacyValue(key)}
+                  className="admin-field mt-2"
+                />
+              </label>
+            ))}
+          </div>
+          <div className="mt-4 grid gap-4 md:grid-cols-2">
+            <label className="text-xs font-semibold">
+              认证 / 报告历史声明（每行一条）
+              <textarea
+                name="legacyCertificationStatements"
+                defaultValue={legacyClaims.certificationStatements?.join("\n")}
+                className="admin-field mt-2 min-h-24"
+              />
+            </label>
+            <label className="text-xs font-semibold">
+              质量检测历史声明
+              <textarea
+                name="legacyQualityStatement"
+                defaultValue={legacyClaims.qualityStatement}
+                className="admin-field mt-2 min-h-24"
+              />
+            </label>
+            <label className="text-xs font-semibold md:col-span-2">
+              价格说明
+              <input
+                name="legacyPriceStatement"
+                defaultValue={legacyClaims.priceStatement}
+                className="admin-field mt-2"
+              />
+            </label>
+          </div>
+        </section>
         <div className="mt-6 grid gap-4 md:grid-cols-2">
           <label className="text-xs font-semibold">
             SEO 关键词（逗号分隔）

@@ -1,0 +1,359 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminRole {
+  ADMIN
+  EDITOR
+  SALES
+}
+
+enum ContentStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum InquiryStatus {
+  NEW
+  CONTACTED
+  QUOTED
+  SAMPLE_SENT
+  FOLLOWING
+  WON
+  LOST
+  INVALID
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum CertificateType {
+  INTERNAL_TEST
+  THIRD_PARTY_TEST
+  CERTIFICATION
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  name         String
+  email        String    @unique
+  passwordHash String
+  role         AdminRole @default(ADMIN)
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  @@index([active, deletedAt])
+}
+
+model SiteSetting {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  description String?
+  isSensitive Boolean  @default(false)
+  updatedBy   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ProductCategory {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  sortOrder   Int       @default(0)
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  products    Product[]
+
+  @@index([active, sortOrder])
+}
+
+model Product {
+  id                 String                 @id @default(cuid())
+  name               String
+  slug               String                 @unique
+  categoryId         String?
+  category           ProductCategory?       @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  coverImage         String?
+  gallery            String[]               @default([])
+  videoUrl           String?
+  videoPoster        String?
+  summary            String?
+  description        String?
+  sourceDescription  String?
+  species            String?
+  color              String?
+  downClusterContent String?
+  downContent        String?
+  fillPower          String?
+  cleanliness        String?
+  oxygenNumber       String?
+  moisture           String?
+  packaging          String?
+  packageWeight      String?
+  minimumOrder       String?
+  supplyCapacity     String?
+  leadTime           String?
+  customItems        String[]               @default([])
+  applications       String[]               @default([])
+  qualityNote        String?
+  reportUrl          String?
+  showPrice          Boolean                @default(false)
+  priceText          String?
+  customization      Boolean                @default(false)
+  sampleAvailable    Boolean                @default(false)
+  featured           Boolean                @default(false)
+  sortOrder          Int                    @default(0)
+  status             ContentStatus          @default(DRAFT)
+  demoNotice         String?
+  seoTitle           String?
+  seoDescription     String?
+  createdAt          DateTime               @default(now())
+  updatedAt          DateTime               @updatedAt
+  publishedAt        DateTime?
+  deletedAt          DateTime?
+  specifications     ProductSpecification[]
+  inquiries          Inquiry[]
+
+  @@index([status, featured, sortOrder])
+  @@index([categoryId, deletedAt])
+}
+
+model ProductSpecification {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  groupName String?
+  label     String
+  value     String?
+  unit      String?
+  sortOrder Int      @default(0)
+  isPublic  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, isPublic, sortOrder])
+}
+
+model MarketQuote {
+  id            String               @id @default(cuid())
+  productName   String
+  specification String?
+  priceMin      Decimal?             @db.Decimal(12, 2)
+  priceMax      Decimal?             @db.Decimal(12, 2)
+  unit          String?
+  changeValue   Decimal?             @db.Decimal(8, 2)
+  quoteDate     DateTime
+  sourceNote    String?
+  disclaimer    String?
+  published     Boolean              @default(false)
+  sortOrder     Int                  @default(0)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  deletedAt     DateTime?
+  history       MarketQuoteHistory[]
+
+  @@index([published, quoteDate, sortOrder])
+}
+
+model MarketQuoteHistory {
+  id          String      @id @default(cuid())
+  quoteId     String
+  quote       MarketQuote @relation(fields: [quoteId], references: [id], onDelete: Cascade)
+  priceMin    Decimal?    @db.Decimal(12, 2)
+  priceMax    Decimal?    @db.Decimal(12, 2)
+  changeValue Decimal?    @db.Decimal(8, 2)
+  recordedAt  DateTime    @default(now())
+
+  @@index([quoteId, recordedAt])
+}
+
+model ArticleCategory {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  sortOrder   Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  articles    Article[]
+}
+
+model Article {
+  id             String           @id @default(cuid())
+  title          String
+  slug           String           @unique
+  categoryId     String?
+  category       ArticleCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  excerpt        String?
+  content        String?
+  coverImage     String?
+  author         String?
+  sourceName     String?
+  sourceUrl      String?
+  status         ContentStatus    @default(DRAFT)
+  demoNotice     String?
+  seoTitle       String?
+  seoDescription String?
+  publishedAt    DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  deletedAt      DateTime?
+  faqs           FAQ[]
+
+  @@index([status, publishedAt])
+}
+
+model FAQ {
+  id        String    @id @default(cuid())
+  question  String
+  answer    String
+  category  String?
+  articleId String?
+  article   Article?  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  sortOrder Int       @default(0)
+  published Boolean   @default(false)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([published, category, sortOrder])
+}
+
+model MediaAsset {
+  id             String    @id @default(cuid())
+  title          String
+  type           MediaType
+  url            String?
+  posterUrl      String?
+  category       String
+  description    String?
+  capturedAt     DateTime?
+  sortOrder      Int       @default(0)
+  featuredOnHome Boolean   @default(false)
+  published      Boolean   @default(false)
+  altText        String?
+  replaceNotice  String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  @@index([published, category, sortOrder])
+  @@index([featuredOnHome, published])
+}
+
+model Certificate {
+  id          String          @id @default(cuid())
+  title       String
+  type        CertificateType
+  issuer      String?
+  issueDate   DateTime?
+  expiryDate  DateTime?
+  fileUrl     String?
+  thumbnail   String?
+  description String?
+  verified    Boolean         @default(false)
+  published   Boolean         @default(false)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+
+  @@index([type, published, verified])
+}
+
+model Inquiry {
+  id              String              @id @default(cuid())
+  name            String
+  mobile          String
+  wechat          String?
+  company         String
+  position        String?
+  province        String?
+  city            String?
+  productId       String?
+  product         Product?            @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName     String
+  specification   String?
+  quantity        String
+  usage           String?
+  deliveryDate    DateTime?
+  sampleRequired  Boolean             @default(false)
+  budget          String?
+  message         String?
+  sourceUrl       String?
+  referrer        String?
+  utmSource       String?
+  utmMedium       String?
+  utmCampaign     String?
+  status          InquiryStatus       @default(NEW)
+  assignee        String?
+  internalNote    String?
+  fingerprintHash String?
+  privacyAccepted Boolean             @default(false)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  deletedAt       DateTime?
+  attachments     InquiryAttachment[]
+  followUps       InquiryFollowUp[]
+
+  @@index([status, createdAt])
+  @@index([mobile, createdAt])
+  @@index([assignee, status])
+}
+
+model InquiryAttachment {
+  id         String   @id @default(cuid())
+  inquiryId  String
+  inquiry    Inquiry  @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  fileName   String
+  storageKey String
+  url        String?
+  mimeType   String
+  size       Int
+  createdAt  DateTime @default(now())
+
+  @@index([inquiryId])
+}
+
+model InquiryFollowUp {
+  id           String         @id @default(cuid())
+  inquiryId    String
+  inquiry      Inquiry        @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+  status       InquiryStatus?
+  note         String
+  nextActionAt DateTime?
+  createdBy    String
+  createdAt    DateTime       @default(now())
+
+  @@index([inquiryId, createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String?
+  adminEmail String?
+  action     String
+  entityType String
+  entityId   String?
+  summary    String?
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([adminId, createdAt])
+}

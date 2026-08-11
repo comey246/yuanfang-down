@@ -1,0 +1,186 @@
+# 羽绒原料工厂 B2B 官网
+
+面向中国羽绒原料生产工厂的现代化中文 B2B 官网。项目重点是展示可供应原料、工厂与质量资料，通过国内在线客服、电话、企业微信和邮箱与采购方直接沟通，并通过行业内容承接中文搜索流量。它不是零售商城，不包含购物车、在线支付或公开询盘表单。
+
+所有初始企业信息均使用“待填写”，演示产品不包含虚构参数、价格、产能、认证或检测结论。演示文章为后台草稿，不会直接公开。
+
+## 技术栈
+
+- Next.js App Router、React、TypeScript 严格模式
+- Tailwind CSS、Lucide 图标、无障碍基础组件
+- Prisma ORM、PostgreSQL 16
+- JWT HttpOnly Cookie 后台认证、bcrypt 密码哈希
+- Recharts 行情趋势图
+- Vitest 单元测试、Playwright 关键流程测试
+- Docker Compose 本地数据库、Next standalone 部署镜像
+- 可选 Supabase 托管 PostgreSQL，用于内容、设置、管理员及历史业务档案
+
+## 快速启动
+
+要求 Node.js 20.9+（建议 Node.js 22）、npm 与 Docker。
+
+```bash
+cp .env.example .env
+docker compose up -d
+npm install
+npm run db:deploy
+npm run db:seed
+npm run dev
+```
+
+打开 `http://localhost:3000`。后台地址为 `http://localhost:3000/admin`。
+
+首次 seed 使用 `.env` 中的 `ADMIN_EMAIL` 与 `ADMIN_INITIAL_PASSWORD`。正式环境务必先把两项替换为真实管理员邮箱和不少于 12 位的独立强密码，同时将 `AUTH_SECRET` 替换为至少 32 字节的随机字符串。
+
+## 常用命令
+
+```bash
+npm run dev             # 开发服务器
+npm run lint            # ESLint
+npm run typecheck       # TypeScript 严格检查
+npm test                # Vitest 单元测试
+npm run test:e2e        # Playwright 桌面与 390px 移动端流程
+npm run build           # 生产构建
+npm run start           # 启动生产构建
+npm run db:migrate      # 本地创建新迁移
+npm run db:deploy       # 生产应用已有迁移
+npm run db:seed         # 初始化管理员与演示草稿
+npm run db:studio       # Prisma 数据管理界面
+```
+
+## 路由
+
+公开站包含首页、产品目录与详情、羽绒行情、工厂实力、生产工艺、质量检测、媒体中心、文章列表与详情、关于、联系与在线客服、隐私政策和使用条款。`/inquiry/success` 仅作为旧链接兼容提示，不代表网站仍可提交表单。
+
+后台包含控制台、产品、行情、文章、媒体、询盘、网站设置和管理员账号。`/admin` 路由由中间件与服务器端账号状态共同保护。
+
+## 后台使用说明
+
+### 产品
+
+在“产品管理”创建或编辑产品。参数留空时前台不会显示，也不会显示为 `0`。自定义参数每行格式为：
+
+```text
+参数名称|参数值|单位|参数分组
+```
+
+演示产品默认是草稿。确认原料来源、规格、包装、起订量、供货能力、交付周期和质量说明后再改为“发布”。
+
+### 行情
+
+每次保存行情会同时写入历史记录，趋势图读取已发布记录。价格可留空；留空时前台显示“联系询价”。必须填写可说明的真实数据来源，不自动抓取第三方网站。
+
+### 文章
+
+演示文章默认草稿。正文使用空行分段，`## 标题` 和 `### 标题` 会生成对应标题结构。FAQ 每行格式为 `问题|答案`，发布后生成 FAQPage JSON-LD。内容发布前应由业务或质量负责人审核结论、时间和来源。
+
+### 图片与视频
+
+媒体可设置类型、URL、poster、分类、alt、排序、首页展示和公开状态。只上传企业自有或已获授权素材。视频使用 `preload="none"`，不会在首屏自动下载完整文件。生产环境建议使用阿里云 OSS 或中国大陆可稳定访问的 CDN。
+
+### 检测与认证
+
+在“网站设置 → 检测报告与认证资料”维护。企业内部检测、第三方检测与认证证书为三种独立类型。只有勾选“资料已核验”且“前台公开”的资料才会显示。不要把检测报告作为认证，也不要上传未经授权的认证 Logo。
+
+### 询盘
+
+公开询盘表单和 `/api/inquiries` 写入能力已经停用；接口固定返回 HTTP `410 Gone`。新的在线客服会话不写入 Supabase，也不出现在后台询盘列表。
+
+后台“询盘管理”仅作为历史档案兼容功能，支持搜索、状态筛选、批量更新、业务员指派、内部备注、跟进记录和 CSV 导出。停用前形成的客户手机号、附件和跟进信息仅在受保护后台出现。
+
+状态包括：新询盘、已联系、已报价、已寄样、跟进中、已成交、未成交、无效询盘。
+
+### 企业资料与客服
+
+在“网站设置”维护公司名、简称、电话、微信、邮箱、地址、工作时间、统一社会信用代码和备案信息，保存后公共头部与页脚立即读取。国内客服平台支持配置平台名称、官方直聊 URL 和脚本插槽。正式接入前必须完成供应商、隐私政策、数据存储地区、保存期限及脚本安全审查；未接入时统一联系窗口会显示电话、企业微信和邮箱。
+
+删除类操作均要求二次确认并采用软删除/归档；关键后台操作写入 `AuditLog`。
+
+## 联系模式与数据边界
+
+- 公开页面不显示姓名、手机号、微信号、采购备注或附件上传字段。
+- 所有“报价、样品、微信、在线咨询”按钮打开统一联系窗口，并携带当前产品提示，但不向服务器提交该提示。
+- 在线会话由后台配置的国内客服平台处理；网站不复制会话到 Supabase。
+- 电话、企业微信和邮箱由访客主动发起，信息按对应通信渠道的规则处理。
+- 历史 `Inquiry`、附件和跟进模型暂时保留，便于企业处理停用前记录；无保留需要时应制定期限后再合规清理。
+
+## SEO 与统计
+
+- 独立 title、description、canonical、Open Graph
+- Organization / LocalBusiness、Product、Article、FAQPage、Breadcrumb JSON-LD
+- `/sitemap.xml` 与 `/robots.txt`
+- 中文语义化标题、参数表、FAQ、更新时间与来源
+- 百度统计、百度/360/搜狗验证环境变量占位
+- `BAIDU_PUSH_TOKEN` 已预留；接入推送前应增加提交日志、重试和配额控制
+
+统计脚本只有在对应环境变量存在时加载。SEO 关键词不应堆砌，不要生成隐藏文本或黑帽页面。
+
+## 部署
+
+### Supabase
+
+本工程已维护 `supabase/config.toml` 和 `supabase/migrations`。连接独立项目后执行：
+
+```bash
+npm run supabase:link
+npm run supabase:push
+npm run supabase:configure
+```
+
+`supabase:configure` 从本机已登录的官方 Supabase CLI 读取项目 URL 与 API Key，并仅写入 Git 忽略的 `.env`，不会在终端打印密钥。先在 `.env` 的 `SUPABASE_DATABASE_PASSWORD` 填写创建项目时保存的密码；命令会进行 URL 编码并生成适合 Next.js/Prisma 的 Transaction Pooler `DATABASE_URL`，同时限制每个进程的连接数。Supabase 当前用于 CMS、后台账号、设置和历史档案；公开站不会向其写入访客联系方式或在线客服会话。历史附件 Bucket 保持私有，后台通过短时签名 URL 下载。
+
+### Docker / 自建服务器
+
+1. 准备 PostgreSQL 数据库和对象存储。
+2. 设置全部生产环境变量，尤其是 `DATABASE_URL`、`AUTH_SECRET` 和管理员账号。
+3. 执行 `npm ci`、`npm run db:deploy`，仅首次执行 `npm run db:seed`。
+4. 使用项目 `Dockerfile` 构建并运行 standalone 镜像，反向代理到 3000 端口。
+5. 将 `/api/health` 配为健康检查，并在网关限制 `/admin` 与 `/api` 的异常访问。
+6. 配置 HTTPS、定期数据库备份、日志留存、告警和历史档案生命周期策略。
+
+```bash
+docker build -t down-material-b2b .
+docker run --env-file .env -p 3000:3000 down-material-b2b
+```
+
+数据库迁移建议作为发布前独立任务执行，不建议由多个应用副本同时运行。
+
+### Vercel / 其他 Node 平台
+
+构建命令使用 `npm run build`，启动命令使用 `npm run start`。平台需连接可从公网安全访问的 PostgreSQL，并配置持久化对象存储。Next Image 默认允许阿里云 OSS/CDN；其他图片 CDN 通过 `NEXT_PUBLIC_IMAGE_HOSTS` 配置明确域名白名单，多个域名用英文逗号分隔。
+
+## 安全与合规注意
+
+- 公开询盘接口固定返回 `410 Gone`，不会解析或保存请求中的个人资料。
+- 后台会话使用签名 JWT、HttpOnly、SameSite Cookie；密码 bcrypt 哈希存储。
+- Prisma 参数化查询降低 SQL 注入风险；输出不渲染未过滤 HTML。
+- 历史客户资料不进入公开页面、结构化数据或前端静态包。
+- 环境密钥不得提交到 Git，生产管理员不得共用账号。
+- 正式隐私政策、条款、数据保存期限和跨境处理情况应由企业法务审核。
+- 如插入第三方客服或统计脚本，应增加严格 CSP，并审查脚本获取的数据范围。
+
+## 上线前资料清单
+
+以下资料当前都是“待填写/待补充”，缺一不可时请保持页面不发布对应内容：
+
+- 企业全称、简称、Logo、统一社会信用代码、真实介绍
+- 服务电话、手机、微信号、微信二维码、邮箱、地址、工作时间
+- ICP 备案号、公安备案号、隐私联系人和正式条款日期
+- 自有或获授权的工厂航拍、车间、设备、实验室、仓储、发货照片
+- 视频文件、poster、拍摄日期、描述和每张图片的 alt 文本
+- 各产品真实原料来源、颜色、规格和可供应范围
+- 绒子含量、羽绒含量、蓬松度、清洁度、耗氧量、水分率等实测/约定数据
+- 包装方式、单包重量、起订量、供货能力、交付周期、适用场景
+- 经授权的内部检测文件、第三方报告、真实认证证书与核验信息
+- 厂房面积、产能、员工和设备数字（不提供则不显示）
+- 行情价格、单位、日期、涨跌与真实来源说明
+- 文章作者、审核人、来源、更新时间和经核验内容
+- 生产数据库、历史档案保留期限、域名与 HTTPS
+- 百度统计、站点验证、Baidu Push、360/搜狗验证配置
+- 国内客服平台真实名称、直聊 URL、隐私政策、数据存储地区、保存期限、脚本及其安全和合规审查结果
+
+## 数据模型
+
+Prisma 已包含：`AdminUser`、`SiteSetting`、`ProductCategory`、`Product`、`ProductSpecification`、`MarketQuote`、`MarketQuoteHistory`、`ArticleCategory`、`Article`、`FAQ`、`MediaAsset`、`Certificate`、`Inquiry`、`InquiryAttachment`、`InquiryFollowUp`、`AuditLog`。
+
+初始迁移位于 `prisma/migrations/202608110001_init`，seed 位于 `prisma/seed.ts`。

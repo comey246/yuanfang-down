@@ -1,0 +1,28 @@
+import type { Metadata } from "next";
+import { ProductFilter } from "@/components/products/product-filter";
+import { Container } from "@/components/ui/container";
+import { PageHero } from "@/components/layout/page-hero";
+import { getPublishedProducts } from "@/lib/data";
+import { createMetadata } from "@/lib/seo";
+
+export const metadata: Metadata = createMetadata(
+  "羽绒原料目录",
+  "查看白鹅绒、灰鹅绒、白鸭绒、灰鸭绒及定制羽绒原料供应条目。具体规格和参数以后台核实发布数据为准。",
+  "/products"
+);
+
+export default async function ProductsPage() {
+  const products = await getPublishedProducts();
+  return (
+    <>
+      <PageHero
+        eyebrow="PRODUCT CATALOG"
+        title="羽绒原料目录"
+        description="按种类、颜色与定制能力筛选原料。演示条目不代表真实库存、参数、价格或供货承诺。"
+      />
+      <Container className="py-14 sm:py-20">
+        <ProductFilter products={products} />
+      </Container>
+    </>
+  );
+}

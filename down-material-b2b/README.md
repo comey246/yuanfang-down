@@ -154,7 +154,7 @@ npm run supabase:push
 npm run supabase:configure
 ```
 
-`supabase:configure` 从本机已登录的官方 Supabase CLI 读取项目 URL 与 API Key，并仅写入 Git 忽略的 `.env`，不会在终端打印密钥。先在 `.env` 的 `SUPABASE_DATABASE_PASSWORD` 填写创建项目时保存的密码；命令会进行 URL 编码并生成适合 Next.js/Prisma 的 Transaction Pooler `DATABASE_URL`，同时限制每个进程的连接数。Supabase 当前用于 CMS、后台账号、设置和历史档案；公开站不会向其写入访客联系方式或在线客服会话。历史附件 Bucket 保持私有，后台通过短时签名 URL 下载。
+`supabase:configure` 从本机已登录的官方 Supabase CLI 读取项目 URL 与 API Key，并仅写入 Git 忽略的 `.env`，不会在终端打印密钥。先在 `.env` 的 `SUPABASE_DATABASE_PASSWORD` 填写创建项目时保存的密码；命令会进行 URL 编码，生成供应用运行使用的 Transaction Pooler `DATABASE_URL`，以及供 Prisma 迁移使用的 Session Pooler `DIRECT_URL`。Supabase 当前用于 CMS、后台账号、设置和历史档案；公开站不会向其写入访客联系方式或在线客服会话。历史附件 Bucket 保持私有，后台通过短时签名 URL 下载。
 
 ### Docker / 自建服务器
 

@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { jwtVerify } from "jose";
 
-export async function proxy(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname === "/admin/login") return NextResponse.next();
   const token = request.cookies.get("down_admin_session")?.value;
   if (!token) {

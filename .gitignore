@@ -1,6 +1,8 @@
 node_modules/
 package.json
 package-lock.json
+!down-material-b2b/package.json
+!down-material-b2b/package-lock.json
 dist/
 .next/
 .vinext/

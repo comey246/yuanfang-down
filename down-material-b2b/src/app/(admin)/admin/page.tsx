@@ -6,10 +6,11 @@ import {
   PackageSearch,
   TrendingUp
 } from "lucide-react";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminDashboard() {
+  const prisma = getPrisma();
   const week = new Date();
   week.setDate(week.getDate() - 7);
   const [

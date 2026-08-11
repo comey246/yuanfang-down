@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { createInquiryAttachmentUrl } from "@/lib/storage";
 
 export const runtime = "nodejs";
@@ -11,6 +11,7 @@ export async function GET(
 ) {
   if (!(await getAdminSession()))
     return NextResponse.json({ error: "未授权" }, { status: 401 });
+  const prisma = getPrisma();
   const { id } = await params;
   const attachment = await prisma.inquiryAttachment.findUnique({
     where: { id }

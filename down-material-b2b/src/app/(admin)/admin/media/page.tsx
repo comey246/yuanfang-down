@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Pencil, Plus } from "lucide-react";
 import { archiveMedia, saveMedia } from "@/app/(admin)/admin/actions";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 const mediaCategories = [
@@ -22,6 +22,7 @@ export default async function AdminMediaPage({
 }: {
   searchParams: Promise<{ edit?: string }>;
 }) {
+  const prisma = getPrisma();
   const { edit } = await searchParams;
   const [assets, current] = await Promise.all([
     prisma.mediaAsset.findMany({

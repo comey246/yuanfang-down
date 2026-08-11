@@ -46,6 +46,9 @@ npm run db:migrate      # 本地创建新迁移
 npm run db:deploy       # 生产应用已有迁移
 npm run db:seed         # 初始化管理员与演示草稿
 npm run db:studio       # Prisma 数据管理界面
+npm run cf:build        # 生成 Cloudflare Workers / OpenNext 构建
+npm run cf:preview      # 在本地 workerd 运行时预览
+npm run cf:deploy       # 构建并部署到 Cloudflare Workers
 ```
 
 ## 路由
@@ -144,6 +147,52 @@ docker run --env-file .env -p 3000:3000 down-material-b2b
 ```
 
 数据库迁移建议作为发布前独立任务执行，不建议由多个应用副本同时运行。
+
+### Cloudflare Workers（OpenNext）
+
+本项目已使用 `@opennextjs/cloudflare` 适配完整 Next.js 动态站点，Worker 名称为 `yf-down-next`。现有 `yf-down` 是 Cloudflare Pages 静态项目，不要继续使用旧的 `npm run build:static` / `static-dist` 设置；发布动态站点应新建 Workers 项目并保留旧 Pages 项目作为回退。
+
+Git 仓库连接参数：
+
+- 仓库：`comey246/yuanfang-down`
+- Production branch：`main`
+- Root directory：`down-material-b2b`
+- Build command：`npm run cf:build`
+- Deploy command：`npx wrangler deploy --keep-vars`
+- 非生产分支构建：按需开启
+
+先在 Workers 的 **Build variables and secrets** 配置构建期变量，再在 Worker 的 **Settings → Variables and Secrets** 配置运行期变量。`NEXT_PUBLIC_*` 会在构建时内联，因此构建期和运行期都应保持一致。
+
+构建期普通变量：
+
+- `NEXT_PUBLIC_SITE_URL`：正式域名，例如 `https://yf-down.com`
+- `NEXT_PUBLIC_SUPABASE_URL`：Supabase 项目 URL
+- `NEXT_PUBLIC_IMAGE_HOSTS`：可选，额外图片 CDN 域名，英文逗号分隔
+- 百度统计及百度/360/搜狗验证变量：仅在实际启用时填写
+
+运行期密钥：
+
+- `DATABASE_URL`：Supabase Transaction Pooler 连接串
+- `AUTH_SECRET`：至少 32 字节的独立随机字符串
+- `SUPABASE_SERVICE_ROLE_KEY`：仅服务器端使用，不得改为普通变量或提交 Git
+
+运行期普通变量：
+
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `SUPABASE_STORAGE_BUCKET`
+- `NEXT_PUBLIC_IMAGE_HOSTS` 及已启用的统计/验证变量
+
+`SUPABASE_PROJECT_REF`、`SUPABASE_DATABASE_PASSWORD`、`ADMIN_EMAIL` 和 `ADMIN_INITIAL_PASSWORD` 只用于本地配置、迁移或 seed，不需要放入 Worker 运行环境。Cloudflare 构建默认关闭动态图片转换，避免启用 Cloudflare Images 后产生额外费用；页面仍通过 `next/image` 保留尺寸、懒加载和布局稳定性。数据库迁移与首次 seed 仍在可信本地环境或独立发布任务中执行，不在 Worker 启动时执行。
+
+本地 Workers 预览：
+
+```bash
+cp .dev.vars.example .dev.vars
+npm run cf:preview
+```
+
+正式部署后先验证 `/`、`/products`、`/admin/login` 和 `/api/health`，再把 `yf-down.com`、`www.yf-down.com` 从旧 Pages 项目切换到新 Worker。不要在验证前删除旧 Pages 项目。
 
 ### Vercel / 其他 Node 平台
 

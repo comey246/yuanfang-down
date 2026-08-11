@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
 
 const configuredImageHosts = (process.env.NEXT_PUBLIC_IMAGE_HOSTS || "")
   .split(",")
@@ -8,9 +9,14 @@ const configuredImageHosts = (process.env.NEXT_PUBLIC_IMAGE_HOSTS || "")
 const nextConfig: NextConfig = {
   output: "standalone",
   outputFileTracingRoot: process.cwd(),
+  outputFileTracingIncludes: {
+    "/*": ["./node_modules/pg-cloudflare/**/*"]
+  },
+  serverExternalPackages: ["@prisma/client", ".prisma/client"],
   allowedDevOrigins: ["127.0.0.1"],
   poweredByHeader: false,
   images: {
+    unoptimized: process.env.CLOUDFLARE_WORKERS === "true",
     formats: ["image/avif", "image/webp"],
     remotePatterns: [
       {
@@ -52,5 +58,7 @@ const nextConfig: NextConfig = {
     ];
   }
 };
+
+initOpenNextCloudflareForDev();
 
 export default nextConfig;

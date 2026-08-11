@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Pencil, Plus } from "lucide-react";
 import { archiveArticle, saveArticle } from "@/app/(admin)/admin/actions";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminArticlesPage({
@@ -11,6 +11,7 @@ export default async function AdminArticlesPage({
 }: {
   searchParams: Promise<{ edit?: string }>;
 }) {
+  const prisma = getPrisma();
   const { edit } = await searchParams;
   const [articles, categories, current] = await Promise.all([
     prisma.article.findMany({

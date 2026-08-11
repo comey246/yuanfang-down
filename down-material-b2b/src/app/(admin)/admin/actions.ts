@@ -10,7 +10,7 @@ import {
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 const text = (form: FormData, key: string) =>
   String(form.get(key) || "").trim();
@@ -24,6 +24,7 @@ async function audit(
   summary?: string
 ) {
   const admin = await requireAdmin();
+  const prisma = getPrisma();
   await prisma.auditLog.create({
     data: {
       adminId: admin.id,
@@ -38,6 +39,7 @@ async function audit(
 
 export async function saveProduct(form: FormData) {
   const admin = await requireAdmin();
+  const prisma = getPrisma();
   const id = text(form, "id");
   const name = text(form, "name");
   const slug = text(form, "slug");
@@ -134,6 +136,7 @@ export async function saveProduct(form: FormData) {
 }
 
 export async function archiveProduct(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   await prisma.product.update({
     where: { id },
@@ -145,6 +148,7 @@ export async function archiveProduct(form: FormData) {
 }
 
 export async function saveProductCategory(form: FormData) {
+  const prisma = getPrisma();
   const name = text(form, "categoryName");
   const slug = text(form, "categorySlug");
   if (!name || !slug) throw new Error("分类名称和 slug 必填");
@@ -158,6 +162,7 @@ export async function saveProductCategory(form: FormData) {
 }
 
 export async function archiveProductCategory(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   await prisma.productCategory.update({
     where: { id },
@@ -168,6 +173,7 @@ export async function archiveProductCategory(form: FormData) {
 }
 
 export async function saveMarketQuote(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   const data = {
     productName: text(form, "productName"),
@@ -204,6 +210,7 @@ export async function saveMarketQuote(form: FormData) {
 }
 
 export async function archiveMarketQuote(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   await prisma.marketQuote.update({
     where: { id },
@@ -215,6 +222,7 @@ export async function archiveMarketQuote(form: FormData) {
 }
 
 export async function saveArticle(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   const data = {
     title: text(form, "title"),
@@ -261,6 +269,7 @@ export async function saveArticle(form: FormData) {
 }
 
 export async function archiveArticle(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   await prisma.article.update({
     where: { id },
@@ -272,6 +281,7 @@ export async function archiveArticle(form: FormData) {
 }
 
 export async function saveMedia(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   const data = {
     title: text(form, "title"),
@@ -295,6 +305,7 @@ export async function saveMedia(form: FormData) {
 }
 
 export async function archiveMedia(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   await prisma.mediaAsset.update({
     where: { id },
@@ -306,6 +317,7 @@ export async function archiveMedia(form: FormData) {
 }
 
 export async function saveCompanySettings(form: FormData) {
+  const prisma = getPrisma();
   const profile = {
     companyName: text(form, "companyName") || "待填写的羽绒工厂名称",
     shortName: text(form, "shortName") || "待填写",
@@ -371,6 +383,7 @@ export async function saveCompanySettings(form: FormData) {
 }
 
 export async function saveCertificate(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   const data = {
     title: text(form, "title"),
@@ -396,6 +409,7 @@ export async function saveCertificate(form: FormData) {
 }
 
 export async function archiveCertificate(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   await prisma.certificate.update({
     where: { id },
@@ -408,6 +422,7 @@ export async function archiveCertificate(form: FormData) {
 
 export async function createAdminUser(form: FormData) {
   const current = await requireAdmin();
+  const prisma = getPrisma();
   if (current.role !== AdminRole.ADMIN)
     throw new Error("仅管理员可创建后台账号");
   const password = text(form, "password");
@@ -425,6 +440,7 @@ export async function createAdminUser(form: FormData) {
 
 export async function toggleAdminUser(form: FormData) {
   const current = await requireAdmin();
+  const prisma = getPrisma();
   if (current.role !== AdminRole.ADMIN)
     throw new Error("仅管理员可修改账号状态");
   const id = text(form, "id");
@@ -436,6 +452,7 @@ export async function toggleAdminUser(form: FormData) {
 }
 
 export async function updateInquiry(form: FormData) {
+  const prisma = getPrisma();
   const id = text(form, "id");
   const status = text(form, "status") as InquiryStatus;
   const assignee = optional(form, "assignee");
@@ -450,6 +467,7 @@ export async function updateInquiry(form: FormData) {
 
 export async function addInquiryFollowUp(form: FormData) {
   const admin = await requireAdmin();
+  const prisma = getPrisma();
   const inquiryId = text(form, "id");
   const note = text(form, "followUpNote");
   if (!note) return;
@@ -468,6 +486,7 @@ export async function addInquiryFollowUp(form: FormData) {
 }
 
 export async function bulkUpdateInquiryStatus(form: FormData) {
+  const prisma = getPrisma();
   const ids = form.getAll("ids").map(String);
   const status = text(form, "bulkStatus") as InquiryStatus;
   if (!ids.length) return;

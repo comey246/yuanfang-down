@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 import { AUTH_COOKIE, createSessionToken } from "@/lib/auth";
-import { databaseConfigured, prisma } from "@/lib/prisma";
+import { databaseConfigured, getPrisma } from "@/lib/prisma";
 import { checkRateLimit } from "@/lib/rate-limit";
 import { loginSchema } from "@/lib/validators";
 
@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       new URL("/admin/login?error=database", request.url),
       303
     );
+  const prisma = getPrisma();
   const user = await prisma.adminUser.findFirst({
     where: {
       email: parsed.data.email.toLowerCase(),

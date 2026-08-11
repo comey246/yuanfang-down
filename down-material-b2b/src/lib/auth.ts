@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { jwtVerify, SignJWT } from "jose";
-import { databaseConfigured, prisma } from "@/lib/prisma";
+import { databaseConfigured, getPrisma } from "@/lib/prisma";
 
 export const AUTH_COOKIE = "down_admin_session";
 
@@ -51,6 +51,7 @@ export async function requireAdmin() {
   const session = await getAdminSession();
   if (!session) redirect("/admin/login");
   if (databaseConfigured()) {
+    const prisma = getPrisma();
     const user = await prisma.adminUser.findFirst({
       where: { id: session.id, active: true, deletedAt: null }
     });

@@ -72,6 +72,10 @@ if (databasePassword) {
     "DATABASE_URL",
     `postgresql://postgres.${projectRef}:${encodedPassword}@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1&sslmode=require&uselibpqcompat=true`
   );
+  setEnv(
+    "DIRECT_URL",
+    `postgresql://postgres.${projectRef}:${encodedPassword}@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres?sslmode=require&uselibpqcompat=true`
+  );
 }
 
 await writeFile(envPath, env, { mode: 0o600 });

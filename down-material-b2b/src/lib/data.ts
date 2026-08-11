@@ -2,7 +2,7 @@ import { ContentStatus, Prisma } from "@prisma/client";
 import { connection } from "next/server";
 import { cache } from "react";
 import { demoProducts } from "@/lib/demo-data";
-import { databaseConfigured, prisma } from "@/lib/prisma";
+import { databaseConfigured, getPrisma } from "@/lib/prisma";
 import type { DemoProduct, MarketPoint } from "@/types";
 import { siteConfig } from "@/config/site";
 
@@ -50,6 +50,7 @@ export const getCompanyProfile = cache(async (): Promise<CompanyProfile> => {
   };
   if (!databaseConfigured()) return fallback;
   try {
+    const prisma = getPrisma();
     const setting = await prisma.siteSetting.findUnique({
       where: { key: "company_profile" }
     });
@@ -74,6 +75,7 @@ export const getSiteOptions = cache(async (): Promise<SiteOptions> => {
   };
   if (!databaseConfigured()) return fallback;
   try {
+    const prisma = getPrisma();
     const setting = await prisma.siteSetting.findUnique({
       where: { key: "site_options" }
     });
@@ -148,6 +150,7 @@ export async function getPublishedProducts(): Promise<DemoProduct[]> {
   await connection();
   if (!databaseConfigured()) return demoProducts;
   try {
+    const prisma = getPrisma();
     const products = await prisma.product.findMany({
       where: { status: ContentStatus.PUBLISHED, deletedAt: null },
       include: {
@@ -172,6 +175,7 @@ export async function getProductBySlug(
   if (!databaseConfigured())
     return demoProducts.find((item) => item.slug === slug) || null;
   try {
+    const prisma = getPrisma();
     const product = await prisma.product.findFirst({
       where: { slug, status: ContentStatus.PUBLISHED, deletedAt: null },
       include: {
@@ -194,6 +198,7 @@ export async function getMarketQuotes(): Promise<MarketPoint[]> {
   await connection();
   if (!databaseConfigured()) return [];
   try {
+    const prisma = getPrisma();
     const quotes = await prisma.marketQuote.findMany({
       where: { published: true, deletedAt: null },
       orderBy: [{ sortOrder: "asc" }, { quoteDate: "desc" }]
@@ -219,6 +224,7 @@ export async function getMarketHistory(): Promise<MarketPoint[]> {
   await connection();
   if (!databaseConfigured()) return [];
   try {
+    const prisma = getPrisma();
     const history = await prisma.marketQuoteHistory.findMany({
       where: { quote: { published: true, deletedAt: null } },
       include: { quote: true },
@@ -244,6 +250,7 @@ export async function getPublishedArticles() {
   await connection();
   if (!databaseConfigured()) return [];
   try {
+    const prisma = getPrisma();
     return await prisma.article.findMany({
       where: { status: ContentStatus.PUBLISHED, deletedAt: null },
       include: {
@@ -264,6 +271,7 @@ export async function getArticleBySlug(slug: string) {
   await connection();
   if (!databaseConfigured()) return null;
   try {
+    const prisma = getPrisma();
     return await prisma.article.findFirst({
       where: { slug, status: ContentStatus.PUBLISHED, deletedAt: null },
       include: {
@@ -283,6 +291,7 @@ export async function getPublishedMedia() {
   await connection();
   if (!databaseConfigured()) return [];
   try {
+    const prisma = getPrisma();
     return await prisma.mediaAsset.findMany({
       where: { published: true, deletedAt: null },
       orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }]
@@ -296,6 +305,7 @@ export async function getPublishedCertificates() {
   await connection();
   if (!databaseConfigured()) return [];
   try {
+    const prisma = getPrisma();
     return await prisma.certificate.findMany({
       where: { published: true, verified: true, deletedAt: null },
       orderBy: { updatedAt: "desc" }

@@ -1,7 +1,7 @@
 import { AdminRole } from "@prisma/client";
 import { createAdminUser, toggleAdminUser } from "@/app/(admin)/admin/actions";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 import { requireAdmin } from "@/lib/auth";
 
@@ -14,6 +14,7 @@ export default async function AdminUsersPage() {
       </div>
     );
   }
+  const prisma = getPrisma();
   const users = await prisma.adminUser.findMany({
     where: { deletedAt: null },
     orderBy: { createdAt: "asc" }

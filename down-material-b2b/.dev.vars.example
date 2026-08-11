@@ -1,0 +1,2 @@
+# Wrangler 本地预览环境。复制为 .dev.vars，真实业务变量仍保存在 .env。
+NEXTJS_ENV=development

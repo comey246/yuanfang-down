@@ -70,7 +70,7 @@ if (databasePassword) {
   const encodedPassword = encodeURIComponent(databasePassword);
   setEnv(
     "DATABASE_URL",
-    `postgresql://postgres.${projectRef}:${encodedPassword}@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1&sslmode=require`
+    `postgresql://postgres.${projectRef}:${encodedPassword}@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?pgbouncer=true&connection_limit=1&sslmode=require&uselibpqcompat=true`
   );
 }
 

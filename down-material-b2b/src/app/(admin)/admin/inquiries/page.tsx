@@ -6,7 +6,7 @@ import {
   bulkUpdateInquiryStatus,
   updateInquiry
 } from "@/app/(admin)/admin/actions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 const statuses: [InquiryStatus, string][] = [
@@ -27,6 +27,7 @@ export default async function AdminInquiriesPage({
 }: {
   searchParams: Promise<{ q?: string; status?: string; page?: string }>;
 }) {
+  const prisma = getPrisma();
   const params = await searchParams;
   const page = Math.max(1, Number(params.page || 1));
   const pageSize = 20;

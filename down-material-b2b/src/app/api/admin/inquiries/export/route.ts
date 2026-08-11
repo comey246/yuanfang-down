@@ -1,13 +1,14 @@
 import { InquiryStatus, Prisma } from "@prisma/client";
 import { NextResponse } from "next/server";
 import { getAdminSession } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 
 const csv = (value: unknown) => `"${String(value ?? "").replace(/"/g, '""')}"`;
 
 export async function GET(request: Request) {
   if (!(await getAdminSession()))
     return NextResponse.json({ error: "未授权" }, { status: 401 });
+  const prisma = getPrisma();
   const url = new URL(request.url);
   const status = url.searchParams.get("status");
   const q = url.searchParams.get("q");

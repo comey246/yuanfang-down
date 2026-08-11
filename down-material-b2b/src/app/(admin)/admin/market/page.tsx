@@ -5,7 +5,7 @@ import {
   saveMarketQuote
 } from "@/app/(admin)/admin/actions";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminMarketPage({
@@ -13,6 +13,7 @@ export default async function AdminMarketPage({
 }: {
   searchParams: Promise<{ edit?: string }>;
 }) {
+  const prisma = getPrisma();
   const { edit } = await searchParams;
   const [quotes, current] = await Promise.all([
     prisma.marketQuote.findMany({

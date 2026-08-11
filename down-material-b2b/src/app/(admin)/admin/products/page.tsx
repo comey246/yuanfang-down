@@ -8,7 +8,7 @@ import {
   saveProduct,
   saveProductCategory
 } from "@/app/(admin)/admin/actions";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminProductsPage({
@@ -16,6 +16,7 @@ export default async function AdminProductsPage({
 }: {
   searchParams: Promise<{ edit?: string }>;
 }) {
+  const prisma = getPrisma();
   const { edit } = await searchParams;
   const [products, categories, current] = await Promise.all([
     prisma.product.findMany({

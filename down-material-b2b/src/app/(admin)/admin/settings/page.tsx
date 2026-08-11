@@ -9,7 +9,7 @@ import {
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
 import { siteConfig } from "@/config/site";
 import type { CompanyProfile } from "@/lib/data";
-import { prisma } from "@/lib/prisma";
+import { getPrisma } from "@/lib/prisma";
 import { formatDate } from "@/lib/utils";
 
 export default async function AdminSettingsPage({
@@ -17,6 +17,7 @@ export default async function AdminSettingsPage({
 }: {
   searchParams: Promise<{ certificate?: string }>;
 }) {
+  const prisma = getPrisma();
   const { certificate } = await searchParams;
   const [profileSetting, optionSetting, certificates, currentCertificate] =
     await Promise.all([

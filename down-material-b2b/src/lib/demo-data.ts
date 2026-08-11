@@ -1,10 +1,9 @@
+import { legacyProductContent } from "@/config/legacy-content";
 import type { DemoProduct } from "@/types";
 
 const shared = {
   description:
     "本条目为网站结构演示数据。原料来源、具体规格、质量指标、包装、起订量、供货能力和交付周期均须由工厂核实后在后台填写。",
-  coverImage: null,
-  gallery: [],
   videoUrl: null,
   videoPoster: null,
   customization: true,
@@ -39,7 +38,7 @@ export const demoProducts: DemoProduct[] = [
     category: "鹅绒原料",
     species: "鹅绒",
     color: "白色",
-    summary: "白鹅绒原料示例条目，可选规格待后台补充。"
+    ...legacyProductContent["white-goose-down"]
   },
   {
     ...shared,
@@ -49,7 +48,7 @@ export const demoProducts: DemoProduct[] = [
     category: "鹅绒原料",
     species: "鹅绒",
     color: "灰色",
-    summary: "灰鹅绒原料示例条目，可选规格待后台补充。"
+    ...legacyProductContent["grey-goose-down"]
   },
   {
     ...shared,
@@ -59,7 +58,7 @@ export const demoProducts: DemoProduct[] = [
     category: "鸭绒原料",
     species: "鸭绒",
     color: "白色",
-    summary: "白鸭绒原料示例条目，可选规格待后台补充。"
+    ...legacyProductContent["white-duck-down"]
   },
   {
     ...shared,
@@ -69,7 +68,7 @@ export const demoProducts: DemoProduct[] = [
     category: "鸭绒原料",
     species: "鸭绒",
     color: "灰色",
-    summary: "灰鸭绒原料示例条目，可选规格待后台补充。"
+    ...legacyProductContent["grey-duck-down"]
   }
 ];
 

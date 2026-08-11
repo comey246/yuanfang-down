@@ -11,6 +11,7 @@ import { OnlineServiceButton } from "@/components/customer-service/online-servic
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
@@ -20,16 +21,42 @@ export const metadata: Metadata = createMetadata(
 );
 
 const zones = [
-  [FactoryIcon, "工厂航拍", "展示厂区边界、环境与物流动线，真实素材待上传。"],
-  [Settings2, "生产设备", "水洗、脱水、烘干、分拣设备型号和数量待核实。"],
+  [
+    FactoryIcon,
+    "工厂环境",
+    "当前图片来自旧站演示素材；厂区边界、环境与物流动线须使用真实资料替换。",
+    legacyDemoAssets.workshop
+  ],
+  [
+    Settings2,
+    "生产设备",
+    "水洗、脱水、烘干、分拣设备型号和数量待核实。",
+    legacyDemoAssets.hero
+  ],
   [
     FlaskConical,
     "检测实验室",
-    "内部检测能力、设备与操作流程待质量负责人补充。"
+    "内部检测能力、设备与操作流程待质量负责人补充。",
+    legacyDemoAssets.laboratory
   ],
-  [Warehouse, "包装仓储", "原料批次、包装、仓储与出库管理方式待补充。"],
-  [Package, "包装实拍", "包装方式、单包重量与标签规则由产品后台配置。"],
-  [Send, "发货区域", "实际发货范围、运输方式与交期不做虚构承诺。"]
+  [
+    Warehouse,
+    "包装仓储",
+    "原料批次、包装、仓储与出库管理方式待补充。",
+    legacyDemoAssets.warehouse
+  ],
+  [
+    Package,
+    "包装展示",
+    "包装方式、单包重量与标签规则由产品后台配置。",
+    legacyDemoAssets.packagedWarehouse
+  ],
+  [
+    Send,
+    "发货区域",
+    "实际发货范围、运输方式与交期不做虚构承诺。",
+    legacyDemoAssets.warehouse
+  ]
 ] as const;
 
 export default function FactoryPage() {
@@ -37,12 +64,12 @@ export default function FactoryPage() {
     <>
       <PageHero
         eyebrow="FACTORY CAPABILITY"
-        title="工厂实力，以真实现场为依据"
-        description="本页不展示未经确认的厂房面积、年产能、员工数量或设备数量。后台填写并审核后再公开。"
+        title="工厂实力，以可核验资料为依据"
+        description="旧站图片已作为演示素材迁入，但不代表本工厂真实现场。本页不展示未经确认的面积、产能、员工或设备数量。"
       />
       <Container className="py-14 sm:py-20">
         <div className="grid gap-6 md:grid-cols-2">
-          {zones.map(([Icon, title, description], index) => (
+          {zones.map(([Icon, title, description, image], index) => (
             <article
               key={title}
               className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
@@ -50,6 +77,8 @@ export default function FactoryPage() {
               <MediaPlaceholder
                 label={title}
                 type={index === 0 ? "factory" : "image"}
+                src={image}
+                notice={legacyDemoNotice}
                 className="min-h-64"
               />
               <div className="p-6">

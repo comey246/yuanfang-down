@@ -7,6 +7,7 @@ import type { DemoProduct } from "@/types";
 import { OnlineServiceButton } from "@/components/customer-service/online-service-button";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { ButtonLink } from "@/components/ui/button";
+import { legacyDemoNotice } from "@/config/legacy-content";
 
 export function ProductFilter({ products }: { products: DemoProduct[] }) {
   const [species, setSpecies] = useState("全部");
@@ -79,6 +80,7 @@ export function ProductFilter({ products }: { products: DemoProduct[] }) {
               <MediaPlaceholder
                 label={`${product.name}原料图片`}
                 src={product.coverImage}
+                notice={product.demo ? legacyDemoNotice : undefined}
                 className="min-h-56"
               />
             </Link>

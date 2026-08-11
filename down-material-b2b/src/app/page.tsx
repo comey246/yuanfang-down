@@ -23,6 +23,7 @@ import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
 import {
   articleDirections,
   advantages,
@@ -75,7 +76,7 @@ export default async function HomePage() {
         <Container className="grid min-h-[650px] items-center gap-10 py-16 lg:grid-cols-[1.05fr_.95fr] lg:py-20">
           <div>
             <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-white/80">
-              <BadgeCheck className="size-4 text-amber-400" /> 工厂直供 ·
+              <BadgeCheck className="size-4 text-amber-400" /> 原料供应 ·
               规格沟通 · 样品确认 · 批量交付
             </p>
             <h1 className="max-w-3xl text-balance text-4xl font-bold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
@@ -123,6 +124,8 @@ export default async function HomePage() {
             <MediaPlaceholder
               label="工厂或羽绒原料首屏实拍"
               type="video"
+              src={legacyDemoAssets.hero}
+              notice={legacyDemoNotice}
               className="min-h-[420px] rounded-[1.75rem] border border-white/10 shadow-2xl"
             />
             <div className="absolute -bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-white/95 p-4 text-ink shadow-xl backdrop-blur sm:left-auto sm:w-72">
@@ -242,6 +245,7 @@ export default async function HomePage() {
                 <MediaPlaceholder
                   label={`${product.name}原料`}
                   src={product.coverImage}
+                  notice={product.demo ? legacyDemoNotice : undefined}
                   className="min-h-52"
                 />
                 <div className="p-5">
@@ -352,14 +356,20 @@ export default async function HomePage() {
               <MediaPlaceholder
                 label="工厂航拍"
                 type="factory"
+                src={legacyDemoAssets.workshop}
+                notice={legacyDemoNotice}
                 className="col-span-2 min-h-60 rounded-xl2"
               />
               <MediaPlaceholder
                 label="生产车间"
+                src={legacyDemoAssets.hero}
+                notice={legacyDemoNotice}
                 className="min-h-44 rounded-xl2"
               />
               <MediaPlaceholder
                 label="包装仓储"
+                src={legacyDemoAssets.warehouse}
+                notice={legacyDemoNotice}
                 className="min-h-44 rounded-xl2"
               />
             </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
@@ -15,9 +16,21 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
       <Container className="grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_.8fr]">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid size-11 place-items-center rounded-xl bg-amber-500 font-black text-white">
-              绒
-            </span>
+            {profile.logoUrl ? (
+              <span className="relative size-11 overflow-hidden rounded-xl bg-white">
+                <Image
+                  src={profile.logoUrl}
+                  alt={`${profile.shortName} Logo`}
+                  fill
+                  sizes="44px"
+                  className="object-contain"
+                />
+              </span>
+            ) : (
+              <span className="grid size-11 place-items-center rounded-xl bg-amber-500 font-black text-white">
+                绒
+              </span>
+            )}
             <div>
               <p className="font-bold text-white">{profile.companyName}</p>
               <p className="text-xs">{siteConfig.slogan}</p>

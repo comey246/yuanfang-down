@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import { siteConfig } from "@/config/site";
+import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
+import { getCompanyProfile } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
@@ -11,7 +12,8 @@ export const metadata: Metadata = createMetadata(
   "/about"
 );
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const profile = await getCompanyProfile();
   return (
     <>
       <PageHero
@@ -24,22 +26,22 @@ export default function AboutPage() {
           <MediaPlaceholder
             label="企业与工厂形象照"
             type="factory"
+            src={legacyDemoAssets.workshop}
+            notice={legacyDemoNotice}
             className="min-h-[420px] rounded-xl2"
           />
           <div>
             <p className="text-sm font-bold text-amber-600">企业实体信息</p>
-            <h2 className="mt-3 text-3xl font-bold">
-              {siteConfig.companyName}
-            </h2>
+            <h2 className="mt-3 text-3xl font-bold">{profile.companyName}</h2>
             <p className="mt-5 leading-8 text-slate-600">
               企业介绍待工厂提供并核验。建议包含成立背景、主营羽绒原料范围、服务地区、业务模式和质量管理方式，不使用“行业第一”等无法验证的绝对化描述。
             </p>
             <dl className="mt-7 divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white px-5">
               {[
-                ["公司简称", siteConfig.shortName],
-                ["统一社会信用代码", siteConfig.creditCode],
-                ["工厂地址", siteConfig.address],
-                ["工作时间", siteConfig.businessHours]
+                ["公司简称", profile.shortName],
+                ["统一社会信用代码", profile.creditCode],
+                ["工厂地址", profile.address],
+                ["工作时间", profile.businessHours]
               ].map(([label, value]) => (
                 <div
                   key={label}

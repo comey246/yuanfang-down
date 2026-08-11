@@ -1,22 +1,25 @@
+import { legacySiteContent } from "@/config/legacy-content";
+
 export const siteConfig = {
-  companyName: "待填写的羽绒工厂名称",
-  shortName: "待填写",
+  companyName: legacySiteContent.companyName,
+  shortName: legacySiteContent.shortName,
   slogan: "专注优质羽绒原料供应",
   description:
-    "面向家纺、服装、品牌与贸易采购客户，提供羽绒原料规格沟通、样品确认和批量交付服务。",
-  phone: "待填写",
-  mobile: "待填写",
+    "远方羽绒面向家纺、服装、品牌与贸易采购客户，提供白鸭绒、灰鸭绒、白鹅绒、灰鹅绒等羽绒原料的规格沟通、样品确认和批量采购服务。具体参数、检测与交付条件以双方确认资料为准。",
+  phone: legacySiteContent.phone,
+  mobile: legacySiteContent.mobile,
   wechat: "待填写",
-  email: "待填写",
+  email: legacySiteContent.email,
   address: "待填写",
   businessHours: "周一至周六 08:30-18:00",
   icpNumber: "待备案",
   policeRecordNumber: "待备案",
   creditCode: "待填写",
-  logoUrl: "",
+  logoUrl: legacySiteContent.logoUrl,
   wechatQrUrl: "",
   baseUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   defaultKeywords: [
+    "远方羽绒",
     "羽绒原料厂家",
     "鹅绒原料供应",
     "鸭绒原料采购",

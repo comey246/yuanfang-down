@@ -189,7 +189,7 @@ export default async function ArticlePage({ params }: Props) {
             <div className="mt-10 flex items-center justify-between border-t border-slate-200 pt-6">
               <ShareButtons />
               <OnlineServiceButton source="article-cta" size="sm">
-                咨询相关原料
+                微信咨询相关原料
               </OnlineServiceButton>
             </div>
           </div>
@@ -228,7 +228,7 @@ export default async function ArticlePage({ params }: Props) {
                 source="article-sidebar"
                 className="mt-5 w-full"
               >
-                在线沟通需求
+                微信沟通需求
               </OnlineServiceButton>
             </div>
           </aside>

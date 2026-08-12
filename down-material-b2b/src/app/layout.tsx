@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import "@/app/globals.css";
 import { PublicChrome } from "@/components/layout/public-chrome";
-import { CustomerServiceSlot } from "@/components/layout/customer-service-slot";
 import { siteConfig } from "@/config/site";
 import { isConfiguredValue, safeJsonLd } from "@/lib/utils";
 import { getCompanyProfile, getSiteOptions } from "@/lib/data";
@@ -78,10 +77,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({
   children
 }: Readonly<{ children: React.ReactNode }>) {
-  const [profile, options] = await Promise.all([
-    getCompanyProfile(),
-    getSiteOptions()
-  ]);
+  const profile = await getCompanyProfile();
   const organization = {
     "@context": "https://schema.org",
     "@type": ["Organization", "LocalBusiness"],
@@ -96,16 +92,11 @@ export default async function RootLayout({
   return (
     <html lang="zh-CN">
       <body>
-        <PublicChrome profile={profile} options={options}>
-          {children}
-        </PublicChrome>
+        <PublicChrome profile={profile}>{children}</PublicChrome>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: safeJsonLd(organization) }}
         />
-        {options.customerServiceScript ? (
-          <CustomerServiceSlot script={options.customerServiceScript} />
-        ) : null}
         {process.env.NEXT_PUBLIC_BAIDU_ANALYTICS_ID ? (
           <Script
             id="baidu-analytics"

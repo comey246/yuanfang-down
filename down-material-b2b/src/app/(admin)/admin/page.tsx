@@ -120,8 +120,7 @@ export default async function AdminDashboard() {
               "补充真实公司名称、电话、微信、地址和备案号",
               "上传自有或已获授权的工厂照片与二维码",
               "核验产品参数、包装、起订量、供货与交期",
-              "只有核验后的检测报告和认证证书才可发布",
-              "配置国内客服平台并完成隐私、数据存储地区和脚本安全审查"
+              "只有核验后的检测报告和认证证书才可发布"
             ].map((item) => (
               <li key={item} className="flex gap-2">
                 <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-600" />

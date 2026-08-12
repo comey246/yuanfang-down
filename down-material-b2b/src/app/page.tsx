@@ -130,12 +130,12 @@ export default async function HomePage() {
               无表单直联 · 不在本站保存访客联系方式
             </p>
             <p className="mt-2 text-sm leading-6 text-white/70">
-              准备好品类、目标规格、数量和交期，通过在线客服、电话或企业微信直接沟通。
+              准备好品类、目标规格、数量和交期，通过微信或电话直接沟通。
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
             <OnlineServiceButton source="home-contact-strip" size="lg">
-              在线咨询采购需求
+              微信咨询采购需求
               <ArrowRight className="size-4" />
             </OnlineServiceButton>
             <a
@@ -166,7 +166,7 @@ export default async function HomePage() {
             ) : (
               <EmptyState
                 title="今日行情请联系业务人员获取"
-                description="数据库中暂无已核实发布的行情数据。请通过在线客服说明所需品类、规格与数量，业务人员将结合实际供货情况回复。"
+                description="数据库中暂无已核实发布的行情数据。请通过微信或电话说明所需品类、规格与数量，业务人员将结合实际供货情况回复。"
                 actionLabel="获取今日报价"
                 actionHref="/contact?source=market-empty"
               />
@@ -221,7 +221,7 @@ export default async function HomePage() {
                       size="sm"
                       className="min-h-0 px-0 py-0 text-amber-600 hover:bg-transparent hover:underline"
                     >
-                      索取报价
+                      微信询价
                     </OnlineServiceButton>
                   </div>
                 </div>
@@ -486,7 +486,7 @@ export default async function HomePage() {
               正在寻找稳定的羽绒原料供应商？
             </h2>
             <p className="mt-3 text-white/80">
-              通过在线客服、电话或企业微信说明品类、规格和数量，直接获取针对本次采购需求的回复。
+              通过微信或电话说明品类、规格和数量，直接获取针对本次采购需求的回复。
             </p>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -496,7 +496,7 @@ export default async function HomePage() {
               size="lg"
             >
               <Send className="size-4" />
-              在线获取报价
+              微信获取报价
             </OnlineServiceButton>
             <a
               href={`tel:${profile.mobile}`}
@@ -510,7 +510,7 @@ export default async function HomePage() {
               size="lg"
               className="border-white/40 bg-transparent text-white hover:bg-white/10"
             >
-              企业微信咨询
+              微信咨询
             </OnlineServiceButton>
             <OnlineServiceButton
               sample
@@ -519,7 +519,7 @@ export default async function HomePage() {
               size="lg"
               className="border-white/40 bg-transparent text-white hover:bg-white/10"
             >
-              咨询样品
+              微信咨询样品
             </OnlineServiceButton>
           </div>
         </Container>

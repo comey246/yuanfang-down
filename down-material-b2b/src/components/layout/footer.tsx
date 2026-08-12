@@ -34,7 +34,7 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
             </div>
           </div>
           <p className="mt-5 max-w-sm text-sm leading-7">
-            本网站用于展示羽绒原料供应能力并提供在线客服、电话和微信直联。所有参数、价格、证书及检测文件以后台审核发布内容为准。
+            本网站用于展示羽绒原料供应能力，并提供电话和微信直联。所有参数、价格、证书及检测文件以后台审核发布内容为准。
           </p>
         </div>
         <div>

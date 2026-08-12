@@ -344,21 +344,11 @@ export async function saveCompanySettings(form: FormData) {
   });
   const current =
     (currentOptions?.value as {
-      customerServiceProviderName?: string;
-      customerServiceUrl?: string;
-      customerServiceScript?: string;
       baiduVerification?: string;
     } | null) || {};
-  const submittedScript = text(form, "customerServiceScript");
   const submittedVerification = text(form, "baiduVerification");
   const other = {
     homeModuleOrder: text(form, "homeModuleOrder"),
-    customerServiceProviderName:
-      text(form, "customerServiceProviderName") || "待填写的国内客服平台",
-    customerServiceUrl: text(form, "customerServiceUrl"),
-    customerServiceScript: submittedScript.startsWith("••••")
-      ? current.customerServiceScript || ""
-      : submittedScript,
     seoKeywords: text(form, "seoKeywords"),
     baiduVerification: submittedVerification.startsWith("••••")
       ? current.baiduVerification || ""
@@ -370,7 +360,7 @@ export async function saveCompanySettings(form: FormData) {
     create: {
       key: "site_options",
       value: other,
-      description: "SEO、首页顺序与客服脚本",
+      description: "SEO 与首页顺序",
       isSensitive: true
     }
   });

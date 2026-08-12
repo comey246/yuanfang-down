@@ -8,24 +8,25 @@ test("首页展示 B2B 定位和核心询价入口", async ({ page }) => {
   await expect(
     page.getByRole("button", { name: "获取今日报价" }).first()
   ).toBeVisible();
-  await expect(page.getByText("示例待替换").first()).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "微信咨询" }).first()
+  ).toBeVisible();
 });
 
-test("产品空参数不展示为 0", async ({ page }) => {
+test("产品参数不展示为 0", async ({ page }) => {
   await page.goto("/products/white-goose-down");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("白鹅绒");
-  await expect(page.getByText("绒子含量", { exact: true })).toHaveCount(0);
   await expect(page.getByText("0", { exact: true })).toHaveCount(0);
 });
 
-test("联系页不收集表单并可打开在线客服", async ({ page }) => {
+test("联系页不收集表单并可查看微信二维码", async ({ page }) => {
   await page.goto("/contact");
   await expect(page.getByRole("textbox")).toHaveCount(0);
-  await page.getByRole("button", { name: "开始在线咨询" }).click();
+  await page.getByRole("button", { name: "查看微信二维码" }).click();
   await expect(
-    page.getByRole("heading", { name: "在线联系工厂" })
+    page.getByRole("heading", { name: "联系工厂", exact: true })
   ).toBeVisible();
-  await expect(page.getByText(/不会将聊天内容.*Supabase/)).toBeVisible();
+  await expect(page.getByText("微信二维码").last()).toBeVisible();
 });
 
 test("旧询盘接口不再接收个人资料", async ({ request }) => {

@@ -1,6 +1,3 @@
-export const generatedAssetNotice =
-  "AI 概念示意图，不代表本工厂真实现场、设备、库存、批次或检测结果";
-
 export const generatedProductNotice =
   "AI 产品示意图，实际颜色、形态、规格与批次以样品及双方确认资料为准";
 

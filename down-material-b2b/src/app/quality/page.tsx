@@ -4,10 +4,7 @@ import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import {
-  generatedAssetNotice,
-  generatedAssets
-} from "@/config/generated-assets";
+import { generatedAssets } from "@/config/generated-assets";
 import { getLegacyClaims, getPublishedCertificates } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
@@ -91,7 +88,6 @@ export default async function QualityPage() {
                 <MediaPlaceholder
                   label={item.title}
                   src={item.image}
-                  notice={generatedAssetNotice}
                   className="min-h-56"
                 />
                 <h3 className="p-5 font-bold">{item.title}</h3>

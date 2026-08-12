@@ -6,6 +6,23 @@ import { databaseConfigured, getPrisma } from "@/lib/prisma";
 import type { DemoProduct, MarketPoint } from "@/types";
 import { siteConfig } from "@/config/site";
 import { getGeneratedProductAssets } from "@/config/generated-assets";
+import { newsRetentionDays } from "@/lib/down-news";
+
+const autoNewsPrefix = "cfd-news-";
+const dayMs = 86_400_000;
+
+function isPublicArticleWithinRetention(article: {
+  slug: string;
+  publishedAt: Date | null;
+}) {
+  return (
+    !article.slug.startsWith(autoNewsPrefix) ||
+    Boolean(
+      article.publishedAt &&
+      article.publishedAt.getTime() >= Date.now() - newsRetentionDays * dayMs
+    )
+  );
+}
 
 export type CompanyProfile = {
   companyName: string;
@@ -297,7 +314,7 @@ export async function getPublishedArticles() {
   if (!databaseConfigured()) return [];
   try {
     const prisma = getPrisma();
-    return await prisma.article.findMany({
+    const articles = await prisma.article.findMany({
       where: { status: ContentStatus.PUBLISHED, deletedAt: null },
       include: {
         category: true,
@@ -308,6 +325,7 @@ export async function getPublishedArticles() {
       },
       orderBy: { publishedAt: "desc" }
     });
+    return articles.filter(isPublicArticleWithinRetention);
   } catch {
     return [];
   }
@@ -318,7 +336,7 @@ export async function getArticleBySlug(slug: string) {
   if (!databaseConfigured()) return null;
   try {
     const prisma = getPrisma();
-    return await prisma.article.findFirst({
+    const article = await prisma.article.findFirst({
       where: { slug, status: ContentStatus.PUBLISHED, deletedAt: null },
       include: {
         category: true,
@@ -328,6 +346,7 @@ export async function getArticleBySlug(slug: string) {
         }
       }
     });
+    return article && isPublicArticleWithinRetention(article) ? article : null;
   } catch {
     return null;
   }

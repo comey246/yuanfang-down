@@ -82,3 +82,24 @@ test("行业资讯同步接口拒绝未授权请求", async ({ request }) => {
   });
   expect(response.status()).toBe(401);
 });
+
+test("行业资讯支持主题、时间和排序筛选", async ({ page }) => {
+  await page.goto("/articles");
+  const marketButton = page.getByRole("button", { name: "行业行情" });
+  await expect(marketButton).toBeVisible();
+  await marketButton.click();
+  await expect(marketButton).toHaveAttribute("aria-pressed", "true");
+  await expect(page.getByText(/当前显示 \d+ 条最近 30 天的内容/)).toBeVisible();
+
+  await page.getByLabel("发布时间范围").selectOption("7");
+  await expect(page.getByText(/当前显示 \d+ 条最近 7 天的内容/)).toBeVisible();
+
+  await page.getByLabel("资讯排序方式").selectOption("oldest");
+  await expect(page.getByLabel("资讯排序方式")).toHaveValue("oldest");
+
+  await page.getByRole("button", { name: "全部资讯" }).click();
+  await expect(page.getByRole("button", { name: "全部资讯" })).toHaveAttribute(
+    "aria-pressed",
+    "true"
+  );
+});

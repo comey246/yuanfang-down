@@ -52,3 +52,7 @@ test("SEO 文件可访问", async ({ request }) => {
   expect((await request.get("/sitemap.xml")).ok()).toBe(true);
   expect((await request.get("/robots.txt")).ok()).toBe(true);
 });
+
+test("图片中心页面已下线", async ({ request }) => {
+  expect((await request.get("/media")).status()).toBe(404);
+});

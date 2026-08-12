@@ -43,9 +43,6 @@ export default function ProcessPage() {
                 </p>
                 <h2 className="mt-3 text-2xl font-bold">{title}</h2>
                 <p className="mt-4 leading-7 text-slate-600">{description}</p>
-                <p className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-5 text-slate-500">
-                  具体控制点、检测频次与判定标准待后台补充，不在前台预设数据。
-                </p>
               </div>
             </article>
           ))}

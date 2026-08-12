@@ -24,7 +24,7 @@ export default async function MarketPage() {
       <PageHero
         eyebrow="MARKET QUOTE"
         title="羽绒行情与市场报价"
-        description="行情每天同步一次羽绒金网匿名公开查询接口，并保留后台人工维护能力。价格仅供采购沟通参考，不构成最终合同报价。"
+        description="每日更新鹅绒、鸭绒公开市场行情，支持按品种和绒子含量查看价格及趋势。"
       />
       <Container className="space-y-8 py-14 sm:py-20">
         <div className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 sm:flex-row sm:items-center sm:justify-between">

@@ -64,7 +64,10 @@ export default async function ArticlePage({ params }: Props) {
     description: article.excerpt,
     datePublished: article.publishedAt?.toISOString(),
     dateModified: article.updatedAt.toISOString(),
-    author: { "@type": "Person", name: article.author || "待填写" },
+    author: {
+      "@type": article.author ? "Person" : "Organization",
+      name: article.author || profile.shortName
+    },
     publisher: { "@type": "Organization", name: profile.companyName },
     image: coverImage
       ? new URL(coverImage, siteConfig.baseUrl).toString()
@@ -117,10 +120,12 @@ export default async function ArticlePage({ params }: Props) {
                   <Clock3 className="size-4" />
                   更新：{formatDate(article.updatedAt)}
                 </span>
-                <span className="flex items-center gap-2">
-                  <UserRound className="size-4" />
-                  作者：{article.author || "待填写"}
-                </span>
+                {article.author ? (
+                  <span className="flex items-center gap-2">
+                    <UserRound className="size-4" />
+                    作者：{article.author}
+                  </span>
+                ) : null}
               </div>
             </header>
             {coverImage ? (

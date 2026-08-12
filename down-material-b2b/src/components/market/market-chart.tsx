@@ -106,7 +106,7 @@ export function MarketChart({
         </ResponsiveContainer>
       </div>
       <p className="mt-3 text-xs text-slate-500">
-        图表仅呈现后台已发布的价格数据，不构成报价承诺。
+        图表呈现所选品种与规格的历史价格变化，仅供市场参考。
       </p>
     </div>
   );

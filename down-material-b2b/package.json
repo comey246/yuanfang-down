@@ -21,6 +21,7 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:migrate:legacy-content": "tsx --env-file=.env scripts/migrate-legacy-content.ts",
     "market:sync": "tsx --env-file=.env scripts/sync-cn-down-market.ts",
+    "news:sync:dry": "NEWS_SYNC_DRY_RUN=1 node scripts/push-down-news.mjs",
     "articles:publish": "tsx --env-file=.env scripts/publish-articles.ts",
     "content:clean-placeholders": "tsx --env-file=.env scripts/clean-public-placeholders.ts",
     "db:studio": "prisma studio",

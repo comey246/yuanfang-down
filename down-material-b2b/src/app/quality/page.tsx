@@ -31,12 +31,12 @@ export default function QualityPage() {
             [
               Building2,
               "第三方检测",
-              "后台填写检测机构、检测日期并上传对应报告文件。"
+              "由第三方机构出具检测报告，报告通常包含样品信息、检测项目、方法和结果。"
             ],
             [
               BadgeCheck,
               "认证证书",
-              "证书经核验且后台明确发布后才展示，不默认显示认证 Logo。"
+              "由认证机构依据相应规则签发，查看时需关注认证范围、有效期和证书状态。"
             ]
           ].map(([Icon, title, description]) => {
             const ItemIcon = Icon as typeof FlaskConical;
@@ -57,7 +57,7 @@ export default function QualityPage() {
         <section className="mt-14">
           <h2 className="text-3xl font-bold">质量指标说明</h2>
           <p className="mt-3 text-slate-600">
-            下列图片用于解释指标和资料分级，不是本工厂检测现场，也不包含任何产品检测结果。
+            了解绒子含量、蓬松度、清洁度、气味和水分等常见质量指标。
           </p>
           <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {generatedAssets.quality.map((item) => (

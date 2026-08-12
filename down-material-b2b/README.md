@@ -47,6 +47,7 @@ npm run db:deploy       # 生产应用已有迁移
 npm run db:seed         # 初始化管理员、产品与公开文章
 npm run articles:publish # 发布 3 篇文章并隐藏公开联系邮箱
 npm run db:migrate:legacy-content # 安全合并旧站品牌、联系方式和演示素材
+npm run news:sync:dry    # 预览行业资讯抓取结果，不写入数据库
 npm run db:studio       # Prisma 数据管理界面
 npm run cf:build        # 生成 Cloudflare Workers / OpenNext 构建
 npm run cf:preview      # 在本地 workerd 运行时预览
@@ -84,6 +85,12 @@ npm run market:sync
 ### 文章
 
 演示文章默认草稿。正文使用空行分段，`## 标题` 和 `### 标题` 会生成对应标题结构。FAQ 每行格式为 `问题|答案`，发布后生成 FAQPage JSON-LD。内容发布前应由业务或质量负责人审核结论、时间和来源。
+
+GitHub Actions 每天北京时间 09:50 从中国羽绒工业协会旗下“中国羽绒信息网”读取最新行业条目，并调用受 `AUTH_SECRET` 保护的 `/api/cron/news-sync` 写入文章中心。同步只保存标题、分类、发布日期、简短索引摘要和原文链接，不复制来源正文；来源编号用于去重，同一条资讯再次同步时只会更新。任务复用仓库 Secret `MARKET_SYNC_SECRET`，其值必须与生产环境的 `AUTH_SECRET` 一致。修改抓取规则后可先运行：
+
+```bash
+npm run news:sync:dry
+```
 
 ### 图片
 

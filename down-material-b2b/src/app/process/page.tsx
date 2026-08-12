@@ -8,7 +8,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
   "生产工艺与质量控制",
-  "了解羽绒原料从入厂、筛选、清洗、脱水、烘干、分拣、检测、包装到出库的可配置流程。",
+  "了解羽绒原料从入厂、筛选、清洗、脱水、烘干、分拣、检测、包装到出库的主要流程。",
   "/process"
 );
 
@@ -18,7 +18,7 @@ export default function ProcessPage() {
       <PageHero
         eyebrow="PRODUCTION PROCESS"
         title="生产工艺与质量控制"
-        description="展示羽绒原料从入厂到出库的主要工序，具体控制点、设备和质量要求以双方确认资料为准。"
+        description="展示羽绒原料从入厂到出库的主要工序。"
       />
       <Container className="py-14 sm:py-20">
         <div className="relative space-y-8 before:absolute before:bottom-10 before:left-6 before:top-10 before:w-px before:bg-forest-100 md:before:left-1/2">

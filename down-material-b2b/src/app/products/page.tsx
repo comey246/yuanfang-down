@@ -7,7 +7,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
   "羽绒原料目录",
-  "查看白鹅绒、灰鹅绒、白鸭绒、灰鸭绒及定制羽绒原料供应条目。具体规格和参数以后台核实发布数据为准。",
+  "查看白鹅绒、灰鹅绒、白鸭绒、灰鸭绒及定制羽绒原料供应条目。",
   "/products"
 );
 

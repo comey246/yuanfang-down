@@ -1,12 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  Check,
-  Download,
-  MessageCircle,
-  Phone,
-  ShieldCheck
-} from "lucide-react";
+import { Check, Download, MessageCircle, Phone } from "lucide-react";
 import { OnlineServiceButton } from "@/components/customer-service/online-service-button";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ButtonLink } from "@/components/ui/button";
@@ -137,10 +131,6 @@ export default async function ProductDetailPage({ params }: Props) {
                   </strong>
                 </div>
               ) : null}
-              <div className="mt-7 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">
-                <ShieldCheck className="mr-2 inline size-5" />
-                参数、报价与交期以双方确认的样品、检测文件及合同为准；本页空参数不会显示为“0”。
-              </div>
               {parameters.length ? (
                 <dl className="mt-7 divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-200 bg-white">
                   {parameters.slice(0, 7).map(([label, value]) => (
@@ -153,14 +143,7 @@ export default async function ProductDetailPage({ params }: Props) {
                     </div>
                   ))}
                 </dl>
-              ) : (
-                <div className="mt-7 rounded-xl border border-dashed border-slate-300 p-6 text-sm leading-6 text-slate-600">
-                  <p className="font-bold text-ink">规格参数待补充</p>
-                  <p className="mt-1">
-                    请通过微信或电话说明目标规格和数量，业务人员将按本次需求确认可供应参数。
-                  </p>
-                </div>
-              )}
+              ) : null}
               <div className="mt-7 grid grid-cols-2 gap-3">
                 <a
                   href={`tel:${profile.mobile}`}

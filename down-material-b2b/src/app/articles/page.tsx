@@ -23,7 +23,7 @@ export default async function ArticlesPage() {
     "采购指南",
     "质量检测",
     "行业行情",
-    "工厂动态",
+    "行业资讯",
     "常见问题"
   ];
   return (
@@ -31,7 +31,7 @@ export default async function ArticlesPage() {
       <PageHero
         eyebrow="KNOWLEDGE CENTER"
         title="羽绒知识与行业资讯"
-        description="内容注明更新时间和来源，区分企业声明与第三方资料，不发布未经核验的检测结论。"
+        description="分享羽绒原料知识、采购指南、质量指标和行业行情内容。"
       />
       <Container className="py-14 sm:py-20">
         <div className="mb-8 flex flex-wrap gap-2">

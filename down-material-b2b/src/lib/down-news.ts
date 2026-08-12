@@ -15,10 +15,31 @@ export const downNewsItemsSchema = z.array(downNewsItemSchema).min(1).max(30);
 
 export type DownNewsItem = z.infer<typeof downNewsItemSchema>;
 
+export const newsRetentionDays = 30;
+const dayMs = 86_400_000;
+
+export function filterRecentNews(
+  items: DownNewsItem[],
+  now: Date,
+  retentionDays = newsRetentionDays
+) {
+  const cutoff = now.getTime() - retentionDays * dayMs;
+  return items.filter(
+    (item) => publishedAt(item.publishedDate).getTime() >= cutoff
+  );
+}
+
 export function getNewsCategory(sourceCategory: string) {
-  return sourceCategory.includes("行情")
-    ? { name: "行业行情", slug: "industry-market" }
-    : { name: "行业资讯", slug: "industry-news" };
+  if (sourceCategory.includes("行情")) {
+    return { name: "行业行情", slug: "industry-market" };
+  }
+  if (/(知识|百科)/u.test(sourceCategory)) {
+    return { name: "羽绒知识", slug: "down-knowledge" };
+  }
+  if (/(质量|标准|检测)/u.test(sourceCategory)) {
+    return { name: "质量检测", slug: "quality-testing" };
+  }
+  return { name: "行业资讯", slug: "industry-news" };
 }
 
 export function buildNewsExcerpt(item: DownNewsItem) {
@@ -43,12 +64,13 @@ function publishedAt(date: string) {
   return new Date(`${date}T00:00:00+08:00`);
 }
 
-export async function persistDownNews(items: DownNewsItem[]) {
+export async function persistDownNews(items: DownNewsItem[], now = new Date()) {
   const prisma = getPrisma();
+  const recentItems = filterRecentNews(items, now);
   let created = 0;
   let updated = 0;
 
-  for (const item of items) {
+  for (const item of recentItems) {
     const categoryInput = getNewsCategory(item.sourceCategory);
     const category = await prisma.articleCategory.upsert({
       where: { slug: categoryInput.slug },
@@ -88,5 +110,20 @@ export async function persistDownNews(items: DownNewsItem[]) {
     else created += 1;
   }
 
-  return { received: items.length, created, updated };
+  const archived = await prisma.article.updateMany({
+    where: {
+      slug: { startsWith: "cfd-news-" },
+      publishedAt: { lt: new Date(now.getTime() - newsRetentionDays * dayMs) },
+      deletedAt: null
+    },
+    data: { deletedAt: now }
+  });
+
+  return {
+    received: items.length,
+    retained: recentItems.length,
+    created,
+    updated,
+    archived: archived.count
+  };
 }

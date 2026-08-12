@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArticleBrowser } from "@/components/articles/article-browser";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
-import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { getGeneratedArticleCover } from "@/config/generated-assets";
 import { getPublishedArticles } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
-import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "羽绒知识与行业资讯",
@@ -34,58 +31,23 @@ export default async function ArticlesPage() {
         description="分享羽绒原料知识、采购指南、质量指标和行业行情内容。"
       />
       <Container className="py-14 sm:py-20">
-        <div className="mb-8 flex flex-wrap gap-2">
-          {categories.map((item) => (
-            <span
-              key={item}
-              className="rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-600"
-            >
-              {item}
-            </span>
-          ))}
-        </div>
         {articles.length ? (
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {articles.map((article) => (
-              <article
-                key={article.id}
-                className="flex flex-col overflow-hidden rounded-xl2 border border-slate-200 bg-white"
-              >
-                <MediaPlaceholder
-                  label={`${article.title}文章封面`}
-                  src={
-                    article.coverImage || getGeneratedArticleCover(article.slug)
-                  }
-                  className="min-h-48"
-                />
-                <div className="flex flex-1 flex-col p-6">
-                  <p className="text-xs font-bold text-amber-600">
-                    {article.category?.name || "行业资讯"}
-                  </p>
-                  <h2 className="mt-3 text-xl font-bold leading-8">
-                    <Link
-                      href={`/articles/${article.slug}`}
-                      className="hover:text-forest-700"
-                    >
-                      {article.title}
-                    </Link>
-                  </h2>
-                  <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
-                    {article.excerpt}
-                  </p>
-                  <div className="mt-5 flex items-center justify-between text-xs text-slate-500">
-                    <span>{formatDate(article.publishedAt)}</span>
-                    <Link
-                      href={`/articles/${article.slug}`}
-                      className="flex items-center gap-1 font-bold text-forest-700"
-                    >
-                      阅读全文 <ArrowRight className="size-4" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+          <ArticleBrowser
+            categories={categories}
+            now={new Date().toISOString()}
+            articles={articles.map((article) => ({
+              id: article.id,
+              title: article.title,
+              slug: article.slug,
+              excerpt: article.excerpt || "",
+              coverImage:
+                article.coverImage || getGeneratedArticleCover(article.slug),
+              categoryName: article.category?.name || "行业资讯",
+              publishedAt: (
+                article.publishedAt || article.createdAt
+              ).toISOString()
+            }))}
+          />
         ) : (
           <EmptyState
             title="文章内容暂时无法读取"

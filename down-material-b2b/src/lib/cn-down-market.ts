@@ -297,24 +297,3 @@ export async function syncCnDownMarket(
 ) {
   return persistCnDownMarket(await fetchCnDownMarket(now, fetcher), now);
 }
-
-export async function syncCnDownMarketFromWorker() {
-  const secret = process.env.AUTH_SECRET;
-  if (!secret) throw new Error("AUTH_SECRET 未配置");
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://yf-down.com";
-  const response = await fetch(
-    new URL("/api/internal/cn-down-source", siteUrl),
-    {
-      method: "POST",
-      headers: { Authorization: `Bearer ${secret}` },
-      cache: "no-store"
-    }
-  );
-  if (!response.ok) {
-    throw new Error(`行情源读取失败：HTTP ${response.status}`);
-  }
-  const payload = z
-    .object({ snapshots: cnDownSnapshotsSchema })
-    .parse(await response.json());
-  return persistCnDownMarket(payload.snapshots);
-}

@@ -10,7 +10,6 @@ import {
 } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth";
-import { syncCnDownMarketFromWorker } from "@/lib/cn-down-market";
 import { getPrisma } from "@/lib/prisma";
 
 const text = (form: FormData, key: string) =>
@@ -218,25 +217,6 @@ export async function archiveMarketQuote(form: FormData) {
     data: { deletedAt: new Date(), published: false }
   });
   await audit("ARCHIVE", "MarketQuote", id);
-  revalidatePath("/market");
-  revalidatePath("/admin/market");
-}
-
-export async function syncMarketQuotesFromCnDown() {
-  const admin = await requireAdmin();
-  const result = await syncCnDownMarketFromWorker();
-  const prisma = getPrisma();
-  await prisma.auditLog.create({
-    data: {
-      adminId: admin.id,
-      adminEmail: admin.email,
-      action: "MANUAL_SYNC",
-      entityType: "MarketQuote",
-      summary: `手动同步羽绒金网行情：${result.products} 个品种`,
-      metadata: result
-    }
-  });
-  revalidatePath("/");
   revalidatePath("/market");
   revalidatePath("/admin/market");
 }

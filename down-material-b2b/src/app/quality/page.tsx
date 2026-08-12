@@ -3,6 +3,11 @@ import { BadgeCheck, Building2, FlaskConical, ShieldAlert } from "lucide-react";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
+import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import {
+  generatedAssetNotice,
+  generatedAssets
+} from "@/config/generated-assets";
 import { getLegacyClaims, getPublishedCertificates } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
@@ -72,6 +77,28 @@ export default async function QualityPage() {
             );
           })}
         </div>
+        <section className="mt-14">
+          <h2 className="text-3xl font-bold">质量指标科普示意</h2>
+          <p className="mt-3 text-slate-600">
+            下列图片用于解释指标和资料分级，不是本工厂检测现场，也不包含任何产品检测结果。
+          </p>
+          <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {generatedAssets.quality.map((item) => (
+              <article
+                key={item.title}
+                className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
+              >
+                <MediaPlaceholder
+                  label={item.title}
+                  src={item.image}
+                  notice={generatedAssetNotice}
+                  className="min-h-56"
+                />
+                <h3 className="p-5 font-bold">{item.title}</h3>
+              </article>
+            ))}
+          </div>
+        </section>
         {legacyClaims?.certificationStatements.length ? (
           <section className="mt-8 rounded-xl2 border border-amber-200 bg-amber-50 p-6">
             <p className="text-xs font-bold text-amber-700">

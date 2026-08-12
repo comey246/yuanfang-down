@@ -5,6 +5,7 @@ import { demoProducts } from "@/lib/demo-data";
 import { databaseConfigured, getPrisma } from "@/lib/prisma";
 import type { DemoProduct, MarketPoint } from "@/types";
 import { siteConfig } from "@/config/site";
+import { getGeneratedProductAssets } from "@/config/generated-assets";
 
 export type CompanyProfile = {
   companyName: string;
@@ -137,6 +138,16 @@ function productToView(
     include: { category: true; specifications: true };
   }>
 ): DemoProduct {
+  const generated = product.demoNotice
+    ? getGeneratedProductAssets(product.slug)
+    : null;
+  const useGeneratedCover =
+    generated &&
+    (!product.coverImage || product.coverImage.startsWith("/legacy-assets/"));
+  const useGeneratedGallery =
+    generated &&
+    (!product.gallery.length ||
+      product.gallery.every((item) => item.startsWith("/legacy-assets/")));
   return {
     id: product.id,
     name: product.name,
@@ -156,8 +167,8 @@ function productToView(
           : "其他",
     summary: product.summary || "",
     description: product.description || "",
-    coverImage: product.coverImage,
-    gallery: product.gallery,
+    coverImage: useGeneratedCover ? generated.cover : product.coverImage,
+    gallery: useGeneratedGallery ? [...generated.gallery] : product.gallery,
     videoUrl: product.videoUrl,
     videoPoster: product.videoPoster,
     customization: product.customization,

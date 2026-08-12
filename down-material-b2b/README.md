@@ -123,6 +123,17 @@ npm run db:migrate:legacy-content
 
 执行后会写入一条 `AuditLog`。确认真实资料后，请在后台逐项替换演示图片和仍为“待填写”的字段。
 
+## AI 示意素材
+
+项目现包含 39 张统一风格的 AI 示意图片，覆盖首页 Hero、4 类产品主图与图集、9 个生产流程、6 类质量指标、4 类应用场景、3 张文章封面、SEO 分享图及 3 张视频 poster。每张图片均提供 WebP 与 AVIF：
+
+- 访问路径：`public/generated`
+- 集中配置：`src/config/generated-assets.ts`
+- 转换脚本：`scripts/process-ai-assets.mjs`
+- 重新处理：先安装 ImageMagick，再运行 `AI_SOURCE_DIR=/原始PNG目录 npm run assets:optimize`
+
+前台对这些素材统一显示“AI 概念示意图”或“AI 产品示意图”，不得描述为本工厂实拍、具体设备、真实库存、实际批次、检测结果、认证或客户案例。原始 PNG 保留在本地下载目录，没有加入部署包；上线后仍须逐步用企业自有或获得授权的真实图片替换涉及工厂可信度的页面。
+
 ## 联系模式与数据边界
 
 - 公开页面不显示姓名、手机号、微信号、采购备注或附件上传字段。

@@ -6,6 +6,7 @@ import { CustomerServiceSlot } from "@/components/layout/customer-service-slot";
 import { siteConfig } from "@/config/site";
 import { safeJsonLd } from "@/lib/utils";
 import { getCompanyProfile, getSiteOptions } from "@/lib/data";
+import { generatedAssets } from "@/config/generated-assets";
 
 export async function generateMetadata(): Promise<Metadata> {
   const [profile, options] = await Promise.all([
@@ -47,7 +48,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: siteConfig.description,
       images: [
         {
-          url: "/og.png",
+          url: generatedAssets.og,
           width: 1200,
           height: 630,
           alt: "专注优质羽绒原料供应"
@@ -58,7 +59,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: `${siteConfig.slogan}｜${profile.companyName}`,
       description: siteConfig.description,
-      images: ["/og.png"]
+      images: [generatedAssets.og]
     },
     robots: { index: true, follow: true },
     icons: { icon: "/brand/yuanfang-feather.svg" },

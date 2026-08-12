@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { siteConfig } from "@/config/site";
+import { generatedAssets } from "@/config/generated-assets";
 
 export function createMetadata(
   title: string,
@@ -21,7 +22,7 @@ export function createMetadata(
       url,
       images: [
         {
-          url: "/og.png",
+          url: generatedAssets.og,
           width: 1200,
           height: 630,
           alt: "专注优质羽绒原料供应"
@@ -32,7 +33,7 @@ export function createMetadata(
       card: "summary_large_image",
       title,
       description,
-      images: ["/og.png"]
+      images: [generatedAssets.og]
     }
   };
 }

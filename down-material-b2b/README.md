@@ -72,7 +72,7 @@ npm run cf:deploy       # 构建并部署到 Cloudflare Workers
 
 ### 行情
 
-系统通过羽绒金网无需登录的公开查询接口，每天北京时间 09:20 同步一次白鹅绒、灰鹅绒、白鸭绒、灰鸭绒的 GB/T 14272-2021 90% 规格参考价和近 90 天历史数据。Cloudflare Cron 调用受 `AUTH_SECRET` 保护的内部同步路由；后台也可手动同步，本地可运行：
+系统通过羽绒金网无需登录的公开查询接口，每天北京时间 09:20 同步一次白鹅绒、灰鹅绒、白鸭绒、灰鸭绒的 GB/T 14272-2021 90% 规格参考价和近 90 天历史数据。GitHub Actions 使用系统 `curl` 读取公开接口，再调用受 `AUTH_SECRET` 保护的生产同步路由；仓库 Secret `MARKET_SYNC_SECRET` 必须与生产环境的 `AUTH_SECRET` 一致。本地可运行：
 
 ```bash
 npm run market:sync

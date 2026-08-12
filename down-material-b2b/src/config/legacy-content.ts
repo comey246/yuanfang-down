@@ -3,7 +3,7 @@ import { generatedAssets } from "@/config/generated-assets";
 /**
  * 从同一仓库旧站中提取的、可核对的公开内容。
  *
- * 旧站图片没有随仓库提供拍摄来源或授权记录，因此只能作为演示素材使用，
+ * 旧站图片没有随仓库提供拍摄来源或授权记录，
  * 不能描述为本工厂实拍。上线前应由后台替换为自有或已获授权的真实素材。
  */
 export const legacySiteContent = {
@@ -17,7 +17,6 @@ export const legacySiteContent = {
   baiduVerification: "codeva-6IO0Ia9h6l"
 } as const;
 
-export const legacyDemoNotice = "旧站演示素材，真实工厂照片待替换";
 export const legacyDataNotice = "来源于旧站历史页面，待企业核验";
 
 export const legacyDemoAssets = {

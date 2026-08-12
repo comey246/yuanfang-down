@@ -198,11 +198,6 @@ export default async function HomePage() {
                     <h3 className="text-xl font-bold text-ink">
                       {product.name}
                     </h3>
-                    {product.demo ? (
-                      <span className="rounded-full bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-700">
-                        示例待替换
-                      </span>
-                    ) : null}
                   </div>
                   <p className="mt-3 min-h-12 text-sm leading-6 text-slate-600">
                     {product.summary}
@@ -264,60 +259,6 @@ export default async function HomePage() {
                 </div>
               );
             })}
-          </div>
-        </Container>
-      </section>
-
-      <section className="overflow-hidden bg-forest-900 py-20 text-white sm:py-24">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div>
-              <SectionHeading
-                eyebrow="Factory Capability"
-                title="工厂实力，用可核验资料建立信任"
-                description="工厂能力、经营数据与相关资料以后台核验发布内容为准。"
-                tone="inverse"
-              />
-              <div className="mt-8 grid grid-cols-2 gap-3">
-                {[
-                  "工厂航拍",
-                  "水洗设备",
-                  "分拣设备",
-                  "检测实验室",
-                  "包装仓储",
-                  "发货区域"
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm font-semibold text-white/80"
-                  >
-                    <Check className="mr-2 inline size-4 text-amber-400" />
-                    {item}
-                  </div>
-                ))}
-              </div>
-              <ButtonLink href="/factory" className="mt-8">
-                了解工厂实力
-              </ButtonLink>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <MediaPlaceholder
-                label="工厂全景"
-                type="factory"
-                src={generatedAssets.factoryImages[0].image}
-                className="col-span-2 min-h-60 rounded-xl2"
-              />
-              <MediaPlaceholder
-                label="清洗设备"
-                src={generatedAssets.factoryImages[1].image}
-                className="min-h-44 rounded-xl2"
-              />
-              <MediaPlaceholder
-                label="质量检测"
-                src={generatedAssets.factoryImages[2].image}
-                className="min-h-44 rounded-xl2"
-              />
-            </div>
           </div>
         </Container>
       </section>

@@ -99,8 +99,7 @@ export default async function ContactPage({
                 当前咨询产品：<strong className="text-ink">{product}</strong>。
               </>
             ) : null}
-            客服在线时可直接沟通；离线时请使用电话或微信。网站不要求填写姓名、手机号，也不会把聊天内容写入
-            Supabase。
+            客服在线时可直接沟通；离线时请使用电话或微信。网站不要求填写姓名、手机号，也不会保存咨询内容。
           </p>
 
           <OnlineServiceButton

@@ -7,7 +7,6 @@ import {
 import bcrypt from "bcryptjs";
 import {
   legacyDataNotice,
-  legacyDemoNotice,
   legacyHistoricalClaims,
   legacyProductContent,
   legacySiteContent
@@ -70,7 +69,7 @@ async function main() {
         color,
         summary: legacyProduct.summary,
         description:
-          "本条目为网站结构演示数据。所有原料来源、参数、包装、起订量、供货能力与交付周期均须核实后填写。",
+          "产品规格、质量指标、包装、起订量、供货能力与交付周期以双方确认的样品、检测文件、报价单及合同为准。",
         coverImage: legacyProduct.coverImage,
         gallery: [...legacyProduct.gallery],
         applications: [...legacyProduct.applications],
@@ -81,7 +80,7 @@ async function main() {
         sampleAvailable: true,
         status: ContentStatus.PUBLISHED,
         publishedAt: new Date(),
-        demoNotice: `${legacyDemoNotice}；产品参数${legacyDataNotice}`
+        demoNotice: null
       }
     });
   }

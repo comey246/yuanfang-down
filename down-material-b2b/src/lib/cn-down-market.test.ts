@@ -27,16 +27,38 @@ describe("羽绒金网行情同步", () => {
     ]);
   });
 
-  it("匿名请求当前价格和90天历史数据", async () => {
+  it("动态读取全部规格并请求当前价格和90天历史数据", async () => {
     const fetcher = vi.fn(
       async (input: string | URL | Request, init?: RequestInit) => {
         const url = String(input);
+        if (url.endsWith("getFeatherPriceInfo")) {
+          expect(init?.method).toBe("GET");
+          return new Response(
+            JSON.stringify({
+              code: 200,
+              message: "success",
+              data: {
+                standard: [
+                  {
+                    id: "1",
+                    standardName: "羽绒服装 GB/T 14272-2021",
+                    specification: [
+                      { id: "2", specification: 95 },
+                      { id: "3", specification: 90 }
+                    ]
+                  }
+                ]
+              }
+            }),
+            { status: 200, headers: { "Content-Type": "application/json" } }
+          );
+        }
         const body = JSON.parse(String(init?.body)) as {
           featherNameId: string;
           specificationId: string;
           standardId: string;
         };
-        expect(body.specificationId).toBe("3");
+        expect(["2", "3"]).toContain(body.specificationId);
         expect(body.standardId).toBe("1");
         return new Response(
           JSON.stringify(
@@ -69,10 +91,11 @@ describe("羽绒金网行情同步", () => {
       new Date("2026-08-12T04:00:00Z"),
       fetcher as typeof fetch
     );
-    expect(fetcher).toHaveBeenCalledTimes(8);
-    expect(result).toHaveLength(4);
-    expect(result[2]).toMatchObject({
+    expect(fetcher).toHaveBeenCalledTimes(17);
+    expect(result).toHaveLength(8);
+    expect(result[4]).toMatchObject({
       productName: "白鸭绒",
+      specificationValue: 95,
       currentPrice: 503
     });
   });

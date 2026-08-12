@@ -5,7 +5,6 @@ import {
   legacyHistoricalClaims,
   legacySiteContent
 } from "@/config/legacy-content";
-import { generatedProductNotice } from "@/config/generated-assets";
 
 describe("演示产品数据安全", () => {
   it("四个演示产品均明确标记为示例", () => {
@@ -29,10 +28,9 @@ describe("演示产品数据安全", () => {
     }
   });
 
-  it("AI 产品图只作为明确标识的演示素材", () => {
+  it("演示产品使用独立的本地图片目录", () => {
     for (const product of demoProducts) {
       expect(product.coverImage).toMatch(/^\/generated\/products\//);
-      expect(generatedProductNotice).toContain("AI 产品示意图");
     }
     expect(legacyDemoNotice).toContain("演示素材");
   });

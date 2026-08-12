@@ -13,6 +13,7 @@ import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { getCompanyProfile, getSiteOptions } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
+import { isConfiguredValue } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "联系我们与在线客服",
@@ -48,39 +49,41 @@ export default async function ContactPage({
         <aside>
           <h2 className="text-2xl font-bold">直接联系工厂</h2>
           <div className="mt-6 space-y-3">
-            {contacts.map(([Icon, label, value, href]) => {
-              const content = (
-                <>
-                  <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-forest-50 text-forest-700">
-                    <Icon className="size-5" />
-                  </span>
-                  <span>
-                    <span className="block text-xs text-slate-500">
-                      {label}
+            {contacts
+              .filter(([, , value]) => isConfiguredValue(value))
+              .map(([Icon, label, value, href]) => {
+                const content = (
+                  <>
+                    <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-forest-50 text-forest-700">
+                      <Icon className="size-5" />
                     </span>
-                    <span className="mt-1 block font-semibold text-ink">
-                      {value}
+                    <span>
+                      <span className="block text-xs text-slate-500">
+                        {label}
+                      </span>
+                      <span className="mt-1 block font-semibold text-ink">
+                        {value}
+                      </span>
                     </span>
-                  </span>
-                </>
-              );
-              return href ? (
-                <a
-                  key={label}
-                  href={href}
-                  className="hover:border-forest-200 flex gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:bg-forest-50/40"
-                >
-                  {content}
-                </a>
-              ) : (
-                <div
-                  key={label}
-                  className="flex gap-4 rounded-xl border border-slate-200 bg-white p-4"
-                >
-                  {content}
-                </div>
-              );
-            })}
+                  </>
+                );
+                return href ? (
+                  <a
+                    key={label}
+                    href={href}
+                    className="hover:border-forest-200 flex gap-4 rounded-xl border border-slate-200 bg-white p-4 hover:bg-forest-50/40"
+                  >
+                    {content}
+                  </a>
+                ) : (
+                  <div
+                    key={label}
+                    className="flex gap-4 rounded-xl border border-slate-200 bg-white p-4"
+                  >
+                    {content}
+                  </div>
+                );
+              })}
           </div>
           <div className="mt-6 rounded-xl2 border border-slate-200 bg-white p-5">
             <MediaPlaceholder

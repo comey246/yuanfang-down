@@ -5,10 +5,7 @@ import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { siteConfig } from "@/config/site";
 import type { CompanyProfile } from "@/lib/data";
-
-function configured(value: string) {
-  return Boolean(value && !value.startsWith("待填") && value !== "待备案");
-}
+import { isConfiguredValue } from "@/lib/utils";
 
 export function Footer({ profile }: { profile: CompanyProfile }) {
   return (
@@ -55,10 +52,12 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
               <Mail className="mt-0.5 size-4 shrink-0 text-amber-400" />
               {profile.email}
             </li>
-            <li className="flex gap-2">
-              <MapPin className="mt-0.5 size-4 shrink-0 text-amber-400" />
-              {profile.address}
-            </li>
+            {isConfiguredValue(profile.address) ? (
+              <li className="flex gap-2">
+                <MapPin className="mt-0.5 size-4 shrink-0 text-amber-400" />
+                {profile.address}
+              </li>
+            ) : null}
             <li className="flex gap-2">
               <Clock className="mt-0.5 size-4 shrink-0 text-amber-400" />
               {profile.businessHours}
@@ -100,17 +99,17 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
           <p>
             © {new Date().getFullYear()} {profile.companyName}。保留所有权利。
           </p>
-          {configured(profile.creditCode) ||
-          configured(profile.icpNumber) ||
-          configured(profile.policeRecordNumber) ? (
+          {isConfiguredValue(profile.creditCode) ||
+          isConfiguredValue(profile.icpNumber) ||
+          isConfiguredValue(profile.policeRecordNumber) ? (
             <div className="flex flex-wrap gap-4">
-              {configured(profile.creditCode) ? (
+              {isConfiguredValue(profile.creditCode) ? (
                 <span>统一社会信用代码：{profile.creditCode}</span>
               ) : null}
-              {configured(profile.icpNumber) ? (
+              {isConfiguredValue(profile.icpNumber) ? (
                 <span>{profile.icpNumber}</span>
               ) : null}
-              {configured(profile.policeRecordNumber) ? (
+              {isConfiguredValue(profile.policeRecordNumber) ? (
                 <span>{profile.policeRecordNumber}</span>
               ) : null}
             </div>

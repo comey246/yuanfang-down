@@ -18,6 +18,16 @@ export function nonEmpty(value: unknown): value is string {
   return typeof value === "string" && value.trim().length > 0;
 }
 
+export function isConfiguredValue(value: unknown): value is string {
+  return (
+    nonEmpty(value) &&
+    !value.startsWith("待填") &&
+    !value.startsWith("待补") &&
+    value !== "待备案" &&
+    value !== "未配置"
+  );
+}
+
 export function safeJsonLd(data: object) {
   return JSON.stringify(data).replace(/</g, "\\u003c");
 }

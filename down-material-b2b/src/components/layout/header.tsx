@@ -19,7 +19,7 @@ import {
   OnlineServiceTrigger
 } from "@/components/customer-service/online-service-button";
 import { Container } from "@/components/ui/container";
-import { cn } from "@/lib/utils";
+import { cn, isConfiguredValue } from "@/lib/utils";
 
 export function Header({ profile }: { profile: CompanyProfile }) {
   const [open, setOpen] = useState(false);
@@ -37,10 +37,12 @@ export function Header({ profile }: { profile: CompanyProfile }) {
               <MessageCircle className="size-3.5" />
               微信咨询：{profile.wechat}
             </span>
-            <span className="flex items-center gap-2">
-              <MapPin className="size-3.5" />
-              工厂地址：{profile.address}
-            </span>
+            {isConfiguredValue(profile.address) ? (
+              <span className="flex items-center gap-2">
+                <MapPin className="size-3.5" />
+                工厂地址：{profile.address}
+              </span>
+            ) : null}
           </div>
           <OnlineServiceTrigger
             source="top-quote"

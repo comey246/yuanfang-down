@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Container } from "@/components/ui/container";
 import { getCompanyProfile, getSiteOptions } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
+import { isConfiguredValue } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "隐私政策",
@@ -90,8 +91,10 @@ export default async function PrivacyPage() {
         <p>
           你可以向相应通信渠道或运营企业申请查询、更正、复制、删除相关个人信息，或撤回基于同意的处理授权。运营主体：
           {profile.companyName}；电话：{profile.phone}；邮箱：{profile.email}
-          ；地址：
-          {profile.address}。以上资料仍为“待填写”时，网站不得正式对外发布。
+          {isConfiguredValue(profile.address)
+            ? `；地址：${profile.address}`
+            : ""}
+          。
         </p>
       </article>
     </Container>

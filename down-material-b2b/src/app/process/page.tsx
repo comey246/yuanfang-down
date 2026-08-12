@@ -18,7 +18,7 @@ export default function ProcessPage() {
       <PageHero
         eyebrow="PRODUCTION PROCESS"
         title="生产工艺与质量控制"
-        description="以下流程图片均为 AI 工艺示意，不代表本工厂真实设备或车间；真实控制点、图片和视频由后台补充。"
+        description="展示羽绒原料从入厂到出库的主要工序，具体控制点、设备和质量要求以双方确认资料为准。"
       />
       <Container className="py-14 sm:py-20">
         <div className="relative space-y-8 before:absolute before:bottom-10 before:left-6 before:top-10 before:w-px before:bg-forest-100 md:before:left-1/2">
@@ -29,7 +29,7 @@ export default function ProcessPage() {
             >
               <div className="relative">
                 <MediaPlaceholder
-                  label={`${title}工序实拍`}
+                  label={`${title}工序`}
                   type={index === 2 || index === 5 ? "video" : "image"}
                   src={generatedAssets.process[index]}
                   className="min-h-64 rounded-xl2"

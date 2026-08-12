@@ -5,7 +5,7 @@ export const siteConfig = {
   shortName: legacySiteContent.shortName,
   slogan: "专注优质羽绒原料供应",
   description:
-    "远方羽绒面向家纺、服装、品牌与贸易采购客户，提供白鸭绒、灰鸭绒、白鹅绒、灰鹅绒等羽绒原料的规格沟通、样品确认和批量采购服务。具体参数、检测与交付条件以双方确认资料为准。",
+    "远方羽绒面向家纺、服装、品牌与贸易采购客户，提供白鸭绒、灰鸭绒、白鹅绒、灰鹅绒等羽绒原料的规格沟通、样品确认和批量采购服务。",
   phone: legacySiteContent.phone,
   mobile: legacySiteContent.mobile,
   wechat: legacySiteContent.mobile,

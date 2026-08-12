@@ -9,7 +9,7 @@ import { isConfiguredValue } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "关于工厂",
-  "了解羽绒原料工厂的企业定位、服务客户、经营信息和联系资料。未提供的真实信息明确标记待补充。",
+  "了解远方羽绒的企业定位、服务对象和联系信息。",
   "/about"
 );
 
@@ -20,7 +20,7 @@ export default async function AboutPage() {
       <PageHero
         eyebrow="ABOUT THE FACTORY"
         title="关于工厂"
-        description="我们用明确占位符标记尚未提供的信息，避免用模板化数字和未经核验的宣传代替真实企业资料。"
+        description="面向家纺、服装、品牌和贸易采购客户，提供羽绒原料采购服务。"
       />
       <Container className="py-14 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
@@ -34,7 +34,7 @@ export default async function AboutPage() {
             <p className="text-sm font-bold text-amber-600">企业实体信息</p>
             <h2 className="mt-3 text-3xl font-bold">{profile.companyName}</h2>
             <p className="mt-5 leading-8 text-slate-600">
-              企业介绍待工厂提供并核验。建议包含成立背景、主营羽绒原料范围、服务地区、业务模式和质量管理方式，不使用“行业第一”等无法验证的绝对化描述。
+              提供白鹅绒、灰鹅绒、白鸭绒和灰鸭绒等原料的规格沟通、样品确认与批量采购服务。
             </p>
             <dl className="mt-7 divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white px-5">
               {[

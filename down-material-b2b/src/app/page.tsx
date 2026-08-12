@@ -3,7 +3,6 @@ import {
   ArrowRight,
   BadgeCheck,
   Box,
-  Check,
   FlaskConical,
   Handshake,
   Layers3,
@@ -98,16 +97,6 @@ export default async function HomePage() {
                 查看羽绒原料
               </ButtonLink>
             </div>
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/65">
-              {["产品参数由后台确认", "价格不公开虚构", "检测资料分级展示"].map(
-                (item) => (
-                  <span key={item} className="flex items-center gap-2">
-                    <Check className="size-4 text-amber-400" />
-                    {item}
-                  </span>
-                )
-              )}
-            </div>
           </div>
           <div>
             <MediaPlaceholder
@@ -151,7 +140,7 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow="Market Quote"
               title="今日羽绒行情"
-              description="每日同步羽绒金网公开行情，并保留后台人工维护能力；市场数据仅供采购参考，不构成工厂报价。"
+              description="每日同步鹅绒、鸭绒市场行情，支持按品种和绒子含量查看价格及趋势。"
             />
             <ButtonLink href="/market" variant="outline">
               查看行情中心 <ArrowRight className="size-4" />
@@ -163,7 +152,7 @@ export default async function HomePage() {
             ) : (
               <EmptyState
                 title="今日行情请联系业务人员获取"
-                description="数据库中暂无已核实发布的行情数据。请通过微信或电话说明所需品类、规格与数量，业务人员将结合实际供货情况回复。"
+                description="请通过微信或电话说明所需品类、规格与数量，业务人员将回复本次采购需求。"
                 actionLabel="获取今日报价"
                 actionHref="/contact?source=market-empty"
               />
@@ -174,11 +163,7 @@ export default async function HomePage() {
 
       <section className="bg-warm py-20 sm:py-24">
         <Container>
-          <SectionHeading
-            eyebrow="Raw Materials"
-            title="羽绒原料分类"
-            description="产品规格与参数以后台核验发布内容为准；空值不会在前台显示。"
-          />
+          <SectionHeading eyebrow="Raw Materials" title="羽绒原料分类" />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.slice(0, 4).map((product) => (
               <article
@@ -199,11 +184,11 @@ export default async function HomePage() {
                   <p className="mt-3 min-h-12 text-sm leading-6 text-slate-600">
                     {product.summary}
                   </p>
-                  <p className="mt-4 text-xs text-slate-500">
-                    {product.downClusterContent
-                      ? `绒子含量：${product.downClusterContent}（待核验）`
-                      : "可选规格：待后台补充"}
-                  </p>
+                  {product.downClusterContent ? (
+                    <p className="mt-4 text-xs text-slate-500">
+                      绒子含量：{product.downClusterContent}
+                    </p>
+                  ) : null}
                   <div className="mt-5 flex items-center justify-between">
                     <Link
                       href={`/products/${product.slug}`}
@@ -238,7 +223,6 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Why Us"
             title="围绕采购需求建立可验证的供应服务"
-            description="以下为可配置的业务能力方向，具体设备、产能和指标将在工厂提供资料后按事实展示。"
             align="center"
           />
           <div className="mt-12 grid gap-px overflow-hidden rounded-xl2 border border-slate-200 bg-slate-200 sm:grid-cols-2 lg:grid-cols-4">
@@ -265,7 +249,6 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Production Process"
             title="生产工艺与批次质量控制"
-            description="流程节点可配置图片、标题和说明；页面不会把内部检测包装成第三方认证。"
           />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {processSteps.map(([number, title, description], index) => {
@@ -304,7 +287,6 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Applications"
             title="面向多类采购与应用场景"
-            description="以下图片用于说明原料选型方向，具体成品性能与供货条件以双方确认资料为准。"
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {generatedAssets.applications.map((item) => (
@@ -334,15 +316,15 @@ export default async function HomePage() {
           <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {cooperationSteps.map((item, index) => (
               <div
-                key={item}
+                key={item.title}
                 className="rounded-xl border border-forest-100 bg-white p-5"
               >
                 <span className="text-xs font-black text-amber-600">
                   STEP {String(index + 1).padStart(2, "0")}
                 </span>
-                <h3 className="mt-2 font-bold text-ink">{item}</h3>
+                <h3 className="mt-2 font-bold text-ink">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  具体节点与双方责任以最终沟通及合同为准。
+                  {item.description}
                 </p>
               </div>
             ))}
@@ -356,7 +338,7 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow="Knowledge Center"
               title="羽绒知识与采购指南"
-              description="内容将标注更新时间与来源，并经业务或质量人员核验后发布。"
+              description="了解原料选型、采购参数、检测指标和常见应用场景。"
             />
             <ButtonLink href="/articles" variant="outline">
               查看全部文章

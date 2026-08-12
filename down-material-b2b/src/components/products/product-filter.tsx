@@ -65,10 +65,7 @@ export function ProductFilter({ products }: { products: DemoProduct[] }) {
           支持定制
         </label>
       </div>
-      <p className="mb-5 text-sm text-slate-500">
-        共找到 {filtered.length}{" "}
-        项。旧站绒子含量区间会在详情页标注待核验；其他参数由后台补充真实数据。
-      </p>
+      <p className="mb-5 text-sm text-slate-500">共找到 {filtered.length} 项</p>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((product) => (
           <article

@@ -48,24 +48,21 @@ export const legacyProductContent = {
   "white-goose-down": {
     coverImage: generatedAssets.products["white-goose-down"].cover,
     gallery: [...generatedAssets.products["white-goose-down"].gallery],
-    summary:
-      "可用于服装、户外和家纺等采购场景；蓬松度等质量指标须以样品和检测文件确认。",
+    summary: "适用于服装、户外用品和家纺等采购场景，支持规格沟通和样品确认。",
     downClusterContent: "80%-95%",
     applications: ["服装", "户外用品", "家纺"]
   },
   "grey-goose-down": {
     coverImage: generatedAssets.products["grey-goose-down"].cover,
     gallery: [...generatedAssets.products["grey-goose-down"].gallery],
-    summary:
-      "可用于户外、家纺和贸易订单等场景；具体指标、成本与交付条件须单独确认。",
+    summary: "适用于户外用品、家纺和贸易采购等场景，支持规格沟通和样品确认。",
     downClusterContent: "80%-95%",
     applications: ["户外用品", "家纺", "贸易采购"]
   },
   "white-duck-down": {
     coverImage: generatedAssets.products["white-duck-down"].cover,
     gallery: [...generatedAssets.products["white-duck-down"].gallery],
-    summary:
-      "可用于羽绒服、被芯和枕芯等采购场景；具体指标、包装与批次供应情况待业务确认。",
+    summary: "适用于羽绒服、被芯和枕芯等采购场景，支持规格沟通和批量采购。",
     downClusterContent: "70%-95%",
     applications: ["羽绒服", "被芯", "枕芯"]
   },
@@ -73,7 +70,7 @@ export const legacyProductContent = {
     coverImage: generatedAssets.products["grey-duck-down"].cover,
     gallery: [...generatedAssets.products["grey-duck-down"].gallery],
     summary:
-      "可用于深色面料制品与家纺填充等场景；具体规格与批次供应情况待业务确认。",
+      "适用于深色面料制品、家纺填充和贸易采购等场景，支持规格沟通和批量采购。",
     downClusterContent: "70%-90%",
     applications: ["深色面料制品", "家纺", "贸易采购"]
   }

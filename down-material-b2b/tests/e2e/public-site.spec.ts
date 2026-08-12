@@ -56,3 +56,29 @@ test("SEO 文件可访问", async ({ request }) => {
 test("图片中心页面已下线", async ({ request }) => {
   expect((await request.get("/media")).status()).toBe(404);
 });
+
+test("首页不显示内部维护文案并展示分步合作说明", async ({ page }) => {
+  await page.goto("/");
+  for (const text of [
+    "工厂提供资料后按事实展示",
+    "流程节点可配置图片",
+    "具体节点与双方责任以最终沟通及合同为准",
+    "待后台补充",
+    "待核验"
+  ]) {
+    await expect(page.getByText(text, { exact: false })).toHaveCount(0);
+  }
+  await expect(
+    page.getByText("告知采购品类、目标规格、预计数量、用途和期望交期。")
+  ).toBeVisible();
+  await expect(
+    page.getByText("到货后跟进验收与使用反馈，衔接补货和后续采购需求。")
+  ).toBeVisible();
+});
+
+test("行业资讯同步接口拒绝未授权请求", async ({ request }) => {
+  const response = await request.post("/api/cron/news-sync", {
+    data: { items: [] }
+  });
+  expect(response.status()).toBe(401);
+});

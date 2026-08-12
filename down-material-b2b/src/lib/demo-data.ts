@@ -1,12 +1,9 @@
-import {
-  legacyDataNotice,
-  legacyProductContent
-} from "@/config/legacy-content";
+import { legacyProductContent } from "@/config/legacy-content";
 import type { DemoProduct } from "@/types";
 
 const shared = {
   description:
-    "产品规格、质量指标、包装、起订量、供货能力与交付周期以双方确认的样品、检测文件、报价单及合同为准。",
+    "适用于家纺、服装、户外用品与贸易采购等场景，支持规格沟通、样品确认和批量采购。",
   customization: true,
   sampleAvailable: true,
   showPrice: false,
@@ -24,7 +21,7 @@ const shared = {
   leadTime: null,
   applications: [],
   customItems: [],
-  qualityNote: `${legacyDataNotice}；实际质量参数以双方确认的样品、合同及检测文件为准。`,
+  qualityNote: "",
   specifications: [],
   demo: false as const
 };
@@ -129,7 +126,7 @@ export const advantages = [
   {
     title: "水洗加工",
     description:
-      "结合原料状态与目标规格安排水洗、脱水和烘干环节，具体工艺信息以实际生产批次记录为准。"
+      "结合原料状态与目标规格衔接水洗、脱水和烘干环节，保持各加工环节顺畅流转。"
   },
   {
     title: "分拣能力",
@@ -149,7 +146,7 @@ export const advantages = [
   {
     title: "批量交付",
     description:
-      "围绕订单数量、批次、包装和交期组织备货与发运，实际供货安排以双方确认的合同为准。"
+      "围绕订单数量、批次、包装和交期组织备货与发运，便于采购方安排生产与收货。"
   },
   {
     title: "样品支持",
@@ -164,15 +161,39 @@ export const advantages = [
 ] as const;
 
 export const cooperationSteps = [
-  "提交需求",
-  "业务沟通",
-  "确认规格",
-  "样品确认",
-  "报价与合同",
-  "批量生产",
-  "质检与发货",
-  "售后跟进"
-];
+  {
+    title: "提交需求",
+    description: "告知采购品类、目标规格、预计数量、用途和期望交期。"
+  },
+  {
+    title: "业务沟通",
+    description: "业务人员通过微信或电话进一步了解采购重点和应用场景。"
+  },
+  {
+    title: "确认规格",
+    description: "围绕原料类型、颜色、绒子含量、包装等项目确认采购规格。"
+  },
+  {
+    title: "样品确认",
+    description: "根据采购需要安排样品，用于外观、规格和适用性确认。"
+  },
+  {
+    title: "报价与合同",
+    description: "结合规格、数量和交付要求提供报价，并确认合同条款。"
+  },
+  {
+    title: "批量生产",
+    description: "按照订单要求组织原料加工、分拣、批次管理和包装。"
+  },
+  {
+    title: "质检与发货",
+    description: "完成批次检查与包装核对后，按约定方式安排发货。"
+  },
+  {
+    title: "售后跟进",
+    description: "到货后跟进验收与使用反馈，衔接补货和后续采购需求。"
+  }
+] as const;
 
 export const articleDirections = [
   "羽绒原料采购需要关注哪些指标",

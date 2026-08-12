@@ -6,7 +6,6 @@ import {
   Check,
   Clock,
   Copy,
-  ExternalLink,
   MessageCircle,
   Phone,
   X
@@ -17,19 +16,13 @@ import {
   OnlineServiceTrigger
 } from "@/components/customer-service/online-service-button";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import type { CompanyProfile, SiteOptions } from "@/lib/data";
+import type { CompanyProfile } from "@/lib/data";
 
 function configured(value: string) {
   return Boolean(value && !value.startsWith("待填") && value !== "待备案");
 }
 
-export function FloatingContact({
-  profile,
-  options
-}: {
-  profile: CompanyProfile;
-  options: SiteOptions;
-}) {
+export function FloatingContact({ profile }: { profile: CompanyProfile }) {
   const [open, setOpen] = useState(false);
   const [context, setContext] = useState<CustomerServiceContext>({});
   const [wechatCopied, setWechatCopied] = useState(false);
@@ -59,9 +52,6 @@ export function FloatingContact({
     window.setTimeout(() => setWechatCopied(false), 1800);
   }
 
-  const providerConfigured = configured(options.customerServiceProviderName);
-  const chatUrlConfigured = configured(options.customerServiceUrl);
-
   return (
     <>
       <div className="fixed bottom-5 right-5 z-40 hidden overflow-hidden rounded-xl border border-slate-200 bg-white shadow-soft md:block">
@@ -79,14 +69,6 @@ export function FloatingContact({
         >
           <MessageCircle className="size-5" />
         </OnlineServiceTrigger>
-        <OnlineServiceTrigger
-          source="floating-online"
-          className="flex size-14 items-center justify-center border-b border-slate-100 bg-amber-500 text-white hover:bg-amber-600"
-          ariaLabel="在线客服"
-        >
-          <span className="sr-only">在线客服</span>
-          <MessageCircle className="size-5" />
-        </OnlineServiceTrigger>
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -97,7 +79,7 @@ export function FloatingContact({
         </button>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-3 border-t border-slate-200 bg-white p-2 shadow-[0_-10px_30px_rgba(0,0,0,.08)] md:hidden">
+      <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-slate-200 bg-white p-2 shadow-[0_-10px_30px_rgba(0,0,0,.08)] md:hidden">
         <a
           href={`tel:${profile.mobile}`}
           className="flex min-h-12 flex-col items-center justify-center gap-1 text-xs font-semibold text-forest-900"
@@ -111,13 +93,6 @@ export function FloatingContact({
         >
           <MessageCircle className="size-4" />
           微信
-        </OnlineServiceTrigger>
-        <OnlineServiceTrigger
-          source="mobile-online"
-          className="flex min-h-12 items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-bold text-white"
-        >
-          <MessageCircle className="size-4" />
-          在线客服
         </OnlineServiceTrigger>
       </div>
 
@@ -144,7 +119,7 @@ export function FloatingContact({
                   id="customer-service-title"
                   className="mt-1 text-2xl font-bold text-ink"
                 >
-                  在线联系工厂
+                  联系工厂
                 </h2>
               </div>
               <button
@@ -165,42 +140,6 @@ export function FloatingContact({
                   {context.sample ? " · 申请样品" : " · 规格与报价"}
                 </div>
               ) : null}
-
-              <div className="rounded-xl bg-forest-900 p-5 text-white">
-                <div className="flex items-center gap-3">
-                  <span className="grid size-11 place-items-center rounded-xl bg-amber-500">
-                    <MessageCircle className="size-5" />
-                  </span>
-                  <div>
-                    <p className="font-bold">
-                      {providerConfigured
-                        ? options.customerServiceProviderName
-                        : "在线客服平台待配置"}
-                    </p>
-                    <p className="mt-1 text-xs text-white/65">
-                      网站不保存聊天内容，消息由所配置的国内客服平台处理。
-                    </p>
-                  </div>
-                </div>
-                {chatUrlConfigured ? (
-                  <a
-                    href={options.customerServiceUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-5 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 font-bold text-white hover:bg-amber-600"
-                  >
-                    进入在线客服 <ExternalLink className="size-4" />
-                  </a>
-                ) : options.customerServiceScript ? (
-                  <p className="mt-5 rounded-lg border border-white/15 bg-white/10 p-3 text-sm leading-6 text-white/75">
-                    客服脚本已加载，请使用客服平台显示的会话图标开始聊天。
-                  </p>
-                ) : (
-                  <p className="mt-5 rounded-lg border border-white/15 bg-white/10 p-3 text-sm leading-6 text-white/75">
-                    尚未配置第三方客服，请先通过电话或微信联系。
-                  </p>
-                )}
-              </div>
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <a

@@ -24,9 +24,6 @@ export type CompanyProfile = {
 
 export type SiteOptions = {
   homeModuleOrder: string;
-  customerServiceProviderName: string;
-  customerServiceUrl: string;
-  customerServiceScript: string;
   seoKeywords: string;
   baiduVerification: string;
 };
@@ -85,9 +82,6 @@ export const getSiteOptions = cache(async (): Promise<SiteOptions> => {
   await connection();
   const fallback = {
     homeModuleOrder: "",
-    customerServiceProviderName: "待填写的国内客服平台",
-    customerServiceUrl: "",
-    customerServiceScript: "",
     seoKeywords: siteConfig.defaultKeywords.join("，"),
     baiduVerification: ""
   };

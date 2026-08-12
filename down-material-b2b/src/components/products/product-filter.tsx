@@ -131,7 +131,7 @@ export function ProductFilter({ products }: { products: DemoProduct[] }) {
                   size="sm"
                   className="flex-1"
                 >
-                  索取报价 <ArrowRight className="size-4" />
+                  微信询价 <ArrowRight className="size-4" />
                 </OnlineServiceButton>
               </div>
             </div>

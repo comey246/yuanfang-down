@@ -81,8 +81,7 @@ export default async function AdminInquiriesPage({
       </div>
       <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950">
         <strong>当前为历史询盘档案：</strong>
-        公开站询盘表单与写入接口已经停用，新的在线客服会话不会同步或写入
-        Supabase。此处仅用于处理停用前已有的历史记录或后台人工录入数据。
+        公开站询盘表单与写入接口已经停用，访客通过电话或微信直接联系工厂，不会写入本站数据库。此处仅用于处理停用前已有的历史记录或后台人工录入数据。
       </div>
       <form className="mt-6 grid gap-3 rounded-xl border border-slate-200 bg-white p-4 sm:grid-cols-[1fr_180px_auto]">
         <label className="relative">

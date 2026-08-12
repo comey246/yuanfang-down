@@ -89,8 +89,8 @@ export default async function ArticlesPage() {
         ) : (
           <EmptyState
             title="文章内容暂时无法读取"
-            description="公开文章暂未从内容数据库加载成功，请稍后刷新或通过在线客服咨询采购问题。"
-            actionLabel="在线咨询采购问题"
+            description="公开文章暂未从内容数据库加载成功，请稍后刷新或通过微信、电话咨询采购问题。"
+            actionLabel="微信咨询采购问题"
             actionHref="/contact?source=articles-empty"
           />
         )}

@@ -56,9 +56,6 @@ export default async function AdminSettingsPage({
   const options =
     (optionSetting?.value as {
       homeModuleOrder?: string;
-      customerServiceProviderName?: string;
-      customerServiceUrl?: string;
-      customerServiceScript?: string;
       seoKeywords?: string;
       baiduVerification?: string;
     } | null) || {};
@@ -72,7 +69,7 @@ export default async function AdminSettingsPage({
     <>
       <div>
         <p className="text-sm font-bold text-amber-600">SETTINGS</p>
-        <h1 className="mt-1 text-3xl font-bold">企业资料、客服与 SEO</h1>
+        <h1 className="mt-1 text-3xl font-bold">企业资料与 SEO</h1>
       </div>
       <form
         action={saveCompanySettings}
@@ -190,44 +187,6 @@ export default async function AdminSettingsPage({
               }
               className="admin-field mt-2 min-h-24"
             />
-          </label>
-          <label className="text-xs font-semibold">
-            国内客服平台名称
-            <input
-              name="customerServiceProviderName"
-              defaultValue={
-                options.customerServiceProviderName || "待填写的国内客服平台"
-              }
-              placeholder="例如：企业微信客服"
-              className="admin-field mt-2"
-            />
-          </label>
-          <label className="text-xs font-semibold">
-            在线客服直聊 URL
-            <input
-              name="customerServiceUrl"
-              type="url"
-              defaultValue={options.customerServiceUrl || ""}
-              placeholder="客服平台提供的 https:// 直聊链接"
-              className="admin-field mt-2"
-            />
-          </label>
-          <label className="text-xs font-semibold md:col-span-2">
-            第三方客服脚本插槽
-            <textarea
-              name="customerServiceScript"
-              defaultValue={
-                options.customerServiceScript
-                  ? "••••••••（敏感内容已保存，重新粘贴才会替换）"
-                  : ""
-              }
-              placeholder="粘贴国内客服平台提供的官方脚本；未配置时显示电话、微信和邮箱联系方式"
-              className="admin-field mt-2 min-h-28"
-            />
-            <span className="mt-2 block font-normal leading-5 text-slate-500">
-              仅使用已完成安全与隐私审查的官方脚本。聊天内容由所配置的平台处理，不写入本站
-              Supabase 询盘表。
-            </span>
           </label>
           <label className="text-xs font-semibold">
             百度站点验证

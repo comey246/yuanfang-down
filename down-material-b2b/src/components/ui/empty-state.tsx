@@ -4,7 +4,7 @@ import { OnlineServiceButton } from "@/components/customer-service/online-servic
 export function EmptyState({
   title,
   description,
-  actionLabel = "联系在线客服",
+  actionLabel = "微信联系业务人员",
   actionHref = "/contact"
 }: {
   title: string;

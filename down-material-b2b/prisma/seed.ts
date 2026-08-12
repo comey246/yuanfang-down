@@ -196,13 +196,10 @@ async function main() {
     update: {},
     create: {
       key: "site_options",
-      description: "SEO、首页顺序与客服脚本",
+      description: "SEO 与首页顺序",
       isSensitive: true,
       value: {
         homeModuleOrder: "",
-        customerServiceProviderName: "待填写的国内客服平台",
-        customerServiceUrl: "",
-        customerServiceScript: "",
         seoKeywords:
           "远方羽绒，羽绒原料厂家，鹅绒原料供应，鸭绒原料采购，羽绒加工厂，羽绒原料报价",
         baiduVerification: legacySiteContent.baiduVerification

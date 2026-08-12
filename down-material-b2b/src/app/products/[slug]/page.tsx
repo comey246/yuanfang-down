@@ -157,7 +157,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 <div className="mt-7 rounded-xl border border-dashed border-slate-300 p-6 text-sm leading-6 text-slate-600">
                   <p className="font-bold text-ink">规格参数待补充</p>
                   <p className="mt-1">
-                    请打开在线客服说明目标规格和数量，业务人员将按本次需求确认可供应参数。
+                    请通过微信或电话说明目标规格和数量，业务人员将按本次需求确认可供应参数。
                   </p>
                 </div>
               )}
@@ -175,7 +175,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   size="lg"
                 >
                   <MessageCircle className="size-4" />
-                  索取报价
+                  微信询价
                 </OnlineServiceButton>
                 <OnlineServiceButton
                   product={product.name}
@@ -184,7 +184,7 @@ export default async function ProductDetailPage({ params }: Props) {
                   variant="outline"
                   size="lg"
                 >
-                  申请样品
+                  微信申请样品
                 </OnlineServiceButton>
                 <ButtonLink href="/quality" variant="outline" size="lg">
                   <Download className="size-4" />
@@ -249,10 +249,10 @@ export default async function ProductDetailPage({ params }: Props) {
             <aside className="h-fit rounded-xl2 border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-28">
               <p className="text-xs font-bold text-amber-600">DIRECT CONTACT</p>
               <h2 className="mt-2 text-xl font-bold">
-                在线咨询 {product.name}
+                联系咨询 {product.name}
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                无需填写姓名或手机号。打开客服窗口后，可直接选择在线客服、电话或企业微信沟通。
+                无需填写姓名或手机号。请直接添加微信或拨打电话沟通产品、规格、数量和交期。
               </p>
               <OnlineServiceButton
                 product={product.name}
@@ -261,7 +261,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 className="mt-6 w-full"
               >
                 <MessageCircle className="size-4" />
-                打开在线客服
+                查看微信二维码
               </OnlineServiceButton>
               <OnlineServiceButton
                 product={product.name}
@@ -271,12 +271,8 @@ export default async function ProductDetailPage({ params }: Props) {
                 size="lg"
                 className="mt-3 w-full"
               >
-                申请样品
+                微信申请样品
               </OnlineServiceButton>
-              <div className="mt-6 flex items-start gap-3 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-600">
-                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-forest-700" />
-                <p>本站不保存在线客服聊天内容或你主动提供的联系方式。</p>
-              </div>
             </aside>
           </div>
         </Container>

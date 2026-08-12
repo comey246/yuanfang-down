@@ -67,7 +67,7 @@ async function main() {
     update: { value: nextOptions as Prisma.InputJsonValue },
     create: {
       key: "site_options",
-      description: "SEO、首页顺序与客服脚本",
+      description: "SEO 与首页顺序",
       isSensitive: true,
       value: nextOptions as Prisma.InputJsonValue
     }

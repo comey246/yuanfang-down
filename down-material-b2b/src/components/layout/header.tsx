@@ -111,7 +111,7 @@ export function Header({ profile }: { profile: CompanyProfile }) {
             size="sm"
             className="hidden sm:inline-flex"
           >
-            在线咨询
+            微信咨询
           </OnlineServiceButton>
           <button
             type="button"
@@ -151,7 +151,7 @@ export function Header({ profile }: { profile: CompanyProfile }) {
                 className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-amber-500 text-sm font-semibold text-white"
               >
                 <MessageCircle className="size-4" />
-                在线客服
+                微信咨询
               </OnlineServiceTrigger>
             </div>
           </Container>

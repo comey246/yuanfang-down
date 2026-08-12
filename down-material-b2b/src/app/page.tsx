@@ -9,7 +9,6 @@ import {
   Layers3,
   PackageCheck,
   SearchCheck,
-  Send,
   Sparkles,
   Truck,
   WashingMachine,
@@ -36,7 +35,6 @@ import {
   getCompanyProfile,
   getMarketQuotes,
   getPublishedArticles,
-  getPublishedMedia,
   getPublishedProducts
 } from "@/lib/data";
 
@@ -63,11 +61,10 @@ const processIcons = [
 ];
 
 export default async function HomePage() {
-  const [products, quotes, articles, media, profile] = await Promise.all([
+  const [products, quotes, articles, profile] = await Promise.all([
     getPublishedProducts(),
     getMarketQuotes(),
     getPublishedArticles(),
-    getPublishedMedia(),
     getCompanyProfile()
   ]);
   return (
@@ -327,56 +324,6 @@ export default async function HomePage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
-        <Container>
-          <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
-            <SectionHeading
-              eyebrow="Factory Media"
-              title="工厂图片"
-              description="图片由后台统一维护，发布前确认版权和企业归属。"
-            />
-            <ButtonLink href="/media" variant="outline">
-              进入媒体中心
-            </ButtonLink>
-          </div>
-          <div className="mt-10">
-            {media.length ? (
-              <div className="grid gap-6 md:grid-cols-3">
-                {media.slice(0, 6).map((item) => (
-                  <article
-                    key={item.id}
-                    className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
-                  >
-                    <MediaPlaceholder
-                      label={item.title}
-                      src={item.url}
-                      className="min-h-56"
-                    />
-                    <div className="p-5">
-                      <p className="text-xs font-bold text-amber-600">
-                        {item.category}
-                      </p>
-                      <h3 className="mt-1 font-bold">{item.title}</h3>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="grid gap-6 md:grid-cols-3">
-                {generatedAssets.factoryImages.map((item) => (
-                  <MediaPlaceholder
-                    key={item.title}
-                    label={item.title}
-                    src={item.image}
-                    className="min-h-60 rounded-xl2"
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-        </Container>
-      </section>
-
       <section className="bg-forest-50 py-20 sm:py-24">
         <Container>
           <SectionHeading
@@ -474,53 +421,6 @@ export default async function HomePage() {
                     </div>
                   </article>
                 ))}
-          </div>
-        </Container>
-      </section>
-
-      <section className="relative overflow-hidden bg-amber-500 py-16 text-white">
-        <Container className="relative flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <p className="text-sm font-bold text-white/75">PURCHASE INQUIRY</p>
-            <h2 className="mt-3 text-balance text-3xl font-bold sm:text-4xl">
-              正在寻找稳定的羽绒原料供应商？
-            </h2>
-            <p className="mt-3 text-white/80">
-              通过微信或电话说明品类、规格和数量，直接获取针对本次采购需求的回复。
-            </p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            <OnlineServiceButton
-              source="home-bottom"
-              variant="secondary"
-              size="lg"
-            >
-              <Send className="size-4" />
-              微信获取报价
-            </OnlineServiceButton>
-            <a
-              href={`tel:${profile.mobile}`}
-              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-white/40 px-6 font-bold hover:bg-white/10"
-            >
-              电话咨询
-            </a>
-            <OnlineServiceButton
-              source="home-bottom-wechat"
-              variant="outline"
-              size="lg"
-              className="border-white/40 bg-transparent text-white hover:bg-white/10"
-            >
-              微信咨询
-            </OnlineServiceButton>
-            <OnlineServiceButton
-              sample
-              source="home-bottom-sample"
-              variant="outline"
-              size="lg"
-              className="border-white/40 bg-transparent text-white hover:bg-white/10"
-            >
-              微信咨询样品
-            </OnlineServiceButton>
           </div>
         </Container>
       </section>

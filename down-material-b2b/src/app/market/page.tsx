@@ -10,7 +10,7 @@ import { formatDate } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "羽绒行情与市场报价",
-  "查看后台人工维护的鹅绒、鸭绒原料行情及趋势。无已核实数据时引导联系工厂获取报价。",
+  "查看每日同步的鹅绒、鸭绒公开市场行情与90天趋势。行情仅供参考，不构成工厂报价。",
   "/market"
 );
 
@@ -25,7 +25,7 @@ export default async function MarketPage() {
       <PageHero
         eyebrow="MARKET QUOTE"
         title="羽绒行情与市场报价"
-        description="行情由后台人工维护，不自动抓取其他网站。价格仅供采购沟通参考，不构成最终合同报价。"
+        description="行情每天同步一次羽绒金网匿名公开查询接口，并保留后台人工维护能力。价格仅供采购沟通参考，不构成最终合同报价。"
       />
       <Container className="space-y-8 py-14 sm:py-20">
         <div className="flex flex-col gap-2 rounded-xl border border-amber-200 bg-amber-50 p-5 text-sm text-amber-900 sm:flex-row sm:items-center sm:justify-between">
@@ -33,7 +33,17 @@ export default async function MarketPage() {
             <strong>最后更新时间：</strong>
             {formatDate(lastUpdated)}
           </p>
-          <p>数据来源、单位和免责声明随每条行情单独维护</p>
+          <p>
+            数据来源：
+            <a
+              href="https://www.cn-down.com/"
+              target="_blank"
+              rel="noreferrer"
+              className="font-bold underline"
+            >
+              羽绒金网公开行情
+            </a>
+          </p>
         </div>
         {quotes.length ? (
           <>
@@ -58,7 +68,9 @@ export default async function MarketPage() {
                       <td className="p-4">
                         {quote.priceMin === null && quote.priceMax === null
                           ? "联系业务获取"
-                          : `${quote.priceMin ?? "—"} – ${quote.priceMax ?? "—"}`}
+                          : quote.priceMin === quote.priceMax
+                            ? quote.priceMin
+                            : `${quote.priceMin ?? "—"} – ${quote.priceMax ?? "—"}`}
                       </td>
                       <td className="p-4">{quote.unit}</td>
                       <td className="p-4">
@@ -77,7 +89,20 @@ export default async function MarketPage() {
                         )}
                       </td>
                       <td className="p-4">{formatDate(quote.quoteDate)}</td>
-                      <td className="p-4 text-slate-500">{quote.sourceNote}</td>
+                      <td className="p-4 text-slate-500">
+                        {quote.sourceNote.includes("羽绒金网") ? (
+                          <a
+                            href="https://www.cn-down.com/"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="underline"
+                          >
+                            {quote.sourceNote}
+                          </a>
+                        ) : (
+                          quote.sourceNote
+                        )}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -95,7 +120,7 @@ export default async function MarketPage() {
         )}
         <div className="rounded-xl bg-slate-100 p-5 text-xs leading-6 text-slate-600">
           <strong className="text-ink">免责声明：</strong>
-          市场行情受原料批次、检测指标、数量、包装、交付地点和时间等因素影响。页面历史数据不构成未来价格预测、现货承诺或合同要约，最终以双方书面确认为准。
+          羽绒金网为第三方信息来源，本网站与其不存在隶属关系。市场行情受原料批次、检测指标、数量、包装、交付地点和时间等因素影响。页面数据可能延迟或中断，不构成未来价格预测、现货承诺或合同要约，最终以双方书面确认为准。
         </div>
       </Container>
     </>

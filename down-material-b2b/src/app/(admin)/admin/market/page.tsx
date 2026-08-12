@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, RefreshCw } from "lucide-react";
 import {
   archiveMarketQuote,
-  saveMarketQuote
+  saveMarketQuote,
+  syncMarketQuotesFromCnDown
 } from "@/app/(admin)/admin/actions";
 import { ConfirmSubmit } from "@/components/admin/confirm-submit";
 import { getPrisma } from "@/lib/prisma";
@@ -30,18 +31,28 @@ export default async function AdminMarketPage({
           <p className="text-sm font-bold text-amber-600">MARKET</p>
           <h1 className="mt-1 text-3xl font-bold">行情管理</h1>
         </div>
-        {current ? (
-          <Link
-            href="/admin/market"
-            className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold"
-          >
-            <Plus className="size-4" />
-            新增行情
-          </Link>
-        ) : null}
+        <div className="flex flex-wrap gap-2">
+          <form action={syncMarketQuotesFromCnDown}>
+            <button className="inline-flex min-h-10 items-center gap-2 rounded-lg bg-forest-700 px-4 text-sm font-bold text-white">
+              <RefreshCw className="size-4" />
+              同步羽绒金网
+            </button>
+          </form>
+          {current ? (
+            <Link
+              href="/admin/market"
+              className="inline-flex min-h-10 items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-bold"
+            >
+              <Plus className="size-4" />
+              新增行情
+            </Link>
+          ) : null}
+        </div>
       </div>
       <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-        价格必须来自已确认的工厂报价或授权数据。留空时前台显示联系询价，不得填入虚构价格。
+        系统每天北京时间 09:20 同步羽绒金网匿名公开查询接口，当前固定读取 GB/T
+        14272-2021 的 90%
+        规格。也可点击右上角手动同步；人工价格仍须注明真实来源。
       </div>
       <form
         action={saveMarketQuote}

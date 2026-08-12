@@ -154,7 +154,7 @@ async function main() {
         shortName: legacySiteContent.shortName,
         phone: legacySiteContent.phone,
         mobile: legacySiteContent.mobile,
-        wechat: "待填写",
+        wechat: legacySiteContent.mobile,
         email: legacySiteContent.email,
         address: "待填写",
         businessHours: "周一至周六 08:30-18:00",
@@ -162,7 +162,7 @@ async function main() {
         policeRecordNumber: "待备案",
         creditCode: "待填写",
         logoUrl: legacySiteContent.logoUrl,
-        wechatQrUrl: ""
+        wechatQrUrl: "/contact/wechat-qr.jpg"
       }
     }
   });

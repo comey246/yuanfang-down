@@ -37,7 +37,7 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
             </div>
           </div>
           <p className="mt-5 max-w-sm text-sm leading-7">
-            本网站用于展示羽绒原料供应能力并提供在线客服、电话、企业微信和邮箱直联。所有参数、价格、证书及检测文件以后台审核发布内容为准。
+            本网站用于展示羽绒原料供应能力并提供在线客服、电话、微信和邮箱直联。所有参数、价格、证书及检测文件以后台审核发布内容为准。
           </p>
         </div>
         <div>
@@ -90,7 +90,8 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
           <MediaPlaceholder
             label="微信二维码"
             src={profile.wechatQrUrl}
-            className="min-h-32 rounded-xl"
+            fit="contain"
+            className="min-h-44 rounded-xl"
           />
         </div>
       </Container>

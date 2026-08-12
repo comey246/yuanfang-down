@@ -176,7 +176,7 @@ export default async function HomePage() {
             <SectionHeading
               eyebrow="Market Quote"
               title="今日羽绒行情"
-              description="仅展示后台人工维护并发布的记录；没有具体价格时明确显示联系询价。本站不自动抓取第三方报价。"
+              description="每日同步羽绒金网公开行情，并保留后台人工维护能力；市场数据仅供采购参考，不构成工厂报价。"
             />
             <ButtonLink href="/market" variant="outline">
               查看行情中心 <ArrowRight className="size-4" />
@@ -207,7 +207,9 @@ export default async function HomePage() {
                         <td className="p-4">
                           {quote.priceMin === null && quote.priceMax === null
                             ? "联系询价"
-                            : `${quote.priceMin ?? "—"} - ${quote.priceMax ?? "—"}`}
+                            : quote.priceMin === quote.priceMax
+                              ? quote.priceMin
+                              : `${quote.priceMin ?? "—"} - ${quote.priceMax ?? "—"}`}
                         </td>
                         <td className="p-4">{quote.unit}</td>
                         <td className="p-4">
@@ -217,7 +219,18 @@ export default async function HomePage() {
                         </td>
                         <td className="p-4">{formatDate(quote.quoteDate)}</td>
                         <td className="p-4 text-slate-500">
-                          {quote.sourceNote}
+                          {quote.sourceNote.includes("羽绒金网") ? (
+                            <a
+                              href="https://www.cn-down.com/"
+                              target="_blank"
+                              rel="noreferrer"
+                              className="underline"
+                            >
+                              {quote.sourceNote}
+                            </a>
+                          ) : (
+                            quote.sourceNote
+                          )}
                         </td>
                       </tr>
                     ))}

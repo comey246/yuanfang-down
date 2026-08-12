@@ -97,25 +97,11 @@ export default async function ProductDetailPage({ params }: Props) {
         <Container>
           <div className="grid gap-10 lg:grid-cols-[1.12fr_.88fr]">
             <div>
-              {product.videoUrl ? (
-                <video
-                  controls
-                  preload="none"
-                  poster={
-                    product.videoPoster || product.coverImage || undefined
-                  }
-                  className="aspect-[4/3] w-full rounded-xl2 bg-forest-900"
-                  aria-label={`${product.name}产品视频`}
-                >
-                  <source src={product.videoUrl} />
-                </video>
-              ) : (
-                <MediaPlaceholder
-                  label={`${product.name}原料主图`}
-                  src={product.coverImage}
-                  className="min-h-[430px] rounded-xl2"
-                />
-              )}
+              <MediaPlaceholder
+                label={`${product.name}原料主图`}
+                src={product.coverImage}
+                className="min-h-[430px] rounded-xl2"
+              />
               <div className="mt-4 grid grid-cols-2 gap-3">
                 {product.gallery.map((image, index) => (
                   <MediaPlaceholder

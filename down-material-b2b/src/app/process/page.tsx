@@ -30,7 +30,6 @@ export default function ProcessPage() {
               <div className="relative">
                 <MediaPlaceholder
                   label={`${title}工序`}
-                  type={index === 2 || index === 5 ? "video" : "image"}
                   src={generatedAssets.process[index]}
                   className="min-h-64 rounded-xl2"
                 />

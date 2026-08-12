@@ -131,7 +131,7 @@ async function main() {
       await prisma.mediaAsset.create({
         data: {
           title,
-          type: index === 0 ? MediaType.VIDEO : MediaType.IMAGE,
+          type: MediaType.IMAGE,
           category,
           sortOrder: index,
           published: false,

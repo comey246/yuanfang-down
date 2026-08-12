@@ -27,7 +27,7 @@ export default async function AboutPage() {
           <MediaPlaceholder
             label="企业与工厂形象"
             type="factory"
-            src={generatedAssets.posters[0].image}
+            src={generatedAssets.factoryImages[0].image}
             className="min-h-[420px] rounded-xl2"
           />
           <div>

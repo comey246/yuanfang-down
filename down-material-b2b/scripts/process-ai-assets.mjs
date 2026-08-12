@@ -60,9 +60,9 @@ const assets = [
   ["羽绒蓬松度与绒朵结构观察.png", "articles/fill-power-content"],
   ["纯净羽绒，链接远方.png", "seo/social-og"],
 
-  ["曙光洁净羽绒园区.png", "posters/factory-overview"],
-  ["透明舱内的羽绒水洗.png", "posters/washing-process"],
-  ["羽绒标准化抽样检验台.png", "posters/quality-inspection"]
+  ["曙光洁净羽绒园区.png", "factory/factory-overview"],
+  ["透明舱内的羽绒水洗.png", "factory/washing-process"],
+  ["羽绒标准化抽样检验台.png", "factory/quality-inspection"]
 ];
 
 const missing = assets

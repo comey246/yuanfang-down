@@ -9,8 +9,6 @@ export type DemoProduct = {
   description: string;
   coverImage: string | null;
   gallery: string[];
-  videoUrl: string | null;
-  videoPoster: string | null;
   customization: boolean;
   sampleAvailable: boolean;
   showPrice: boolean;

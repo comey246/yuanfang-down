@@ -54,8 +54,6 @@ export async function saveProduct(form: FormData) {
     species: optional(form, "species"),
     color: optional(form, "color"),
     coverImage: optional(form, "coverImage"),
-    videoUrl: optional(form, "videoUrl"),
-    videoPoster: optional(form, "videoPoster"),
     downClusterContent: optional(form, "downClusterContent"),
     downContent: optional(form, "downContent"),
     fillPower: optional(form, "fillPower"),
@@ -285,9 +283,8 @@ export async function saveMedia(form: FormData) {
   const id = text(form, "id");
   const data = {
     title: text(form, "title"),
-    type: text(form, "type") as MediaType,
+    type: MediaType.IMAGE,
     url: optional(form, "url"),
-    posterUrl: optional(form, "posterUrl"),
     category: text(form, "category"),
     description: optional(form, "description"),
     altText: optional(form, "altText"),

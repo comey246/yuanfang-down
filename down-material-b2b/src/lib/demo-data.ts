@@ -7,8 +7,6 @@ import type { DemoProduct } from "@/types";
 const shared = {
   description:
     "本条目为网站结构演示数据。原料来源、具体规格、质量指标、包装、起订量、供货能力和交付周期均须由工厂核实后在后台填写。",
-  videoUrl: null,
-  videoPoster: null,
   customization: true,
   sampleAvailable: true,
   showPrice: false,

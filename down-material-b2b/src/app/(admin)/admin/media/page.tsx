@@ -26,17 +26,21 @@ export default async function AdminMediaPage({
   const { edit } = await searchParams;
   const [assets, current] = await Promise.all([
     prisma.mediaAsset.findMany({
-      where: { deletedAt: null },
+      where: { type: MediaType.IMAGE, deletedAt: null },
       orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }]
     }),
-    edit ? prisma.mediaAsset.findUnique({ where: { id: edit } }) : null
+    edit
+      ? prisma.mediaAsset.findFirst({
+          where: { id: edit, type: MediaType.IMAGE, deletedAt: null }
+        })
+      : null
   ]);
   return (
     <>
       <div className="flex items-end justify-between">
         <div>
           <p className="text-sm font-bold text-amber-600">MEDIA</p>
-          <h1 className="mt-1 text-3xl font-bold">图片与视频管理</h1>
+          <h1 className="mt-1 text-3xl font-bold">图片管理</h1>
         </div>
         {current ? (
           <Link
@@ -49,8 +53,7 @@ export default async function AdminMediaPage({
         ) : null}
       </div>
       <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-        只使用自有或已获得授权的素材。视频需配置
-        poster，并优先使用中国大陆可稳定访问的 OSS / CDN。
+        只使用自有或已获得授权的图片，并优先使用中国大陆可稳定访问的 OSS / CDN。
       </div>
       <form
         action={saveMedia}
@@ -66,17 +69,6 @@ export default async function AdminMediaPage({
               defaultValue={current?.title || ""}
               className="admin-field mt-2"
             />
-          </label>
-          <label className="text-xs font-semibold">
-            类型
-            <select
-              name="type"
-              defaultValue={current?.type || MediaType.IMAGE}
-              className="admin-field mt-2"
-            >
-              <option value="IMAGE">图片</option>
-              <option value="VIDEO">视频</option>
-            </select>
           </label>
           <label className="text-xs font-semibold">
             分类
@@ -105,15 +97,6 @@ export default async function AdminMediaPage({
               name="url"
               type="url"
               defaultValue={current?.url || ""}
-              className="admin-field mt-2"
-            />
-          </label>
-          <label className="text-xs font-semibold">
-            视频 Poster URL
-            <input
-              name="posterUrl"
-              type="url"
-              defaultValue={current?.posterUrl || ""}
               className="admin-field mt-2"
             />
           </label>
@@ -171,7 +154,6 @@ export default async function AdminMediaPage({
           <thead className="bg-slate-50">
             <tr>
               <th className="p-4">标题</th>
-              <th>类型</th>
               <th>分类</th>
               <th>公开</th>
               <th>更新时间</th>
@@ -182,7 +164,6 @@ export default async function AdminMediaPage({
             {assets.map((item) => (
               <tr key={item.id} className="border-t border-slate-100">
                 <td className="p-4 font-bold">{item.title}</td>
-                <td>{item.type}</td>
                 <td>{item.category}</td>
                 <td>{item.published ? "是" : "否"}</td>
                 <td>{formatDate(item.updatedAt)}</td>

@@ -8,7 +8,6 @@ import {
   Handshake,
   Layers3,
   PackageCheck,
-  Play,
   SearchCheck,
   Send,
   ShieldCheck,
@@ -36,7 +35,6 @@ import {
 } from "@/lib/demo-data";
 import {
   getCompanyProfile,
-  getLegacyClaims,
   getMarketQuotes,
   getPublishedArticles,
   getPublishedMedia,
@@ -66,15 +64,13 @@ const processIcons = [
 ];
 
 export default async function HomePage() {
-  const [products, quotes, articles, media, profile, legacyClaims] =
-    await Promise.all([
-      getPublishedProducts(),
-      getMarketQuotes(),
-      getPublishedArticles(),
-      getPublishedMedia(),
-      getCompanyProfile(),
-      getLegacyClaims()
-    ]);
+  const [products, quotes, articles, media, profile] = await Promise.all([
+    getPublishedProducts(),
+    getMarketQuotes(),
+    getPublishedArticles(),
+    getPublishedMedia(),
+    getCompanyProfile()
+  ]);
   return (
     <>
       <section className="relative isolate overflow-hidden bg-forest-900 text-white">
@@ -105,15 +101,6 @@ export default async function HomePage() {
               >
                 查看羽绒原料
               </ButtonLink>
-              <ButtonLink
-                href="/media"
-                variant="ghost"
-                size="lg"
-                className="text-white hover:bg-white/10"
-              >
-                <Play className="size-4" />
-                视频了解工厂
-              </ButtonLink>
             </div>
             <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-sm text-white/65">
               {["产品参数由后台确认", "价格不公开虚构", "检测资料分级展示"].map(
@@ -126,20 +113,13 @@ export default async function HomePage() {
               )}
             </div>
           </div>
-          <div className="relative">
+          <div>
             <MediaPlaceholder
-              label="羽绒原料供应概念主视觉"
-              type="video"
+              label="羽绒原料供应主图"
               src={generatedAssets.hero}
               eager
               className="min-h-[420px] rounded-[1.75rem] border border-white/10 shadow-2xl"
             />
-            <div className="absolute -bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-white/95 p-4 text-ink shadow-xl backdrop-blur sm:left-auto sm:w-72">
-              <p className="text-xs font-bold text-amber-600">素材合规提示</p>
-              <p className="mt-1 text-sm leading-6 text-slate-600">
-                请在后台替换为自有或已获授权的真实工厂 poster 与视频。
-              </p>
-            </div>
           </div>
         </Container>
       </section>
@@ -201,7 +181,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Raw Materials"
             title="羽绒原料分类"
-            description="旧站绒子含量区间已迁入并标记待企业核验；其余参数留空，后台发布真实数据后自动显示。"
+            description="产品规格与参数以后台核验发布内容为准；空值不会在前台显示。"
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {products.slice(0, 4).map((product) => (
@@ -298,35 +278,6 @@ export default async function HomePage() {
                 title="工厂实力，用可核验资料建立信任"
                 description="工厂能力、经营数据与相关资料以后台核验发布内容为准。"
               />
-              {legacyClaims ? (
-                <div className="mt-7">
-                  <p className="mb-3 text-xs font-bold text-amber-400">
-                    {legacyClaims.verified
-                      ? "企业已确认数据"
-                      : "旧站历史数据 · 待企业核验"}
-                  </p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {legacyClaims.stats.map((item) => (
-                      <div
-                        key={item.key}
-                        className="rounded-xl border border-white/10 bg-white/5 p-4"
-                      >
-                        <p className="text-2xl font-black text-amber-400">
-                          {item.value}
-                          <span className="ml-1 text-sm">{item.unit}</span>
-                        </p>
-                        <p className="mt-1 text-xs text-white/65">
-                          {item.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="mt-3 text-xs leading-5 text-white/50">
-                    来源：{legacyClaims.sourceNote}
-                    。未核验前不构成产能或合作承诺。
-                  </p>
-                </div>
-              ) : null}
               <div className="mt-8 grid grid-cols-2 gap-3">
                 {[
                   "工厂航拍",
@@ -353,17 +304,17 @@ export default async function HomePage() {
               <MediaPlaceholder
                 label="工厂全景"
                 type="factory"
-                src={generatedAssets.posters[0].image}
+                src={generatedAssets.factoryImages[0].image}
                 className="col-span-2 min-h-60 rounded-xl2"
               />
               <MediaPlaceholder
                 label="清洗设备"
-                src={generatedAssets.posters[1].image}
+                src={generatedAssets.factoryImages[1].image}
                 className="min-h-44 rounded-xl2"
               />
               <MediaPlaceholder
                 label="质量检测"
-                src={generatedAssets.posters[2].image}
+                src={generatedAssets.factoryImages[2].image}
                 className="min-h-44 rounded-xl2"
               />
             </div>
@@ -376,7 +327,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Production Process"
             title="生产工艺与批次质量控制"
-            description="流程节点可配置图片、视频、标题和说明；页面不会把内部检测包装成第三方认证。"
+            description="流程节点可配置图片、标题和说明；页面不会把内部检测包装成第三方认证。"
           />
           <div className="mt-12 grid gap-5 md:grid-cols-3">
             {processSteps.map(([number, title, description], index) => {
@@ -488,8 +439,8 @@ export default async function HomePage() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading
               eyebrow="Factory Media"
-              title="视频与图片"
-              description="视频默认不自动加载和播放，配置 poster 后由访客点击观看。"
+              title="工厂图片"
+              description="图片由后台统一维护，发布前确认版权和企业归属。"
             />
             <ButtonLink href="/media" variant="outline">
               进入媒体中心
@@ -505,8 +456,7 @@ export default async function HomePage() {
                   >
                     <MediaPlaceholder
                       label={item.title}
-                      type={item.type === "VIDEO" ? "video" : "image"}
-                      src={item.type === "IMAGE" ? item.url : item.posterUrl}
+                      src={item.url}
                       className="min-h-56"
                     />
                     <div className="p-5">
@@ -520,11 +470,10 @@ export default async function HomePage() {
               </div>
             ) : (
               <div className="grid gap-6 md:grid-cols-3">
-                {generatedAssets.posters.map((item) => (
+                {generatedAssets.factoryImages.map((item) => (
                   <MediaPlaceholder
                     key={item.title}
-                    label={`${item.title}视频封面`}
-                    type="video"
+                    label={item.title}
                     src={item.image}
                     className="min-h-60 rounded-xl2"
                   />

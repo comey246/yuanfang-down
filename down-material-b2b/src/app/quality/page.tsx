@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { generatedAssets } from "@/config/generated-assets";
-import { getLegacyClaims, getPublishedCertificates } from "@/lib/data";
+import { getPublishedCertificates } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
 
@@ -29,10 +29,7 @@ const indicators = [
 ];
 
 export default async function QualityPage() {
-  const [certificates, legacyClaims] = await Promise.all([
-    getPublishedCertificates(),
-    getLegacyClaims()
-  ]);
+  const certificates = await getPublishedCertificates();
   return (
     <>
       <PageHero
@@ -95,27 +92,6 @@ export default async function QualityPage() {
             ))}
           </div>
         </section>
-        {legacyClaims?.certificationStatements.length ? (
-          <section className="mt-8 rounded-xl2 border border-amber-200 bg-amber-50 p-6">
-            <p className="text-xs font-bold text-amber-700">
-              旧站历史质量声明 ·
-              {legacyClaims.verified ? "企业已确认" : "待企业核验"}
-            </p>
-            <h2 className="mt-2 text-xl font-bold">历史页面原文已迁移</h2>
-            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm text-slate-700">
-              {legacyClaims.certificationStatements.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-              {legacyClaims.qualityStatement ? (
-                <li>{legacyClaims.qualityStatement}</li>
-              ) : null}
-            </ul>
-            <p className="mt-4 text-xs leading-5 text-amber-900/70">
-              来源：{legacyClaims.sourceNote}
-              。旧站没有提供认证名称、证书编号、检测机构或报告文件，因此本区不作为正式认证展示；正式文件仍只在下方核验后公开。
-            </p>
-          </section>
-        ) : null}
         <section className="mt-14">
           <h2 className="text-3xl font-bold">可配置质量指标</h2>
           <p className="mt-3 text-slate-600">

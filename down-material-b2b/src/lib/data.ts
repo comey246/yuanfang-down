@@ -1,4 +1,4 @@
-import { ContentStatus, Prisma } from "@prisma/client";
+import { ContentStatus, MediaType, Prisma } from "@prisma/client";
 import { connection } from "next/server";
 import { cache } from "react";
 import { demoProducts } from "@/lib/demo-data";
@@ -169,8 +169,6 @@ function productToView(
     description: product.description || "",
     coverImage: useGeneratedCover ? generated.cover : product.coverImage,
     gallery: useGeneratedGallery ? [...generated.gallery] : product.gallery,
-    videoUrl: product.videoUrl,
-    videoPoster: product.videoPoster,
     customization: product.customization,
     sampleAvailable: product.sampleAvailable,
     showPrice: product.showPrice,
@@ -348,7 +346,11 @@ export async function getPublishedMedia() {
   try {
     const prisma = getPrisma();
     return await prisma.mediaAsset.findMany({
-      where: { published: true, deletedAt: null },
+      where: {
+        type: MediaType.IMAGE,
+        published: true,
+        deletedAt: null
+      },
       orderBy: [{ sortOrder: "asc" }, { updatedAt: "desc" }]
     });
   } catch {

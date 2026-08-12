@@ -1,5 +1,5 @@
 export const generatedAssets = {
-  hero: "/generated/hero/down-material-hero.webp",
+  hero: "/legacy-assets/hero-workshop-generated.webp",
   og: "/generated/seo/social-og.webp",
   products: {
     "white-goose-down": {
@@ -93,18 +93,18 @@ export const generatedAssets = {
     "fill-power-and-down-cluster-content":
       "/generated/articles/fill-power-content.webp"
   },
-  posters: [
+  factoryImages: [
     {
       title: "工厂全景",
-      image: "/generated/posters/factory-overview.webp"
+      image: "/generated/factory/factory-overview.webp"
     },
     {
       title: "清洗过程",
-      image: "/generated/posters/washing-process.webp"
+      image: "/generated/factory/washing-process.webp"
     },
     {
       title: "质量检测",
-      image: "/generated/posters/quality-inspection.webp"
+      image: "/generated/factory/quality-inspection.webp"
     }
   ]
 } as const;

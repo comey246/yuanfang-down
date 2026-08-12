@@ -1,4 +1,4 @@
-import { Factory, ImageIcon, PlayCircle } from "lucide-react";
+import { Factory, ImageIcon } from "lucide-react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
@@ -12,15 +12,14 @@ export function MediaPlaceholder({
   eager = false
 }: {
   label: string;
-  type?: "image" | "video" | "factory";
+  type?: "image" | "factory";
   className?: string;
   src?: string | null;
   notice?: string;
   fit?: "cover" | "contain";
   eager?: boolean;
 }) {
-  const Icon =
-    type === "video" ? PlayCircle : type === "factory" ? Factory : ImageIcon;
+  const Icon = type === "factory" ? Factory : ImageIcon;
   if (src) {
     const generatedAvif =
       src.startsWith("/generated/") && src.endsWith(".webp")

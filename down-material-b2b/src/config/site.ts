@@ -33,7 +33,7 @@ export const siteConfig = {
     { href: "/factory", label: "工厂实力" },
     { href: "/process", label: "生产工艺" },
     { href: "/quality", label: "质量检测" },
-    { href: "/media", label: "视频图片" },
+    { href: "/media", label: "图片中心" },
     { href: "/articles", label: "行业资讯" },
     { href: "/contact", label: "联系咨询" }
   ]

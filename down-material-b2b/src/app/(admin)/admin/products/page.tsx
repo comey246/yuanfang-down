@@ -283,23 +283,6 @@ export default async function AdminProductsPage({
             />
           </label>
           <label className="text-xs font-semibold">
-            视频 / Poster URL
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <input
-                name="videoUrl"
-                defaultValue={current?.videoUrl || ""}
-                className="admin-field"
-                placeholder="视频 URL"
-              />
-              <input
-                name="videoPoster"
-                defaultValue={current?.videoPoster || ""}
-                className="admin-field"
-                placeholder="Poster URL"
-              />
-            </div>
-          </label>
-          <label className="text-xs font-semibold">
             检测报告 URL
             <input
               name="reportUrl"

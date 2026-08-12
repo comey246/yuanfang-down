@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
+import {
+  generatedAssetNotice,
+  generatedAssets
+} from "@/config/generated-assets";
 import { getCompanyProfile } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 
@@ -24,10 +27,10 @@ export default async function AboutPage() {
       <Container className="py-14 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <MediaPlaceholder
-            label="企业与工厂形象照"
+            label="企业与工厂概念形象"
             type="factory"
-            src={legacyDemoAssets.workshop}
-            notice={legacyDemoNotice}
+            src={generatedAssets.posters[0].image}
+            notice={generatedAssetNotice}
             className="min-h-[420px] rounded-xl2"
           />
           <div>

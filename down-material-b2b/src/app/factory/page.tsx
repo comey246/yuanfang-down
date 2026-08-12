@@ -11,7 +11,10 @@ import { OnlineServiceButton } from "@/components/customer-service/online-servic
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
+import {
+  generatedAssetNotice,
+  generatedAssets
+} from "@/config/generated-assets";
 import { getLegacyClaims } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 
@@ -25,38 +28,38 @@ const zones = [
   [
     FactoryIcon,
     "工厂环境",
-    "当前图片来自旧站演示素材；厂区边界、环境与物流动线须使用真实资料替换。",
-    legacyDemoAssets.workshop
+    "当前为 AI 工厂概念图；厂区边界、环境与物流动线须使用真实资料替换。",
+    generatedAssets.posters[0].image
   ],
   [
     Settings2,
     "生产设备",
     "水洗、脱水、烘干、分拣设备型号和数量待核实。",
-    legacyDemoAssets.hero
+    generatedAssets.posters[1].image
   ],
   [
     FlaskConical,
     "检测实验室",
     "内部检测能力、设备与操作流程待质量负责人补充。",
-    legacyDemoAssets.laboratory
+    generatedAssets.posters[2].image
   ],
   [
     Warehouse,
     "包装仓储",
     "原料批次、包装、仓储与出库管理方式待补充。",
-    legacyDemoAssets.warehouse
+    generatedAssets.process[8]
   ],
   [
     Package,
     "包装展示",
     "包装方式、单包重量与标签规则由产品后台配置。",
-    legacyDemoAssets.packagedWarehouse
+    generatedAssets.process[7]
   ],
   [
     Send,
     "发货区域",
     "实际发货范围、运输方式与交期不做虚构承诺。",
-    legacyDemoAssets.warehouse
+    generatedAssets.process[8]
   ]
 ] as const;
 
@@ -67,7 +70,7 @@ export default async function FactoryPage() {
       <PageHero
         eyebrow="FACTORY CAPABILITY"
         title="工厂实力，以可核验资料为依据"
-        description="旧站图片已作为演示素材迁入，但不代表本工厂真实现场。本页不展示未经确认的面积、产能、员工或设备数量。"
+        description="当前图片为 AI 概念示意，不代表本工厂真实现场。本页不展示未经确认的面积、产能、员工或设备数量。"
       />
       <Container className="py-14 sm:py-20">
         {legacyClaims ? (
@@ -105,7 +108,7 @@ export default async function FactoryPage() {
                 label={title}
                 type={index === 0 ? "factory" : "image"}
                 src={image}
-                notice={legacyDemoNotice}
+                notice={generatedAssetNotice}
                 className="min-h-64"
               />
               <div className="p-6">

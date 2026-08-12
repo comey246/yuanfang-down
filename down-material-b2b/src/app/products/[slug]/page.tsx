@@ -12,7 +12,10 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import { legacyDemoNotice } from "@/config/legacy-content";
+import {
+  generatedAssets,
+  generatedProductNotice
+} from "@/config/generated-assets";
 import { siteConfig } from "@/config/site";
 import { getCompanyProfile, getProductBySlug } from "@/lib/data";
 import { nonEmpty, safeJsonLd } from "@/lib/utils";
@@ -31,9 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${product.name}原料供应`,
       description: product.summary,
       type: "website",
-      images: ["/og.png"]
+      images: [product.coverImage || generatedAssets.og]
     },
-    twitter: { card: "summary_large_image", images: ["/og.png"] }
+    twitter: {
+      card: "summary_large_image",
+      images: [product.coverImage || generatedAssets.og]
+    }
   };
 }
 
@@ -110,21 +116,21 @@ export default async function ProductDetailPage({ params }: Props) {
                 <MediaPlaceholder
                   label={`${product.name}原料主图`}
                   src={product.coverImage}
-                  notice={product.demo ? legacyDemoNotice : undefined}
+                  notice={product.demo ? generatedProductNotice : undefined}
                   className="min-h-[430px] rounded-xl2"
                 />
               )}
-              <div className="mt-4 grid grid-cols-3 gap-3">
-                {["原料近景", "包装实拍", "检测取样"].map((label, index) => (
+              <div className="mt-4 grid grid-cols-2 gap-3">
+                {product.gallery.map((image, index) => (
                   <MediaPlaceholder
-                    key={label}
-                    label={label}
-                    src={product.gallery[index]}
-                    notice={
-                      product.demo && product.gallery[index]
-                        ? legacyDemoNotice
-                        : undefined
+                    key={image}
+                    label={
+                      index === 0
+                        ? `${product.name}原料检视示意`
+                        : `${product.name}无品牌样品包装示意`
                     }
+                    src={image}
+                    notice={product.demo ? generatedProductNotice : undefined}
                     className="min-h-28 rounded-xl"
                   />
                 ))}

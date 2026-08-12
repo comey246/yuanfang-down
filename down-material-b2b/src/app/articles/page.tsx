@@ -4,6 +4,11 @@ import { ArrowRight } from "lucide-react";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
+import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import {
+  generatedAssetNotice,
+  getGeneratedArticleCover
+} from "@/config/generated-assets";
 import { getPublishedArticles } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
@@ -47,30 +52,40 @@ export default async function ArticlesPage() {
             {articles.map((article) => (
               <article
                 key={article.id}
-                className="flex flex-col rounded-xl2 border border-slate-200 bg-white p-6"
+                className="flex flex-col overflow-hidden rounded-xl2 border border-slate-200 bg-white"
               >
-                <p className="text-xs font-bold text-amber-600">
-                  {article.category?.name || "行业资讯"}
-                </p>
-                <h2 className="mt-3 text-xl font-bold leading-8">
-                  <Link
-                    href={`/articles/${article.slug}`}
-                    className="hover:text-forest-700"
-                  >
-                    {article.title}
-                  </Link>
-                </h2>
-                <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
-                  {article.excerpt}
-                </p>
-                <div className="mt-5 flex items-center justify-between text-xs text-slate-500">
-                  <span>{formatDate(article.publishedAt)}</span>
-                  <Link
-                    href={`/articles/${article.slug}`}
-                    className="flex items-center gap-1 font-bold text-forest-700"
-                  >
-                    阅读全文 <ArrowRight className="size-4" />
-                  </Link>
+                <MediaPlaceholder
+                  label={`${article.title}文章封面`}
+                  src={
+                    article.coverImage || getGeneratedArticleCover(article.slug)
+                  }
+                  notice={article.coverImage ? undefined : generatedAssetNotice}
+                  className="min-h-48"
+                />
+                <div className="flex flex-1 flex-col p-6">
+                  <p className="text-xs font-bold text-amber-600">
+                    {article.category?.name || "行业资讯"}
+                  </p>
+                  <h2 className="mt-3 text-xl font-bold leading-8">
+                    <Link
+                      href={`/articles/${article.slug}`}
+                      className="hover:text-forest-700"
+                    >
+                      {article.title}
+                    </Link>
+                  </h2>
+                  <p className="mt-3 flex-1 text-sm leading-7 text-slate-600">
+                    {article.excerpt}
+                  </p>
+                  <div className="mt-5 flex items-center justify-between text-xs text-slate-500">
+                    <span>{formatDate(article.publishedAt)}</span>
+                    <Link
+                      href={`/articles/${article.slug}`}
+                      className="flex items-center gap-1 font-bold text-forest-700"
+                    >
+                      阅读全文 <ArrowRight className="size-4" />
+                    </Link>
+                  </div>
                 </div>
               </article>
             ))}

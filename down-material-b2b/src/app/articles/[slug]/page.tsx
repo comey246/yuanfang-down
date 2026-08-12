@@ -6,6 +6,12 @@ import { ShareButtons } from "@/components/articles/share-buttons";
 import { OnlineServiceButton } from "@/components/customer-service/online-service-button";
 import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/ui/container";
+import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import {
+  generatedAssetNotice,
+  generatedAssets,
+  getGeneratedArticleCover
+} from "@/config/generated-assets";
 import { siteConfig } from "@/config/site";
 import { getArticleBySlug, getCompanyProfile } from "@/lib/data";
 import { formatDate, safeJsonLd } from "@/lib/utils";
@@ -16,6 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticleBySlug(slug);
   if (!article) return { title: "文章未找到" };
+  const coverImage =
+    article.coverImage || getGeneratedArticleCover(article.slug);
   return {
     title: article.seoTitle || article.title,
     description: article.seoDescription || article.excerpt,
@@ -26,9 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: article.excerpt || undefined,
       publishedTime: article.publishedAt?.toISOString(),
       modifiedTime: article.updatedAt.toISOString(),
-      images: ["/og.png"]
+      images: [coverImage || generatedAssets.og]
     },
-    twitter: { card: "summary_large_image", images: ["/og.png"] }
+    twitter: {
+      card: "summary_large_image",
+      images: [coverImage || generatedAssets.og]
+    }
   };
 }
 
@@ -39,6 +50,8 @@ export default async function ArticlePage({ params }: Props) {
     getCompanyProfile()
   ]);
   if (!article) notFound();
+  const coverImage =
+    article.coverImage || getGeneratedArticleCover(article.slug);
   const paragraphs = (article.content || "").split(/\n{2,}/).filter(Boolean);
   const articleLd = {
     "@context": "https://schema.org",
@@ -49,6 +62,9 @@ export default async function ArticlePage({ params }: Props) {
     dateModified: article.updatedAt.toISOString(),
     author: { "@type": "Person", name: article.author || "待填写" },
     publisher: { "@type": "Organization", name: profile.companyName },
+    image: coverImage
+      ? new URL(coverImage, siteConfig.baseUrl).toString()
+      : undefined,
     mainEntityOfPage: new URL(
       `/articles/${article.slug}`,
       siteConfig.baseUrl
@@ -103,6 +119,14 @@ export default async function ArticlePage({ params }: Props) {
                 </span>
               </div>
             </header>
+            {coverImage ? (
+              <MediaPlaceholder
+                label={`${article.title}文章封面`}
+                src={coverImage}
+                notice={article.coverImage ? undefined : generatedAssetNotice}
+                className="mt-8 min-h-[320px] rounded-xl2"
+              />
+            ) : null}
             <div className="prose-cn py-8">
               {paragraphs.map((paragraph, index) =>
                 index === 0 ? (

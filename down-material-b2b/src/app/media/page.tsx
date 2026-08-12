@@ -6,6 +6,10 @@ import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getPublishedMedia } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
+import {
+  generatedAssetNotice,
+  generatedAssets
+} from "@/config/generated-assets";
 
 export const metadata: Metadata = createMetadata(
   "工厂视频与图片中心",
@@ -92,12 +96,38 @@ export default async function MediaPage() {
             ))}
           </div>
         ) : (
-          <EmptyState
-            title="真实工厂素材待上传"
-            description="后台已预留图片和视频分类，但当前没有已审核公开的素材。发布前请替换为自有或获得授权的照片、poster 与视频。"
-            actionLabel="联系工厂获取资料"
-            actionHref="/contact?source=media-empty"
-          />
+          <div>
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {generatedAssets.posters.map((item) => (
+                <article
+                  key={item.title}
+                  className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
+                >
+                  <MediaPlaceholder
+                    label={`${item.title}视频封面`}
+                    type="video"
+                    src={item.image}
+                    notice={generatedAssetNotice}
+                    className="min-h-56"
+                  />
+                  <div className="p-5">
+                    <p className="text-xs font-bold text-amber-600">
+                      AI 概念素材
+                    </p>
+                    <h2 className="mt-2 text-lg font-bold">{item.title}</h2>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="mt-8">
+              <EmptyState
+                title="真实工厂素材仍待上传"
+                description="以上为 AI 视频封面示意。后台当前没有已审核公开的真实照片或视频，发布实拍内容前须确认版权和企业归属。"
+                actionLabel="联系工厂获取资料"
+                actionHref="/contact?source=media-empty"
+              />
+            </div>
+          </div>
         )}
       </Container>
     </>

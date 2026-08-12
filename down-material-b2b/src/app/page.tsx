@@ -23,7 +23,12 @@ import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { SectionHeading } from "@/components/ui/section-heading";
-import { legacyDemoAssets, legacyDemoNotice } from "@/config/legacy-content";
+import {
+  generatedAssetNotice,
+  generatedAssets,
+  generatedProductNotice,
+  getGeneratedArticleCover
+} from "@/config/generated-assets";
 import {
   articleDirections,
   advantages,
@@ -125,10 +130,11 @@ export default async function HomePage() {
           </div>
           <div className="relative">
             <MediaPlaceholder
-              label="工厂或羽绒原料首屏实拍"
+              label="羽绒原料供应概念主视觉"
               type="video"
-              src={legacyDemoAssets.hero}
-              notice={legacyDemoNotice}
+              src={generatedAssets.hero}
+              notice={generatedAssetNotice}
+              eager
               className="min-h-[420px] rounded-[1.75rem] border border-white/10 shadow-2xl"
             />
             <div className="absolute -bottom-5 left-5 right-5 rounded-xl border border-white/10 bg-white/95 p-4 text-ink shadow-xl backdrop-blur sm:left-auto sm:w-72">
@@ -248,7 +254,7 @@ export default async function HomePage() {
                 <MediaPlaceholder
                   label={`${product.name}原料`}
                   src={product.coverImage}
-                  notice={product.demo ? legacyDemoNotice : undefined}
+                  notice={product.demo ? generatedProductNotice : undefined}
                   className="min-h-52"
                 />
                 <div className="p-5">
@@ -332,8 +338,8 @@ export default async function HomePage() {
             <div>
               <SectionHeading
                 eyebrow="Factory Capability"
-                title="工厂实力，用真实素材和数据说话"
-                description="旧站经营数字已按原文迁入并明确标记待核验；厂房、设备、实验室、仓储和发货资料继续由后台维护。"
+                title="工厂实力，用可核验资料建立信任"
+                description="当前图片为 AI 概念示意，不代表真实厂区；旧站经营数字已标记待核验，真实厂房、设备和仓储资料继续由后台维护。"
               />
               {legacyClaims ? (
                 <div className="mt-7">
@@ -388,22 +394,22 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <MediaPlaceholder
-                label="工厂航拍"
+                label="工厂全景概念"
                 type="factory"
-                src={legacyDemoAssets.workshop}
-                notice={legacyDemoNotice}
+                src={generatedAssets.posters[0].image}
+                notice={generatedAssetNotice}
                 className="col-span-2 min-h-60 rounded-xl2"
               />
               <MediaPlaceholder
-                label="生产车间"
-                src={legacyDemoAssets.hero}
-                notice={legacyDemoNotice}
+                label="清洗设备概念"
+                src={generatedAssets.posters[1].image}
+                notice={generatedAssetNotice}
                 className="min-h-44 rounded-xl2"
               />
               <MediaPlaceholder
-                label="包装仓储"
-                src={legacyDemoAssets.warehouse}
-                notice={legacyDemoNotice}
+                label="质量检测概念"
+                src={generatedAssets.posters[2].image}
+                notice={generatedAssetNotice}
                 className="min-h-44 rounded-xl2"
               />
             </div>
@@ -500,6 +506,32 @@ export default async function HomePage() {
 
       <section className="py-20 sm:py-24">
         <Container>
+          <SectionHeading
+            eyebrow="Applications"
+            title="面向多类采购与应用场景"
+            description="以下为 AI 应用示意图，仅用于说明原料选型方向，不代表已合作客户、成品性能或供货承诺。"
+          />
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {generatedAssets.applications.map((item) => (
+              <article
+                key={item.title}
+                className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
+              >
+                <MediaPlaceholder
+                  label={item.title}
+                  src={item.image}
+                  notice={generatedAssetNotice}
+                  className="min-h-52"
+                />
+                <h3 className="p-5 text-lg font-bold text-ink">{item.title}</h3>
+              </article>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="py-20 sm:py-24">
+        <Container>
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading
               eyebrow="Factory Media"
@@ -535,16 +567,16 @@ export default async function HomePage() {
               </div>
             ) : (
               <div className="grid gap-6 md:grid-cols-3">
-                {["工厂全景视频", "清洗过程实拍", "质检过程实拍"].map(
-                  (item) => (
-                    <MediaPlaceholder
-                      key={item}
-                      label={item}
-                      type="video"
-                      className="min-h-60 rounded-xl2"
-                    />
-                  )
-                )}
+                {generatedAssets.posters.map((item) => (
+                  <MediaPlaceholder
+                    key={item.title}
+                    label={`${item.title}视频封面`}
+                    type="video"
+                    src={item.image}
+                    notice={generatedAssetNotice}
+                    className="min-h-60 rounded-xl2"
+                  />
+                ))}
               </div>
             )}
           </div>
@@ -594,41 +626,62 @@ export default async function HomePage() {
               ? articles.slice(0, 3).map((article) => (
                   <article
                     key={article.id}
-                    className="rounded-xl2 border border-slate-200 bg-white p-6"
+                    className="overflow-hidden rounded-xl2 border border-slate-200 bg-white"
                   >
-                    <p className="text-xs font-bold text-amber-600">
-                      {article.category?.name || "行业资讯"}
-                    </p>
-                    <h3 className="mt-3 text-xl font-bold text-ink">
-                      <Link href={`/articles/${article.slug}`}>
-                        {article.title}
+                    <MediaPlaceholder
+                      label={`${article.title}文章封面`}
+                      src={
+                        article.coverImage ||
+                        getGeneratedArticleCover(article.slug)
+                      }
+                      notice={
+                        article.coverImage ? undefined : generatedAssetNotice
+                      }
+                      className="min-h-48"
+                    />
+                    <div className="p-6">
+                      <p className="text-xs font-bold text-amber-600">
+                        {article.category?.name || "行业资讯"}
+                      </p>
+                      <h3 className="mt-3 text-xl font-bold text-ink">
+                        <Link href={`/articles/${article.slug}`}>
+                          {article.title}
+                        </Link>
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-slate-600">
+                        {article.excerpt}
+                      </p>
+                      <Link
+                        href={`/articles/${article.slug}`}
+                        className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-forest-700"
+                      >
+                        阅读全文 <ArrowRight className="size-4" />
                       </Link>
-                    </h3>
-                    <p className="mt-3 text-sm leading-6 text-slate-600">
-                      {article.excerpt}
-                    </p>
-                    <Link
-                      href={`/articles/${article.slug}`}
-                      className="mt-5 inline-flex items-center gap-2 text-sm font-bold text-forest-700"
-                    >
-                      阅读全文 <ArrowRight className="size-4" />
-                    </Link>
+                    </div>
                   </article>
                 ))
-              : articleDirections.map((title) => (
+              : articleDirections.map((title, index) => (
                   <article
                     key={title}
-                    className="rounded-xl2 border border-dashed border-slate-300 bg-white p-6"
+                    className="overflow-hidden rounded-xl2 border border-dashed border-slate-300 bg-white"
                   >
-                    <p className="text-xs font-bold text-slate-400">
-                      演示草稿 · 暂未公开
-                    </p>
-                    <h3 className="mt-3 text-lg font-bold text-slate-700">
-                      {title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-6 text-slate-500">
-                      文章需经核验后在后台发布，不展示未经确认的检测结论。
-                    </p>
+                    <MediaPlaceholder
+                      label={`${title}文章封面`}
+                      src={Object.values(generatedAssets.articleCovers)[index]}
+                      notice={generatedAssetNotice}
+                      className="min-h-48"
+                    />
+                    <div className="p-6">
+                      <p className="text-xs font-bold text-slate-400">
+                        演示草稿 · 暂未公开
+                      </p>
+                      <h3 className="mt-3 text-lg font-bold text-slate-700">
+                        {title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-6 text-slate-500">
+                        文章需经核验后在后台发布，不展示未经确认的检测结论。
+                      </p>
+                    </div>
                   </article>
                 ))}
           </div>

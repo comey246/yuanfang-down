@@ -7,17 +7,23 @@ export function MediaPlaceholder({
   type = "image",
   className,
   src,
-  notice
+  notice,
+  eager = false
 }: {
   label: string;
   type?: "image" | "video" | "factory";
   className?: string;
   src?: string | null;
   notice?: string;
+  eager?: boolean;
 }) {
   const Icon =
     type === "video" ? PlayCircle : type === "factory" ? Factory : ImageIcon;
-  if (src)
+  if (src) {
+    const generatedAvif =
+      src.startsWith("/generated/") && src.endsWith(".webp")
+        ? src.replace(/\.webp$/, ".avif")
+        : null;
     return (
       <div
         className={cn(
@@ -25,13 +31,28 @@ export function MediaPlaceholder({
           className
         )}
       >
-        <Image
-          src={src}
-          alt={label}
-          fill
-          sizes="(min-width: 1024px) 50vw, 100vw"
-          className="object-cover"
-        />
+        {generatedAvif ? (
+          <picture className="absolute inset-0 block">
+            <source srcSet={generatedAvif} type="image/avif" />
+            <Image
+              src={src}
+              alt={label}
+              fill
+              loading={eager ? "eager" : "lazy"}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className="object-cover"
+            />
+          </picture>
+        ) : (
+          <Image
+            src={src}
+            alt={label}
+            fill
+            loading={eager ? "eager" : "lazy"}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className="object-cover"
+          />
+        )}
         {notice ? (
           <p className="absolute inset-x-0 bottom-0 bg-slate-950/75 px-3 py-2 text-center text-xs font-semibold text-white backdrop-blur-sm">
             {notice}
@@ -39,6 +60,7 @@ export function MediaPlaceholder({
         ) : null}
       </div>
     );
+  }
   return (
     <div
       className={cn(

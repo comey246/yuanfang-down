@@ -5,10 +5,7 @@ import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import {
-  generatedAssetNotice,
-  getGeneratedArticleCover
-} from "@/config/generated-assets";
+import { getGeneratedArticleCover } from "@/config/generated-assets";
 import { getPublishedArticles } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 import { formatDate } from "@/lib/utils";
@@ -59,7 +56,6 @@ export default async function ArticlesPage() {
                   src={
                     article.coverImage || getGeneratedArticleCover(article.slug)
                   }
-                  notice={article.coverImage ? undefined : generatedAssetNotice}
                   className="min-h-48"
                 />
                 <div className="flex flex-1 flex-col p-6">

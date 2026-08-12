@@ -24,7 +24,6 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
-  generatedAssetNotice,
   generatedAssets,
   generatedProductNotice,
   getGeneratedArticleCover
@@ -133,7 +132,6 @@ export default async function HomePage() {
               label="羽绒原料供应概念主视觉"
               type="video"
               src={generatedAssets.hero}
-              notice={generatedAssetNotice}
               eager
               className="min-h-[420px] rounded-[1.75rem] border border-white/10 shadow-2xl"
             />
@@ -397,19 +395,16 @@ export default async function HomePage() {
                 label="工厂全景概念"
                 type="factory"
                 src={generatedAssets.posters[0].image}
-                notice={generatedAssetNotice}
                 className="col-span-2 min-h-60 rounded-xl2"
               />
               <MediaPlaceholder
                 label="清洗设备概念"
                 src={generatedAssets.posters[1].image}
-                notice={generatedAssetNotice}
                 className="min-h-44 rounded-xl2"
               />
               <MediaPlaceholder
                 label="质量检测概念"
                 src={generatedAssets.posters[2].image}
-                notice={generatedAssetNotice}
                 className="min-h-44 rounded-xl2"
               />
             </div>
@@ -520,7 +515,6 @@ export default async function HomePage() {
                 <MediaPlaceholder
                   label={item.title}
                   src={item.image}
-                  notice={generatedAssetNotice}
                   className="min-h-52"
                 />
                 <h3 className="p-5 text-lg font-bold text-ink">{item.title}</h3>
@@ -573,7 +567,6 @@ export default async function HomePage() {
                     label={`${item.title}视频封面`}
                     type="video"
                     src={item.image}
-                    notice={generatedAssetNotice}
                     className="min-h-60 rounded-xl2"
                   />
                 ))}
@@ -634,9 +627,6 @@ export default async function HomePage() {
                         article.coverImage ||
                         getGeneratedArticleCover(article.slug)
                       }
-                      notice={
-                        article.coverImage ? undefined : generatedAssetNotice
-                      }
                       className="min-h-48"
                     />
                     <div className="p-6">
@@ -668,7 +658,6 @@ export default async function HomePage() {
                     <MediaPlaceholder
                       label={`${title}文章封面`}
                       src={Object.values(generatedAssets.articleCovers)[index]}
-                      notice={generatedAssetNotice}
                       className="min-h-48"
                     />
                     <div className="p-6">

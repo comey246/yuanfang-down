@@ -11,10 +11,7 @@ import { OnlineServiceButton } from "@/components/customer-service/online-servic
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import {
-  generatedAssetNotice,
-  generatedAssets
-} from "@/config/generated-assets";
+import { generatedAssets } from "@/config/generated-assets";
 import { getLegacyClaims } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
 
@@ -108,7 +105,6 @@ export default async function FactoryPage() {
                 label={title}
                 type={index === 0 ? "factory" : "image"}
                 src={image}
-                notice={generatedAssetNotice}
                 className="min-h-64"
               />
               <div className="p-6">

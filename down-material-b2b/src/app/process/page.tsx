@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import {
-  generatedAssetNotice,
-  generatedAssets
-} from "@/config/generated-assets";
+import { generatedAssets } from "@/config/generated-assets";
 import { processSteps } from "@/lib/demo-data";
 import { createMetadata } from "@/lib/seo";
 
@@ -35,7 +32,6 @@ export default function ProcessPage() {
                   label={`${title}工序实拍`}
                   type={index === 2 || index === 5 ? "video" : "image"}
                   src={generatedAssets.process[index]}
-                  notice={generatedAssetNotice}
                   className="min-h-64 rounded-xl2"
                 />
                 <span className="absolute -left-1 top-5 grid size-14 place-items-center rounded-full border-4 border-white bg-amber-500 text-sm font-black text-white md:left-auto md:right-[-2.45rem]">

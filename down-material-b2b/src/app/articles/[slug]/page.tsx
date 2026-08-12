@@ -8,7 +8,6 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import {
-  generatedAssetNotice,
   generatedAssets,
   getGeneratedArticleCover
 } from "@/config/generated-assets";
@@ -123,7 +122,6 @@ export default async function ArticlePage({ params }: Props) {
               <MediaPlaceholder
                 label={`${article.title}文章封面`}
                 src={coverImage}
-                notice={article.coverImage ? undefined : generatedAssetNotice}
                 className="mt-8 min-h-[320px] rounded-xl2"
               />
             ) : null}

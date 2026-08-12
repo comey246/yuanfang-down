@@ -6,10 +6,7 @@ import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { EmptyState } from "@/components/ui/empty-state";
 import { getPublishedMedia } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
-import {
-  generatedAssetNotice,
-  generatedAssets
-} from "@/config/generated-assets";
+import { generatedAssets } from "@/config/generated-assets";
 
 export const metadata: Metadata = createMetadata(
   "工厂视频与图片中心",
@@ -107,7 +104,6 @@ export default async function MediaPage() {
                     label={`${item.title}视频封面`}
                     type="video"
                     src={item.image}
-                    notice={generatedAssetNotice}
                     className="min-h-56"
                   />
                   <div className="p-5">

@@ -10,7 +10,6 @@ import {
   PackageCheck,
   SearchCheck,
   Send,
-  ShieldCheck,
   Sparkles,
   Truck,
   WashingMachine,
@@ -254,13 +253,13 @@ export default async function HomePage() {
             {advantages.map((item, index) => {
               const Icon = advantageIcons[index];
               return (
-                <div key={item} className="bg-white p-7">
+                <div key={item.title} className="bg-white p-7">
                   <span className="grid size-11 place-items-center rounded-xl bg-forest-50 text-forest-700">
                     <Icon className="size-5" />
                   </span>
-                  <h3 className="mt-5 font-bold text-ink">{item}</h3>
+                  <h3 className="mt-5 font-bold text-ink">{item.title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-500">
-                    能力说明与真实数据待后台补充，经确认后公开。
+                    {item.description}
                   </p>
                 </div>
               );
@@ -277,6 +276,7 @@ export default async function HomePage() {
                 eyebrow="Factory Capability"
                 title="工厂实力，用可核验资料建立信任"
                 description="工厂能力、经营数据与相关资料以后台核验发布内容为准。"
+                tone="inverse"
               />
               <div className="mt-8 grid grid-cols-2 gap-3">
                 {[
@@ -357,54 +357,6 @@ export default async function HomePage() {
             <ButtonLink href="/process" variant="outline">
               查看完整工艺说明
             </ButtonLink>
-          </div>
-        </Container>
-      </section>
-
-      <section className="bg-warm py-20 sm:py-24">
-        <Container>
-          <div className="grid gap-12 lg:grid-cols-[.9fr_1.1fr] lg:items-center">
-            <div>
-              <SectionHeading
-                eyebrow="Quality Control"
-                title="质量参数清晰呈现，空值不显示"
-                description="旧站历史声明与正式检测报告、认证证书分开显示；正式文件只有核验并发布后才会出现在前台。"
-              />
-              <div className="mt-7 rounded-xl2 border border-amber-200 bg-amber-50 p-5">
-                <p className="flex items-center gap-2 font-bold text-amber-800">
-                  <ShieldCheck className="size-5" />
-                  资料分级规则
-                </p>
-                <ul className="mt-3 space-y-2 text-sm leading-6 text-amber-900/75">
-                  <li>企业内部检测：明确标注内部检测</li>
-                  <li>第三方检测：展示机构、日期和报告文件</li>
-                  <li>认证证书：必须核验后才能公开</li>
-                </ul>
-              </div>
-              <ButtonLink href="/quality" className="mt-7" variant="secondary">
-                查看质量体系
-              </ButtonLink>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                "绒子含量",
-                "羽绒含量",
-                "蓬松度",
-                "清洁度 / 浊度",
-                "耗氧量",
-                "气味等级",
-                "水分率",
-                "残脂率"
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-xl border border-slate-200 bg-white p-5"
-                >
-                  <p className="text-sm font-semibold text-slate-500">{item}</p>
-                  <p className="mt-2 text-lg font-bold text-ink">待后台配置</p>
-                </div>
-              ))}
-            </div>
           </div>
         </Container>
       </section>
@@ -570,13 +522,13 @@ export default async function HomePage() {
                     />
                     <div className="p-6">
                       <p className="text-xs font-bold text-slate-400">
-                        演示草稿 · 暂未公开
+                        内容暂时无法读取
                       </p>
                       <h3 className="mt-3 text-lg font-bold text-slate-700">
                         {title}
                       </h3>
                       <p className="mt-3 text-sm leading-6 text-slate-500">
-                        文章需经核验后在后台发布，不展示未经确认的检测结论。
+                        公开文章暂未从内容数据库加载成功，请稍后刷新。
                       </p>
                     </div>
                   </article>

@@ -89,7 +89,6 @@ export default async function RootLayout({
     description: siteConfig.description,
     url: siteConfig.baseUrl,
     telephone: profile.phone === "待填写" ? undefined : profile.phone,
-    email: profile.email === "待填写" ? undefined : profile.email,
     address: isConfiguredValue(profile.address)
       ? { "@type": "PostalAddress", streetAddress: profile.address }
       : undefined

@@ -52,6 +52,11 @@ export default async function ArticlePage({ params }: Props) {
   const coverImage =
     article.coverImage || getGeneratedArticleCover(article.slug);
   const paragraphs = (article.content || "").split(/\n{2,}/).filter(Boolean);
+  const tableOfContents = paragraphs.flatMap((paragraph, index) =>
+    paragraph.startsWith("## ")
+      ? [{ id: `section-${index}`, title: paragraph.slice(3) }]
+      : []
+  );
   const articleLd = {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -127,10 +132,14 @@ export default async function ArticlePage({ params }: Props) {
             ) : null}
             <div className="prose-cn py-8">
               {paragraphs.map((paragraph, index) =>
-                index === 0 ? (
-                  <p key={index}>{paragraph}</p>
-                ) : paragraph.startsWith("## ") ? (
-                  <h2 key={index}>{paragraph.slice(3)}</h2>
+                paragraph.startsWith("## ") ? (
+                  <h2
+                    key={index}
+                    id={`section-${index}`}
+                    className="scroll-mt-28"
+                  >
+                    {paragraph.slice(3)}
+                  </h2>
                 ) : paragraph.startsWith("### ") ? (
                   <h3 key={index}>{paragraph.slice(4)}</h3>
                 ) : (
@@ -157,7 +166,9 @@ export default async function ArticlePage({ params }: Props) {
             ) : null}
             {article.faqs.length ? (
               <section className="mt-10">
-                <h2 className="text-2xl font-bold">常见问题</h2>
+                <h2 id="faq" className="scroll-mt-28 text-2xl font-bold">
+                  常见问题
+                </h2>
                 <div className="mt-5 space-y-3">
                   {article.faqs.map((faq) => (
                     <details
@@ -186,9 +197,26 @@ export default async function ArticlePage({ params }: Props) {
             <div className="rounded-xl border border-slate-200 bg-white p-5">
               <p className="font-bold">文章目录</p>
               <ol className="mt-3 space-y-2 text-sm text-slate-500">
-                <li>1. 内容摘要</li>
-                <li>2. 核心说明</li>
-                {article.faqs.length ? <li>3. 常见问题</li> : null}
+                {tableOfContents.map((item, index) => (
+                  <li key={item.id}>
+                    <a
+                      href={`#${item.id}`}
+                      className="block leading-6 hover:text-forest-700"
+                    >
+                      {index + 1}. {item.title}
+                    </a>
+                  </li>
+                ))}
+                {article.faqs.length ? (
+                  <li>
+                    <a
+                      href="#faq"
+                      className="block leading-6 hover:text-forest-700"
+                    >
+                      {tableOfContents.length + 1}. 常见问题
+                    </a>
+                  </li>
+                ) : null}
               </ol>
             </div>
             <div className="rounded-xl bg-forest-900 p-6 text-white">

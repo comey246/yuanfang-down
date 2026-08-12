@@ -13,7 +13,6 @@ export type CompanyProfile = {
   phone: string;
   mobile: string;
   wechat: string;
-  email: string;
   address: string;
   businessHours: string;
   icpNumber: string;
@@ -56,7 +55,6 @@ export const getCompanyProfile = cache(async (): Promise<CompanyProfile> => {
     phone: siteConfig.phone,
     mobile: siteConfig.mobile,
     wechat: siteConfig.wechat,
-    email: siteConfig.email,
     address: siteConfig.address,
     businessHours: siteConfig.businessHours,
     icpNumber: siteConfig.icpNumber,
@@ -71,10 +69,13 @@ export const getCompanyProfile = cache(async (): Promise<CompanyProfile> => {
     const setting = await prisma.siteSetting.findUnique({
       where: { key: "company_profile" }
     });
-    return {
-      ...fallback,
-      ...(setting?.value as Partial<CompanyProfile> | undefined)
-    };
+    const value = setting?.value as Partial<CompanyProfile> | undefined;
+    return Object.fromEntries(
+      Object.entries(fallback).map(([key, fallbackValue]) => [
+        key,
+        value?.[key as keyof CompanyProfile] || fallbackValue
+      ])
+    ) as CompanyProfile;
   } catch {
     return fallback;
   }

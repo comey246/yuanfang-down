@@ -9,7 +9,6 @@ export const siteConfig = {
   phone: legacySiteContent.phone,
   mobile: legacySiteContent.mobile,
   wechat: legacySiteContent.mobile,
-  email: legacySiteContent.email,
   address: "待填写",
   businessHours: "周一至周六 08:30-18:00",
   icpNumber: "待备案",

@@ -88,8 +88,8 @@ export default async function ArticlesPage() {
           </div>
         ) : (
           <EmptyState
-            title="暂无已审核发布的文章"
-            description="3 篇演示文章已作为后台草稿创建，不会直接公开。请由业务或质量负责人核验内容并发布后再展示。"
+            title="文章内容暂时无法读取"
+            description="公开文章暂未从内容数据库加载成功，请稍后刷新或通过在线客服咨询采购问题。"
             actionLabel="在线咨询采购问题"
             actionHref="/contact?source=articles-empty"
           />

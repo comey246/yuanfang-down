@@ -322,7 +322,6 @@ export async function saveCompanySettings(form: FormData) {
     phone: text(form, "phone") || "待填写",
     mobile: text(form, "mobile") || "待填写",
     wechat: text(form, "wechat") || "待填写",
-    email: text(form, "email") || "待填写",
     address: text(form, "address") || "待填写",
     businessHours: text(form, "businessHours") || "待填写",
     icpNumber: text(form, "icpNumber") || "待备案",

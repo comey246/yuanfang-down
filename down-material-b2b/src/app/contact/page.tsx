@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import {
-  Clock,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Phone,
-  ShieldCheck
-} from "lucide-react";
+import { Clock, MapPin, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import { OnlineServiceButton } from "@/components/customer-service/online-service-button";
 import { PageHero } from "@/components/layout/page-hero";
 import { Container } from "@/components/ui/container";
@@ -17,7 +10,7 @@ import { isConfiguredValue } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "联系我们与在线客服",
-  "通过在线客服、电话、微信或业务邮箱直接联系羽绒原料工厂，网站不收集或保存访客询盘表单。",
+  "通过在线客服、电话或微信直接联系羽绒原料工厂，网站不收集或保存访客询盘表单。",
   "/contact"
 );
 
@@ -34,7 +27,6 @@ export default async function ContactPage({
   const contacts = [
     [Phone, "服务热线", profile.phone, `tel:${profile.mobile}`],
     [MessageCircle, "微信咨询", profile.wechat, ""],
-    [Mail, "业务邮箱", profile.email, `mailto:${profile.email}`],
     [MapPin, "工厂地址", profile.address, ""],
     [Clock, "工作时间", profile.businessHours, ""]
   ] as const;
@@ -43,7 +35,7 @@ export default async function ContactPage({
       <PageHero
         eyebrow="CONTACT & ONLINE SERVICE"
         title="联系我们与在线客服"
-        description="无需填写询盘表单。通过在线客服、电话、微信或业务邮箱直接与工厂沟通产品、规格、数量、样品和交期。"
+        description="无需填写询盘表单。通过在线客服、电话或微信直接与工厂沟通产品、规格、数量、样品和交期。"
       />
       <Container className="grid gap-10 py-14 lg:grid-cols-[.85fr_1.15fr] lg:py-20">
         <aside>
@@ -107,7 +99,7 @@ export default async function ContactPage({
                 当前咨询产品：<strong className="text-ink">{product}</strong>。
               </>
             ) : null}
-            客服在线时可直接沟通；离线时请使用电话、微信或邮箱。网站不要求填写姓名、手机号，也不会把聊天内容写入
+            客服在线时可直接沟通；离线时请使用电话或微信。网站不要求填写姓名、手机号，也不会把聊天内容写入
             Supabase。
           </p>
 

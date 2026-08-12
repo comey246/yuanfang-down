@@ -245,12 +245,13 @@ export function FloatingContact({
 
               <div className="grid gap-5 rounded-xl border border-slate-200 p-5 sm:grid-cols-[150px_1fr] sm:items-center">
                 <MediaPlaceholder
-                  label="企业微信二维码"
+                  label="微信二维码"
                   src={profile.wechatQrUrl}
+                  fit="contain"
                   className="min-h-36 rounded-lg"
                 />
                 <div>
-                  <p className="font-bold text-ink">企业微信 / 微信咨询</p>
+                  <p className="font-bold text-ink">微信咨询</p>
                   <p className="mt-2 text-sm leading-6 text-slate-600">
                     微信号：{profile.wechat}。添加时可备注产品名称与采购用途。
                   </p>

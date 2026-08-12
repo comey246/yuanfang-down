@@ -8,6 +8,7 @@ export function MediaPlaceholder({
   className,
   src,
   notice,
+  fit = "cover",
   eager = false
 }: {
   label: string;
@@ -15,6 +16,7 @@ export function MediaPlaceholder({
   className?: string;
   src?: string | null;
   notice?: string;
+  fit?: "cover" | "contain";
   eager?: boolean;
 }) {
   const Icon =
@@ -40,7 +42,7 @@ export function MediaPlaceholder({
               fill
               loading={eager ? "eager" : "lazy"}
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover"
+              className={fit === "contain" ? "object-contain" : "object-cover"}
             />
           </picture>
         ) : (
@@ -50,7 +52,7 @@ export function MediaPlaceholder({
             fill
             loading={eager ? "eager" : "lazy"}
             sizes="(min-width: 1024px) 50vw, 100vw"
-            className="object-cover"
+            className={fit === "contain" ? "object-contain" : "object-cover"}
           />
         )}
         {notice ? (

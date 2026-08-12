@@ -16,7 +16,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
   "联系我们与在线客服",
-  "通过在线客服、电话、企业微信或业务邮箱直接联系羽绒原料工厂，网站不收集或保存访客询盘表单。",
+  "通过在线客服、电话、微信或业务邮箱直接联系羽绒原料工厂，网站不收集或保存访客询盘表单。",
   "/contact"
 );
 
@@ -42,7 +42,7 @@ export default async function ContactPage({
       <PageHero
         eyebrow="CONTACT & ONLINE SERVICE"
         title="联系我们与在线客服"
-        description="无需填写询盘表单。通过在线客服、电话、企业微信或业务邮箱直接与工厂沟通产品、规格、数量、样品和交期。"
+        description="无需填写询盘表单。通过在线客服、电话、微信或业务邮箱直接与工厂沟通产品、规格、数量、样品和交期。"
       />
       <Container className="grid gap-10 py-14 lg:grid-cols-[.85fr_1.15fr] lg:py-20">
         <aside>
@@ -84,8 +84,9 @@ export default async function ContactPage({
           </div>
           <div className="mt-6 rounded-xl2 border border-slate-200 bg-white p-5">
             <MediaPlaceholder
-              label="企业微信二维码"
+              label="微信二维码"
               src={profile.wechatQrUrl}
+              fit="contain"
               className="min-h-52 rounded-xl"
             />
             <p className="mt-4 text-center text-sm text-slate-500">

@@ -14,30 +14,43 @@ import type { MarketPoint } from "@/types";
 
 export function MarketChart({ points }: { points: MarketPoint[] }) {
   const [range, setRange] = useState<7 | 30 | 90>(30);
-  const data = useMemo(() => {
+  const { data, productNames } = useMemo(() => {
     const latestTimestamp = Math.max(
       ...points.map((point) => new Date(point.quoteDate).getTime())
     );
-    return points
-      .filter(
-        (point) =>
-          latestTimestamp - new Date(point.quoteDate).getTime() <=
-          range * 86400000
-      )
-      .map((point) => ({
+    const visible = points.filter(
+      (point) =>
+        latestTimestamp - new Date(point.quoteDate).getTime() <=
+        range * 86400000
+    );
+    const names = [...new Set(visible.map((point) => point.productName))];
+    const rows = new Map<string, Record<string, string | number>>();
+    for (const point of visible) {
+      const price =
+        point.priceMin !== null && point.priceMax !== null
+          ? (point.priceMin + point.priceMax) / 2
+          : (point.priceMin ?? point.priceMax);
+      if (price === null) continue;
+      const date = new Date(point.quoteDate).toLocaleDateString("zh-CN", {
+        timeZone: "Asia/Shanghai",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+      });
+      const row = rows.get(date) || {
         date: new Date(point.quoteDate).toLocaleDateString("zh-CN", {
+          timeZone: "Asia/Shanghai",
           month: "2-digit",
           day: "2-digit"
-        }),
-        price:
-          point.priceMin !== null && point.priceMax !== null
-            ? (point.priceMin + point.priceMax) / 2
-            : (point.priceMin ?? point.priceMax),
-        name: point.productName
-      }))
-      .filter((item) => item.price !== null);
+        })
+      };
+      row[point.productName] = price;
+      rows.set(date, row);
+    }
+    return { data: [...rows.values()], productNames: names };
   }, [points, range]);
   if (!data.length) return null;
+  const colors = ["#376859", "#dca847", "#475569", "#8b5e34"];
   return (
     <div className="rounded-xl2 border border-slate-200 bg-white p-5">
       <div className="mb-5 flex items-center justify-between">
@@ -70,14 +83,19 @@ export function MarketChart({ points }: { points: MarketPoint[] }) {
               domain={["auto", "auto"]}
             />
             <Tooltip />
-            <Line
-              type="monotone"
-              dataKey="price"
-              stroke="#376859"
-              strokeWidth={3}
-              dot={{ fill: "#dca847", r: 3 }}
-              connectNulls
-            />
+            {productNames.map((name, index) => (
+              <Line
+                key={name}
+                type="monotone"
+                dataKey={name}
+                name={name}
+                stroke={colors[index % colors.length]}
+                strokeWidth={2.5}
+                dot={false}
+                activeDot={{ r: 4 }}
+                connectNulls
+              />
+            ))}
           </LineChart>
         </ResponsiveContainer>
       </div>

@@ -12,10 +12,7 @@ import { Breadcrumbs } from "@/components/layout/breadcrumbs";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
-import {
-  generatedAssets,
-  generatedProductNotice
-} from "@/config/generated-assets";
+import { generatedAssets } from "@/config/generated-assets";
 import { siteConfig } from "@/config/site";
 import { getCompanyProfile, getProductBySlug } from "@/lib/data";
 import { nonEmpty, safeJsonLd } from "@/lib/utils";
@@ -116,7 +113,6 @@ export default async function ProductDetailPage({ params }: Props) {
                 <MediaPlaceholder
                   label={`${product.name}原料主图`}
                   src={product.coverImage}
-                  notice={product.demo ? generatedProductNotice : undefined}
                   className="min-h-[430px] rounded-xl2"
                 />
               )}
@@ -130,7 +126,6 @@ export default async function ProductDetailPage({ params }: Props) {
                         : `${product.name}无品牌样品包装示意`
                     }
                     src={image}
-                    notice={product.demo ? generatedProductNotice : undefined}
                     className="min-h-28 rounded-xl"
                   />
                 ))}

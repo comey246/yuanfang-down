@@ -10,7 +10,7 @@ import { generatedAssets } from "@/config/generated-assets";
 
 export const metadata: Metadata = createMetadata(
   "工厂视频与图片中心",
-  "查看工厂环境、生产设备、原料、清洗、分拣、检测、包装发货等经授权实拍素材。",
+  "查看由后台发布的工厂环境、生产设备、原料、清洗、分拣、检测和包装发货等内容。",
   "/media"
 );
 
@@ -107,9 +107,7 @@ export default async function MediaPage() {
                     className="min-h-56"
                   />
                   <div className="p-5">
-                    <p className="text-xs font-bold text-amber-600">
-                      AI 概念素材
-                    </p>
+                    <p className="text-xs font-bold text-amber-600">视频内容</p>
                     <h2 className="mt-2 text-lg font-bold">{item.title}</h2>
                   </div>
                 </article>
@@ -117,8 +115,8 @@ export default async function MediaPage() {
             </div>
             <div className="mt-8">
               <EmptyState
-                title="真实工厂素材仍待上传"
-                description="以上为 AI 视频封面示意。后台当前没有已审核公开的真实照片或视频，发布实拍内容前须确认版权和企业归属。"
+                title="更多工厂内容待上传"
+                description="后台当前没有更多已审核公开的照片或视频，新增内容将在确认版权和企业归属后发布。"
                 actionLabel="联系工厂获取资料"
                 actionHref="/contact?source=media-empty"
               />

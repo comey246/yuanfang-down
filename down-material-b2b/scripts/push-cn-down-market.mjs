@@ -3,6 +3,7 @@ import { promisify } from "node:util";
 
 const execFileAsync = promisify(execFile);
 const apiBaseUrl = "https://www.cn-down.com/cndown/api/portal/featherPrice";
+const targetStandardId = "1";
 const targetUrl =
   process.env.MARKET_SYNC_TARGET_URL ||
   "https://yf-down.com/api/cron/market-sync";
@@ -24,36 +25,40 @@ function shanghaiDate(value) {
   }).format(value);
 }
 
-async function requestSource(endpoint, payload) {
-  const { stdout } = await execFileAsync(
-    "curl",
-    [
-      "--fail-with-body",
-      "--silent",
-      "--show-error",
-      "--max-time",
-      "30",
-      "--retry",
-      "2",
-      "--retry-delay",
-      "2",
-      "--retry-all-errors",
+async function requestSource(endpoint, payload = null) {
+  const requestArguments = [
+    "--fail-with-body",
+    "--silent",
+    "--show-error",
+    "--max-time",
+    "30",
+    "--retry",
+    "2",
+    "--retry-delay",
+    "2",
+    "--retry-all-errors",
+    "--header",
+    "Accept: application/json",
+    "--header",
+    "Lang: zh_CN",
+    "--user-agent",
+    "YuanfangDownMarketSync/1.0 (+https://yf-down.com/market)"
+  ];
+  if (payload) {
+    requestArguments.push(
       "--request",
       "POST",
       "--header",
-      "Accept: application/json",
-      "--header",
       "Content-Type: application/json; charset=UTF-8",
-      "--header",
-      "Lang: zh_CN",
-      "--user-agent",
-      "YuanfangDownMarketSync/1.0 (+https://yf-down.com/market)",
       "--data",
-      JSON.stringify(payload),
-      `${apiBaseUrl}/${endpoint}`
-    ],
-    { encoding: "utf8", maxBuffer: 5 * 1024 * 1024 }
-  );
+      JSON.stringify(payload)
+    );
+  }
+  requestArguments.push(`${apiBaseUrl}/${endpoint}`);
+  const { stdout } = await execFileAsync("curl", requestArguments, {
+    encoding: "utf8",
+    maxBuffer: 5 * 1024 * 1024
+  });
   const envelope = JSON.parse(stdout);
   if (envelope.code !== 200) {
     throw new Error(
@@ -98,46 +103,87 @@ async function main() {
     endDate: shanghaiDate(now)
   };
   const snapshots = [];
-
-  for (const product of products) {
-    const payload = {
-      standardId: "1",
-      featherNameId: product.featherNameId,
-      specificationId: "3",
-      ...commonDates
-    };
-    const current = await requestSource(
-      "getFeatherPriceKeyDataAnalysis",
-      payload
-    );
-    const currentPrice = Number(current?.currentPrice);
-    const priceChange = Number(current?.priceChange);
-    if (!Number.isFinite(currentPrice) || !Number.isFinite(priceChange)) {
-      throw new Error(`羽绒金网${product.productName}当前行情字段异常`);
-    }
-    snapshots.push({
-      ...product,
-      currentPrice,
-      priceChange,
-      history: normalizeHistory(
-        await requestSource("getFeatherPriceByTime", payload)
-      )
-    });
+  const priceInfo = await requestSource("getFeatherPriceInfo");
+  const standard = priceInfo?.standard?.find(
+    (item) => String(item.id) === targetStandardId
+  );
+  if (!standard || !Array.isArray(standard.specification)) {
+    throw new Error("羽绒金网未返回可用的绒子含量规格");
   }
 
-  const response = await fetch(targetUrl, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${secret}`,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ snapshots })
-  });
-  const result = await response.json();
-  if (!response.ok) {
-    throw new Error(
-      `生产同步接口 HTTP ${response.status}：${result.error || "未知错误"}`
-    );
+  for (const product of products) {
+    for (const [
+      specificationIndex,
+      specification
+    ] of standard.specification.entries()) {
+      const specificationValue = Number(specification.specification);
+      const payload = {
+        standardId: String(standard.id),
+        featherNameId: product.featherNameId,
+        specificationId: String(specification.id),
+        ...commonDates
+      };
+      const current = await requestSource(
+        "getFeatherPriceKeyDataAnalysis",
+        payload
+      );
+      const currentPrice = Number(current?.currentPrice);
+      const priceChange = Number(current?.priceChange);
+      if (
+        !Number.isFinite(specificationValue) ||
+        !Number.isFinite(currentPrice) ||
+        !Number.isFinite(priceChange)
+      ) {
+        throw new Error(`羽绒金网${product.productName}当前行情字段异常`);
+      }
+      snapshots.push({
+        ...product,
+        standardId: String(standard.id),
+        standardName: String(standard.standardName),
+        specificationId: String(specification.id),
+        specificationValue,
+        sortOrder: product.sortOrder * 100 + specificationIndex,
+        currentPrice,
+        priceChange,
+        history: normalizeHistory(
+          await requestSource("getFeatherPriceByTime", payload)
+        )
+      });
+    }
+  }
+
+  const totals = {
+    products: 0,
+    historyCreated: 0,
+    historyUpdated: 0,
+    latestDate: null
+  };
+  const batchSize = 4;
+  for (let index = 0; index < snapshots.length; index += batchSize) {
+    const batch = snapshots.slice(index, index + batchSize);
+    const response = await fetch(targetUrl, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${secret}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ snapshots: batch })
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      throw new Error(
+        `生产同步接口 HTTP ${response.status}：${result.error || "未知错误"}`
+      );
+    }
+    totals.products += Number(result.products || 0);
+    totals.historyCreated += Number(result.historyCreated || 0);
+    totals.historyUpdated += Number(result.historyUpdated || 0);
+    if (
+      result.latestDate &&
+      (!totals.latestDate || result.latestDate > totals.latestDate)
+    ) {
+      totals.latestDate = result.latestDate;
+    }
   }
   console.info(
     JSON.stringify(
@@ -145,7 +191,7 @@ async function main() {
         ok: true,
         sourceProducts: snapshots.length,
         historyCounts: snapshots.map((item) => item.history.length),
-        ...result
+        ...totals
       },
       null,
       2

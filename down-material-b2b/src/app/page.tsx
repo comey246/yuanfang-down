@@ -22,10 +22,10 @@ import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { EmptyState } from "@/components/ui/empty-state";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
+import { MarketQuotes } from "@/components/market/market-quotes";
 import { SectionHeading } from "@/components/ui/section-heading";
 import {
   generatedAssets,
-  generatedProductNotice,
   getGeneratedArticleCover
 } from "@/config/generated-assets";
 import {
@@ -42,7 +42,6 @@ import {
   getPublishedMedia,
   getPublishedProducts
 } from "@/lib/data";
-import { formatDate } from "@/lib/utils";
 
 const advantageIcons = [
   SearchCheck,
@@ -184,59 +183,7 @@ export default async function HomePage() {
           </div>
           <div className="mt-10">
             {quotes.length ? (
-              <div className="overflow-x-auto rounded-xl2 border border-slate-200 bg-white">
-                <table className="w-full min-w-[760px] text-left text-sm">
-                  <thead className="bg-forest-50 text-xs uppercase tracking-wider text-forest-900">
-                    <tr>
-                      <th className="p-4">产品名称</th>
-                      <th className="p-4">规格</th>
-                      <th className="p-4">价格区间</th>
-                      <th className="p-4">单位</th>
-                      <th className="p-4">涨跌</th>
-                      <th className="p-4">更新日期</th>
-                      <th className="p-4">数据来源</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {quotes.slice(0, 6).map((quote) => (
-                      <tr key={quote.id} className="border-t border-slate-100">
-                        <td className="p-4 font-bold text-ink">
-                          {quote.productName}
-                        </td>
-                        <td className="p-4">{quote.specification}</td>
-                        <td className="p-4">
-                          {quote.priceMin === null && quote.priceMax === null
-                            ? "联系询价"
-                            : quote.priceMin === quote.priceMax
-                              ? quote.priceMin
-                              : `${quote.priceMin ?? "—"} - ${quote.priceMax ?? "—"}`}
-                        </td>
-                        <td className="p-4">{quote.unit}</td>
-                        <td className="p-4">
-                          {quote.changeValue === null
-                            ? "—"
-                            : `${quote.changeValue > 0 ? "+" : ""}${quote.changeValue}%`}
-                        </td>
-                        <td className="p-4">{formatDate(quote.quoteDate)}</td>
-                        <td className="p-4 text-slate-500">
-                          {quote.sourceNote.includes("羽绒金网") ? (
-                            <a
-                              href="https://www.cn-down.com/"
-                              target="_blank"
-                              rel="noreferrer"
-                              className="underline"
-                            >
-                              {quote.sourceNote}
-                            </a>
-                          ) : (
-                            quote.sourceNote
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <MarketQuotes quotes={quotes} compact />
             ) : (
               <EmptyState
                 title="今日行情请联系业务人员获取"
@@ -265,7 +212,6 @@ export default async function HomePage() {
                 <MediaPlaceholder
                   label={`${product.name}原料`}
                   src={product.coverImage}
-                  notice={product.demo ? generatedProductNotice : undefined}
                   className="min-h-52"
                 />
                 <div className="p-5">
@@ -350,7 +296,7 @@ export default async function HomePage() {
               <SectionHeading
                 eyebrow="Factory Capability"
                 title="工厂实力，用可核验资料建立信任"
-                description="当前图片为 AI 概念示意，不代表真实厂区；旧站经营数字已标记待核验，真实厂房、设备和仓储资料继续由后台维护。"
+                description="工厂能力、经营数据与相关资料以后台核验发布内容为准。"
               />
               {legacyClaims ? (
                 <div className="mt-7">
@@ -405,18 +351,18 @@ export default async function HomePage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <MediaPlaceholder
-                label="工厂全景概念"
+                label="工厂全景"
                 type="factory"
                 src={generatedAssets.posters[0].image}
                 className="col-span-2 min-h-60 rounded-xl2"
               />
               <MediaPlaceholder
-                label="清洗设备概念"
+                label="清洗设备"
                 src={generatedAssets.posters[1].image}
                 className="min-h-44 rounded-xl2"
               />
               <MediaPlaceholder
-                label="质量检测概念"
+                label="质量检测"
                 src={generatedAssets.posters[2].image}
                 className="min-h-44 rounded-xl2"
               />
@@ -517,7 +463,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Applications"
             title="面向多类采购与应用场景"
-            description="以下为 AI 应用示意图，仅用于说明原料选型方向，不代表已合作客户、成品性能或供货承诺。"
+            description="以下图片用于说明原料选型方向，具体成品性能与供货条件以双方确认资料为准。"
           />
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {generatedAssets.applications.map((item) => (
@@ -542,7 +488,7 @@ export default async function HomePage() {
           <div className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <SectionHeading
               eyebrow="Factory Media"
-              title="视频与图片实拍"
+              title="视频与图片"
               description="视频默认不自动加载和播放，配置 poster 后由访客点击观看。"
             />
             <ButtonLink href="/media" variant="outline">

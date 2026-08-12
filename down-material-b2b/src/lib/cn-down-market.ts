@@ -3,7 +3,7 @@ import { getPrisma } from "@/lib/prisma";
 
 const apiBaseUrl = "https://www.cn-down.com/cndown/api/portal/featherPrice";
 const sourceName = "羽绒金网公开行情（cn-down.com）";
-const specification = "羽绒服装 GB/T 14272-2021 · 90%";
+const targetStandardId = "1";
 
 export const cnDownProducts = [
   { featherNameId: "1", productName: "白鹅绒", sortOrder: 0 },
@@ -22,12 +22,33 @@ const historyItemSchema = z.object({
   publishDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
 });
 
+const priceInfoSchema = z.object({
+  standard: z.array(
+    z.object({
+      id: z.string(),
+      standardName: z.string(),
+      specification: z
+        .array(
+          z.object({
+            id: z.string(),
+            specification: z.number().positive()
+          })
+        )
+        .nullable()
+    })
+  )
+});
+
 type MarketFetch = typeof fetch;
 type HistoryItem = z.infer<typeof historyItemSchema>;
 
 export const cnDownSnapshotSchema = z.object({
   featherNameId: z.string(),
   productName: z.string(),
+  standardId: z.string(),
+  standardName: z.string(),
+  specificationId: z.string(),
+  specificationValue: z.number().positive(),
   sortOrder: z.number().int().nonnegative(),
   currentPrice: z.number().nonnegative(),
   priceChange: z.number(),
@@ -65,19 +86,19 @@ function dateAtShanghaiMidnight(value: string) {
 
 async function requestApi<T>(
   endpoint: string,
-  payload: Record<string, string>,
+  payload: Record<string, string> | null,
   schema: z.ZodType<T>,
   fetcher: MarketFetch
 ) {
   const response = await fetcher(`${apiBaseUrl}/${endpoint}`, {
-    method: "POST",
+    method: payload ? "POST" : "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json; charset=UTF-8",
       Lang: "zh_CN",
       "User-Agent": "YuanfangDownMarketSync/1.0 (+https://yf-down.com/market)"
     },
-    body: JSON.stringify(payload),
+    body: payload ? JSON.stringify(payload) : undefined,
     signal: AbortSignal.timeout(15_000)
   });
   if (!response.ok) {
@@ -118,33 +139,55 @@ export async function fetchCnDownMarket(
   const startDate = dateDaysAgo(now, 90);
   const endDate = shanghaiDate(now);
   const snapshots = [];
+  const priceInfo = await requestApi(
+    "getFeatherPriceInfo",
+    null,
+    priceInfoSchema,
+    fetcher
+  );
+  const standard = priceInfo.standard.find(
+    (item) => item.id === targetStandardId
+  );
+  if (!standard?.specification?.length) {
+    throw new Error("羽绒金网未返回可用的绒子含量规格");
+  }
 
   for (const product of cnDownProducts) {
-    const commonPayload = {
-      standardId: "1",
-      featherNameId: product.featherNameId,
-      specificationId: "3",
-      startDate,
-      endDate
-    };
-    const current = await requestApi(
-      "getFeatherPriceKeyDataAnalysis",
-      commonPayload,
-      currentDataSchema,
-      fetcher
-    );
-    const history = await requestApi(
-      "getFeatherPriceByTime",
-      commonPayload,
-      z.array(historyItemSchema),
-      fetcher
-    );
-    snapshots.push({
-      ...product,
-      currentPrice: current.currentPrice,
-      priceChange: Number(current.priceChange),
-      history: addHistoryChanges(history)
-    });
+    for (const [
+      specificationIndex,
+      specification
+    ] of standard.specification.entries()) {
+      const commonPayload = {
+        standardId: standard.id,
+        featherNameId: product.featherNameId,
+        specificationId: specification.id,
+        startDate,
+        endDate
+      };
+      const current = await requestApi(
+        "getFeatherPriceKeyDataAnalysis",
+        commonPayload,
+        currentDataSchema,
+        fetcher
+      );
+      const history = await requestApi(
+        "getFeatherPriceByTime",
+        commonPayload,
+        z.array(historyItemSchema),
+        fetcher
+      );
+      snapshots.push({
+        ...product,
+        standardId: standard.id,
+        standardName: standard.standardName,
+        specificationId: specification.id,
+        specificationValue: specification.specification,
+        sortOrder: product.sortOrder * 100 + specificationIndex,
+        currentPrice: current.currentPrice,
+        priceChange: Number(current.priceChange),
+        history: addHistoryChanges(history)
+      });
+    }
   }
 
   return cnDownSnapshotsSchema.parse(snapshots);
@@ -160,6 +203,7 @@ export async function persistCnDownMarket(
   let latestDate: string | null = null;
 
   for (const snapshot of snapshots) {
+    const specification = `${snapshot.standardName} · 绒子含量 ${snapshot.specificationValue}%`;
     const latestHistory = snapshot.history.at(-1);
     if (
       latestHistory &&
@@ -173,11 +217,22 @@ export async function persistCnDownMarket(
     let quote = await prisma.marketQuote.findFirst({
       where: {
         productName: snapshot.productName,
+        specification,
         sourceNote: { contains: "羽绒金网" },
         deletedAt: null
       }
     });
-    if (!quote) {
+    if (!quote && snapshot.specificationValue === 90) {
+      quote = await prisma.marketQuote.findFirst({
+        where: {
+          productName: snapshot.productName,
+          specification: { contains: "90%" },
+          sourceNote: { contains: "羽绒金网" },
+          deletedAt: null
+        }
+      });
+    }
+    if (!quote && snapshot.specificationValue === 90) {
       quote = await prisma.marketQuote.findFirst({
         where: {
           productName: snapshot.productName,
@@ -276,6 +331,10 @@ export async function persistCnDownMarket(
       summary: `同步羽绒金网公开行情：${snapshots.length} 个品种`,
       metadata: {
         source: "https://www.cn-down.com/",
+        standardId: targetStandardId,
+        specifications: [
+          ...new Set(snapshots.map((item) => item.specificationValue))
+        ],
         historyCreated,
         historyUpdated,
         latestDate

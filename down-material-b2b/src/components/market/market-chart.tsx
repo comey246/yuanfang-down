@@ -12,7 +12,13 @@ import {
 } from "recharts";
 import type { MarketPoint } from "@/types";
 
-export function MarketChart({ points }: { points: MarketPoint[] }) {
+export function MarketChart({
+  points,
+  title = "已发布报价趋势"
+}: {
+  points: MarketPoint[];
+  title?: string;
+}) {
   const [range, setRange] = useState<7 | 30 | 90>(30);
   const { data, productNames } = useMemo(() => {
     const latestTimestamp = Math.max(
@@ -54,7 +60,7 @@ export function MarketChart({ points }: { points: MarketPoint[] }) {
   return (
     <div className="rounded-xl2 border border-slate-200 bg-white p-5">
       <div className="mb-5 flex items-center justify-between">
-        <h3 className="font-bold text-ink">已发布报价趋势</h3>
+        <h3 className="font-bold text-ink">{title}</h3>
         <div className="flex rounded-lg bg-slate-100 p-1">
           {([7, 30, 90] as const).map((item) => (
             <button

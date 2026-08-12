@@ -41,9 +41,9 @@ export default async function AdminMarketPage({
         ) : null}
       </div>
       <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-900">
-        系统每天北京时间 09:20 同步羽绒金网匿名公开查询接口，当前固定读取 GB/T
-        14272-2021 的 90%
-        规格。自动任务异常时继续保留最后一次成功数据；人工价格仍须注明真实来源。
+        系统每天北京时间 09:20 同步羽绒金网匿名公开查询接口，读取 GB/T
+        14272-2021
+        当前提供的全部绒子含量规格。自动任务异常时继续保留最后一次成功数据；人工价格仍须注明真实来源。
       </div>
       <form
         action={saveMarketQuote}

@@ -4,7 +4,7 @@ import "@/app/globals.css";
 import { PublicChrome } from "@/components/layout/public-chrome";
 import { CustomerServiceSlot } from "@/components/layout/customer-service-slot";
 import { siteConfig } from "@/config/site";
-import { safeJsonLd } from "@/lib/utils";
+import { isConfiguredValue, safeJsonLd } from "@/lib/utils";
 import { getCompanyProfile, getSiteOptions } from "@/lib/data";
 import { generatedAssets } from "@/config/generated-assets";
 
@@ -90,10 +90,9 @@ export default async function RootLayout({
     url: siteConfig.baseUrl,
     telephone: profile.phone === "待填写" ? undefined : profile.phone,
     email: profile.email === "待填写" ? undefined : profile.email,
-    address:
-      profile.address === "待填写"
-        ? undefined
-        : { "@type": "PostalAddress", streetAddress: profile.address }
+    address: isConfiguredValue(profile.address)
+      ? { "@type": "PostalAddress", streetAddress: profile.address }
+      : undefined
   };
   return (
     <html lang="zh-CN">

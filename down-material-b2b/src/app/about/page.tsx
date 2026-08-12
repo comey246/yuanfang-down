@@ -5,6 +5,7 @@ import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { generatedAssets } from "@/config/generated-assets";
 import { getCompanyProfile } from "@/lib/data";
 import { createMetadata } from "@/lib/seo";
+import { isConfiguredValue } from "@/lib/utils";
 
 export const metadata: Metadata = createMetadata(
   "关于工厂",
@@ -24,7 +25,7 @@ export default async function AboutPage() {
       <Container className="py-14 sm:py-20">
         <div className="grid gap-10 lg:grid-cols-2 lg:items-center">
           <MediaPlaceholder
-            label="企业与工厂概念形象"
+            label="企业与工厂形象"
             type="factory"
             src={generatedAssets.posters[0].image}
             className="min-h-[420px] rounded-xl2"
@@ -41,15 +42,17 @@ export default async function AboutPage() {
                 ["统一社会信用代码", profile.creditCode],
                 ["工厂地址", profile.address],
                 ["工作时间", profile.businessHours]
-              ].map(([label, value]) => (
-                <div
-                  key={label}
-                  className="grid grid-cols-[140px_1fr] py-4 text-sm"
-                >
-                  <dt className="text-slate-500">{label}</dt>
-                  <dd className="font-semibold">{value}</dd>
-                </div>
-              ))}
+              ]
+                .filter(([, value]) => isConfiguredValue(value))
+                .map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="grid grid-cols-[140px_1fr] py-4 text-sm"
+                  >
+                    <dt className="text-slate-500">{label}</dt>
+                    <dd className="font-semibold">{value}</dd>
+                  </div>
+                ))}
             </dl>
           </div>
         </div>

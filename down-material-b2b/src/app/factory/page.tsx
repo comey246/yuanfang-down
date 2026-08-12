@@ -17,7 +17,7 @@ import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
   "工厂实力",
-  "通过工厂环境、生产设备、检测实验室、包装仓储和发货实拍了解羽绒原料工厂。所有能力数据须经后台确认。",
+  "了解工厂环境、生产设备、检测实验室、包装仓储和发货等供应能力资料。所有能力数据须经后台确认。",
   "/factory"
 );
 
@@ -25,7 +25,7 @@ const zones = [
   [
     FactoryIcon,
     "工厂环境",
-    "当前为 AI 工厂概念图；厂区边界、环境与物流动线须使用真实资料替换。",
+    "厂区环境、区域规划与物流动线资料由后台维护，具体情况可联系工厂确认。",
     generatedAssets.posters[0].image
   ],
   [
@@ -67,7 +67,7 @@ export default async function FactoryPage() {
       <PageHero
         eyebrow="FACTORY CAPABILITY"
         title="工厂实力，以可核验资料为依据"
-        description="当前图片为 AI 概念示意，不代表本工厂真实现场。本页不展示未经确认的面积、产能、员工或设备数量。"
+        description="工厂能力资料以后台核验发布内容为准。本页不展示未经确认的面积、产能、员工或设备数量。"
       />
       <Container className="py-14 sm:py-20">
         {legacyClaims ? (

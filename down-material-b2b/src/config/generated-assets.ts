@@ -1,6 +1,3 @@
-export const generatedProductNotice =
-  "AI 产品示意图，实际颜色、形态、规格与批次以样品及双方确认资料为准";
-
 export const generatedAssets = {
   hero: "/generated/hero/down-material-hero.webp",
   og: "/generated/seo/social-og.webp",
@@ -59,11 +56,11 @@ export const generatedAssets = {
       image: "/generated/quality/cleanliness.webp"
     },
     {
-      title: "耗氧量检测概念",
+      title: "耗氧量检测说明",
       image: "/generated/quality/oxygen-number.webp"
     },
     {
-      title: "水分率与残脂率分析概念",
+      title: "水分率与残脂率分析",
       image: "/generated/quality/moisture-fat.webp"
     },
     {
@@ -98,15 +95,15 @@ export const generatedAssets = {
   },
   posters: [
     {
-      title: "工厂全景概念",
+      title: "工厂全景",
       image: "/generated/posters/factory-overview.webp"
     },
     {
-      title: "清洗过程概念",
+      title: "清洗过程",
       image: "/generated/posters/washing-process.webp"
     },
     {
-      title: "质量检测概念",
+      title: "质量检测",
       image: "/generated/posters/quality-inspection.webp"
     }
   ]

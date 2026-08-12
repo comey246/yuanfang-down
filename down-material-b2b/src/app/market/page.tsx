@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
-import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 import { PageHero } from "@/components/layout/page-hero";
-import { MarketChart } from "@/components/market/market-chart";
+import { MarketQuotes } from "@/components/market/market-quotes";
 import { EmptyState } from "@/components/ui/empty-state";
 import { Container } from "@/components/ui/container";
 import { getMarketHistory, getMarketQuotes } from "@/lib/data";
@@ -33,82 +32,11 @@ export default async function MarketPage() {
             <strong>最后更新时间：</strong>
             {formatDate(lastUpdated)}
           </p>
-          <p>
-            数据来源：
-            <a
-              href="https://www.cn-down.com/"
-              target="_blank"
-              rel="noreferrer"
-              className="font-bold underline"
-            >
-              羽绒金网公开行情
-            </a>
-          </p>
+          <p>数据来源：公开市场行情</p>
         </div>
         {quotes.length ? (
           <>
-            <div className="overflow-x-auto rounded-xl2 border border-slate-200 bg-white">
-              <table className="w-full min-w-[780px] text-left text-sm">
-                <thead className="bg-forest-50">
-                  <tr>
-                    <th className="p-4">品类</th>
-                    <th className="p-4">规格</th>
-                    <th className="p-4">价格区间</th>
-                    <th className="p-4">单位</th>
-                    <th className="p-4">涨跌</th>
-                    <th className="p-4">日期</th>
-                    <th className="p-4">来源说明</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {quotes.map((quote) => (
-                    <tr key={quote.id} className="border-t border-slate-100">
-                      <td className="p-4 font-bold">{quote.productName}</td>
-                      <td className="p-4">{quote.specification}</td>
-                      <td className="p-4">
-                        {quote.priceMin === null && quote.priceMax === null
-                          ? "联系业务获取"
-                          : quote.priceMin === quote.priceMax
-                            ? quote.priceMin
-                            : `${quote.priceMin ?? "—"} – ${quote.priceMax ?? "—"}`}
-                      </td>
-                      <td className="p-4">{quote.unit}</td>
-                      <td className="p-4">
-                        {quote.changeValue === null ? (
-                          <Minus className="size-4 text-slate-400" />
-                        ) : quote.changeValue > 0 ? (
-                          <span className="flex items-center gap-1 text-red-600">
-                            <ArrowUp className="size-4" />
-                            {quote.changeValue}%
-                          </span>
-                        ) : (
-                          <span className="flex items-center gap-1 text-green-700">
-                            <ArrowDown className="size-4" />
-                            {quote.changeValue}%
-                          </span>
-                        )}
-                      </td>
-                      <td className="p-4">{formatDate(quote.quoteDate)}</td>
-                      <td className="p-4 text-slate-500">
-                        {quote.sourceNote.includes("羽绒金网") ? (
-                          <a
-                            href="https://www.cn-down.com/"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="underline"
-                          >
-                            {quote.sourceNote}
-                          </a>
-                        ) : (
-                          quote.sourceNote
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <MarketChart points={history.length ? history : quotes} />
+            <MarketQuotes quotes={quotes} history={history} showChart />
           </>
         ) : (
           <EmptyState

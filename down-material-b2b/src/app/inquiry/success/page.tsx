@@ -12,7 +12,7 @@ export default async function InquirySuccessPage() {
         <ShieldCheck className="mx-auto size-16 text-forest-700" />
         <h1 className="mt-6 text-3xl font-bold text-ink">公开询盘表单已停用</h1>
         <p className="mt-4 leading-7 text-slate-600">
-          本站不再收集或保存访客姓名、手机号和微信号。请打开在线客服，或通过电话、企业微信和邮箱直接与工厂沟通。
+          本站不再收集或保存访客姓名、手机号和微信号。请打开在线客服，或通过电话、企业微信直接与工厂沟通。
         </p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <OnlineServiceButton source="legacy-inquiry-success" size="lg">

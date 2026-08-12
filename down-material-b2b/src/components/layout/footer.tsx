@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, MapPin, MessageCircle, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { MediaPlaceholder } from "@/components/ui/media-placeholder";
 import { siteConfig } from "@/config/site";
@@ -34,7 +34,7 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
             </div>
           </div>
           <p className="mt-5 max-w-sm text-sm leading-7">
-            本网站用于展示羽绒原料供应能力并提供在线客服、电话、微信和邮箱直联。所有参数、价格、证书及检测文件以后台审核发布内容为准。
+            本网站用于展示羽绒原料供应能力并提供在线客服、电话和微信直联。所有参数、价格、证书及检测文件以后台审核发布内容为准。
           </p>
         </div>
         <div>
@@ -47,10 +47,6 @@ export function Footer({ profile }: { profile: CompanyProfile }) {
             <li className="flex gap-2">
               <MessageCircle className="mt-0.5 size-4 shrink-0 text-amber-400" />
               {profile.wechat}
-            </li>
-            <li className="flex gap-2">
-              <Mail className="mt-0.5 size-4 shrink-0 text-amber-400" />
-              {profile.email}
             </li>
             {isConfiguredValue(profile.address) ? (
               <li className="flex gap-2">

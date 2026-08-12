@@ -8,7 +8,6 @@ import {
   Clock,
   Copy,
   ExternalLink,
-  Mail,
   MessageCircle,
   Phone,
   ShieldCheck,
@@ -210,12 +209,12 @@ export function FloatingContact({
                   </p>
                 ) : (
                   <p className="mt-5 rounded-lg border border-white/15 bg-white/10 p-3 text-sm leading-6 text-white/75">
-                    尚未配置第三方客服，请先通过电话、微信或邮箱联系。
+                    尚未配置第三方客服，请先通过电话或微信联系。
                   </p>
                 )}
               </div>
 
-              <div className="grid gap-3 sm:grid-cols-3">
+              <div className="grid gap-3 sm:grid-cols-2">
                 <a
                   href={`tel:${profile.mobile}`}
                   className="text-forest-800 flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 font-bold hover:bg-forest-50"
@@ -235,12 +234,6 @@ export function FloatingContact({
                   )}
                   {copied === "wechat" ? "已复制微信号" : "复制微信号"}
                 </button>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="text-forest-800 flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 font-bold hover:bg-forest-50"
-                >
-                  <Mail className="size-4" /> 邮件联系
-                </a>
               </div>
 
               <div className="grid gap-5 rounded-xl border border-slate-200 p-5 sm:grid-cols-[150px_1fr] sm:items-center">

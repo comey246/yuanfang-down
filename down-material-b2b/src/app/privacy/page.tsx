@@ -38,7 +38,7 @@ export default async function PrivacyPage() {
 
         <h2>2. 你可以主动选择的联系方式</h2>
         <p>
-          你可以自行选择在线客服、电话、企业微信或业务邮箱联系工厂。只有在你主动发起沟通并提供信息后，对应通信渠道才会处理相关资料。建议只提供完成采购沟通所必需的产品、规格、数量、用途和交期信息。
+          你可以自行选择在线客服、电话或企业微信联系工厂。只有在你主动发起沟通并提供信息后，对应通信渠道才会处理相关资料。建议只提供完成采购沟通所必需的产品、规格、数量、用途和交期信息。
         </p>
 
         <h2>3. 在线客服平台</h2>
@@ -90,7 +90,7 @@ export default async function PrivacyPage() {
         <h2>7. 你的权利与联系我们</h2>
         <p>
           你可以向相应通信渠道或运营企业申请查询、更正、复制、删除相关个人信息，或撤回基于同意的处理授权。运营主体：
-          {profile.companyName}；电话：{profile.phone}；邮箱：{profile.email}
+          {profile.companyName}；电话：{profile.phone}
           {isConfiguredValue(profile.address)
             ? `；地址：${profile.address}`
             : ""}

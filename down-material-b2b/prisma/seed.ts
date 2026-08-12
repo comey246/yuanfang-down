@@ -12,6 +12,7 @@ import {
   legacyProductContent,
   legacySiteContent
 } from "../src/config/legacy-content";
+import { publishedArticles } from "../src/content/published-articles";
 
 const prisma = new PrismaClient();
 
@@ -85,34 +86,59 @@ async function main() {
     });
   }
 
-  const articleCategory = await prisma.articleCategory.upsert({
-    where: { slug: "purchasing-guide" },
-    update: {},
-    create: { name: "采购指南", slug: "purchasing-guide" }
-  });
-
-  const articles = [
-    ["羽绒原料采购需要关注哪些指标", "down-purchasing-indicators"],
-    ["鹅绒和鸭绒有什么区别", "goose-down-vs-duck-down"],
-    ["羽绒蓬松度和绒子含量如何理解", "fill-power-and-down-cluster-content"]
-  ];
-
-  for (const [title, slug] of articles) {
-    await prisma.article.upsert({
-      where: { slug },
-      update: {},
+  for (const item of publishedArticles) {
+    const category = await prisma.articleCategory.upsert({
+      where: { slug: item.category.slug },
+      update: { name: item.category.name },
+      create: item.category
+    });
+    const article = await prisma.article.upsert({
+      where: { slug: item.slug },
+      update: {
+        title: item.title,
+        categoryId: category.id,
+        excerpt: item.excerpt,
+        content: item.content,
+        author: item.author,
+        sourceName: item.sourceName,
+        sourceUrl: item.sourceUrl,
+        status: ContentStatus.PUBLISHED,
+        demoNotice: null,
+        seoTitle: item.seoTitle,
+        seoDescription: item.seoDescription,
+        publishedAt: new Date("2026-08-12T00:00:00.000Z"),
+        deletedAt: null
+      },
       create: {
-        title,
-        slug,
-        categoryId: articleCategory.id,
-        excerpt: "演示草稿，内容需经业务与质量负责人核验后方可发布。",
-        content:
-          "本文为内容结构占位，不包含未经核验的检测结论。请在后台完成审核与补充。",
-        author: "待填写",
-        status: ContentStatus.DRAFT,
-        demoNotice: "演示草稿，不直接公开发布"
+        title: item.title,
+        slug: item.slug,
+        categoryId: category.id,
+        excerpt: item.excerpt,
+        content: item.content,
+        author: item.author,
+        sourceName: item.sourceName,
+        sourceUrl: item.sourceUrl,
+        status: ContentStatus.PUBLISHED,
+        seoTitle: item.seoTitle,
+        seoDescription: item.seoDescription,
+        publishedAt: new Date("2026-08-12T00:00:00.000Z")
       }
     });
+    await prisma.$transaction([
+      prisma.fAQ.deleteMany({ where: { articleId: article.id } }),
+      ...item.faqs.map((faq, sortOrder) =>
+        prisma.fAQ.create({
+          data: {
+            articleId: article.id,
+            question: faq.question,
+            answer: faq.answer,
+            category: item.category.name,
+            sortOrder,
+            published: true
+          }
+        })
+      )
+    ]);
   }
 
   const mediaCategories = [
@@ -155,7 +181,6 @@ async function main() {
         phone: legacySiteContent.phone,
         mobile: legacySiteContent.mobile,
         wechat: legacySiteContent.mobile,
-        email: legacySiteContent.email,
         address: "待填写",
         businessHours: "周一至周六 08:30-18:00",
         icpNumber: "待备案",

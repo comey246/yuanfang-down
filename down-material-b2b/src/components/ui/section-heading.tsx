@@ -4,12 +4,14 @@ export function SectionHeading({
   eyebrow,
   title,
   description,
-  align = "left"
+  align = "left",
+  tone = "default"
 }: {
   eyebrow?: string;
   title: string;
   description?: string;
   align?: "left" | "center";
+  tone?: "default" | "inverse";
 }) {
   return (
     <div
@@ -20,11 +22,21 @@ export function SectionHeading({
           {eyebrow}
         </p>
       ) : null}
-      <h2 className="text-balance text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+      <h2
+        className={cn(
+          "text-balance text-3xl font-bold tracking-tight sm:text-4xl",
+          tone === "inverse" ? "text-white" : "text-ink"
+        )}
+      >
         {title}
       </h2>
       {description ? (
-        <p className="mt-4 text-pretty leading-7 text-slate-600">
+        <p
+          className={cn(
+            "mt-4 text-pretty leading-7",
+            tone === "inverse" ? "text-white/75" : "text-slate-600"
+          )}
+        >
           {description}
         </p>
       ) : null}

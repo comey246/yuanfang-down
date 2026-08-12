@@ -257,7 +257,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 在线咨询 {product.name}
               </h2>
               <p className="mt-3 text-sm leading-6 text-slate-600">
-                无需填写姓名或手机号。打开客服窗口后，可直接选择在线客服、电话、企业微信或邮箱沟通。
+                无需填写姓名或手机号。打开客服窗口后，可直接选择在线客服、电话或企业微信沟通。
               </p>
               <OnlineServiceButton
                 product={product.name}

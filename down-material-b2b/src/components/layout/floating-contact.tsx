@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowUp,
   Check,
@@ -10,7 +9,6 @@ import {
   ExternalLink,
   MessageCircle,
   Phone,
-  ShieldCheck,
   X
 } from "lucide-react";
 import {
@@ -34,7 +32,7 @@ export function FloatingContact({
 }) {
   const [open, setOpen] = useState(false);
   const [context, setContext] = useState<CustomerServiceContext>({});
-  const [copied, setCopied] = useState<"wechat" | "request" | null>(null);
+  const [wechatCopied, setWechatCopied] = useState(false);
 
   useEffect(() => {
     function show(event: Event) {
@@ -55,20 +53,10 @@ export function FloatingContact({
     return () => document.removeEventListener("keydown", closeOnEscape);
   }, [open]);
 
-  const requestText = useMemo(
-    () =>
-      [
-        "您好，我想咨询羽绒原料采购。",
-        context.product ? `产品：${context.product}` : "产品：待沟通",
-        context.sample ? "需求：申请样品" : "需求：规格、报价与交期沟通"
-      ].join("\n"),
-    [context.product, context.sample]
-  );
-
-  async function copyText(value: string, type: "wechat" | "request") {
-    await navigator.clipboard.writeText(value);
-    setCopied(type);
-    window.setTimeout(() => setCopied(null), 1800);
+  async function copyWechat() {
+    await navigator.clipboard.writeText(profile.wechat);
+    setWechatCopied(true);
+    window.setTimeout(() => setWechatCopied(false), 1800);
   }
 
   const providerConfigured = configured(options.customerServiceProviderName);
@@ -224,15 +212,15 @@ export function FloatingContact({
                 <button
                   type="button"
                   disabled={!configured(profile.wechat)}
-                  onClick={() => copyText(profile.wechat, "wechat")}
+                  onClick={copyWechat}
                   className="text-forest-800 flex min-h-12 items-center justify-center gap-2 rounded-lg border border-slate-200 font-bold hover:bg-forest-50 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {copied === "wechat" ? (
+                  {wechatCopied ? (
                     <Check className="size-4" />
                   ) : (
                     <Copy className="size-4" />
                   )}
-                  {copied === "wechat" ? "已复制微信号" : "复制微信号"}
+                  {wechatCopied ? "已复制微信号" : "复制微信号"}
                 </button>
               </div>
 
@@ -248,36 +236,7 @@ export function FloatingContact({
                   <p className="mt-2 text-sm leading-6 text-slate-600">
                     微信号：{profile.wechat}。添加时可备注产品名称与采购用途。
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => copyText(requestText, "request")}
-                    className="text-forest-800 mt-4 inline-flex min-h-10 items-center gap-2 rounded-lg bg-forest-50 px-4 text-sm font-bold hover:bg-forest-100"
-                  >
-                    {copied === "request" ? (
-                      <Check className="size-4" />
-                    ) : (
-                      <Copy className="size-4" />
-                    )}
-                    {copied === "request"
-                      ? "咨询内容已复制"
-                      : "复制采购咨询内容"}
-                  </button>
                 </div>
-              </div>
-
-              <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-600">
-                <ShieldCheck className="mt-0.5 size-4 shrink-0 text-forest-700" />
-                <p>
-                  本站不提供询盘表单，也不会将聊天内容或你主动提供的联系方式写入
-                  Supabase。开始聊天前，请阅读
-                  <Link
-                    href="/privacy"
-                    className="mx-1 font-bold text-forest-700 underline"
-                  >
-                    隐私政策
-                  </Link>
-                  及客服平台提示。
-                </p>
               </div>
 
               <p className="flex items-center gap-2 text-xs text-slate-500">

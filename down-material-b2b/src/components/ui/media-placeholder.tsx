@@ -69,7 +69,7 @@ export function MediaPlaceholder({
         className
       )}
       role="img"
-      aria-label={`${label}，本地占位图，发布前替换`}
+      aria-label={label}
     >
       <div className="absolute inset-0 opacity-20 [background-image:linear-gradient(120deg,transparent_45%,rgba(255,255,255,.25)_50%,transparent_55%)] [background-size:42px_42px]" />
       <div className="relative px-6 text-center">
@@ -78,7 +78,6 @@ export function MediaPlaceholder({
           aria-hidden="true"
         />
         <p className="font-semibold">{label}</p>
-        <p className="mt-1 text-xs text-white/65">真实授权素材待替换</p>
       </div>
     </div>
   );

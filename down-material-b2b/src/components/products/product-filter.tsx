@@ -94,11 +94,6 @@ export function ProductFilter({ products }: { products: DemoProduct[] }) {
                     </Link>
                   </h2>
                 </div>
-                {product.demo ? (
-                  <span className="rounded-full bg-amber-50 px-2.5 py-1 text-[11px] font-semibold text-amber-700">
-                    示例待替换
-                  </span>
-                ) : null}
               </div>
               <p className="mt-3 min-h-12 text-sm leading-6 text-slate-600">
                 {product.summary}

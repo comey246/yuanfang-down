@@ -139,9 +139,7 @@ function productToView(
     include: { category: true; specifications: true };
   }>
 ): DemoProduct {
-  const generated = product.demoNotice
-    ? getGeneratedProductAssets(product.slug)
-    : null;
+  const generated = getGeneratedProductAssets(product.slug);
   const useGeneratedCover =
     generated &&
     (!product.coverImage || product.coverImage.startsWith("/legacy-assets/"));
@@ -196,7 +194,7 @@ function productToView(
         unit: item.unit,
         groupName: item.groupName
       })),
-    demo: Boolean(product.demoNotice)
+    demo: false
   };
 }
 

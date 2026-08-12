@@ -72,7 +72,7 @@ export default async function QualityPage() {
           })}
         </div>
         <section className="mt-14">
-          <h2 className="text-3xl font-bold">质量指标科普示意</h2>
+          <h2 className="text-3xl font-bold">质量指标说明</h2>
           <p className="mt-3 text-slate-600">
             下列图片用于解释指标和资料分级，不是本工厂检测现场，也不包含任何产品检测结果。
           </p>

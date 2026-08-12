@@ -1,7 +1,6 @@
 import { ContentStatus, Prisma, PrismaClient } from "@prisma/client";
 import {
   legacyDataNotice,
-  legacyDemoNotice,
   legacyHistoricalClaims,
   legacyProductContent,
   legacySiteContent
@@ -107,7 +106,7 @@ async function main() {
         qualityNote: `${legacyDataNotice}；实际参数以双方确认的样品、合同及检测文件为准。`,
         status: ContentStatus.PUBLISHED,
         publishedAt: product.publishedAt || new Date(),
-        demoNotice: `${legacyDemoNotice}；产品参数${legacyDataNotice}`
+        demoNotice: null
       }
     });
     updatedProducts += 1;

@@ -22,6 +22,7 @@
     "db:migrate:legacy-content": "tsx --env-file=.env scripts/migrate-legacy-content.ts",
     "market:sync": "tsx --env-file=.env scripts/sync-cn-down-market.ts",
     "articles:publish": "tsx --env-file=.env scripts/publish-articles.ts",
+    "content:clean-placeholders": "tsx --env-file=.env scripts/clean-public-placeholders.ts",
     "db:studio": "prisma studio",
     "supabase:link": "npx --yes supabase@2.109.1 link --project-ref alxqluiwyrfezldhuzku",
     "supabase:push": "npx --yes supabase@2.109.1 db push --include-all",

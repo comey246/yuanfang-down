@@ -18,7 +18,7 @@ export default async function ProductsPage() {
       <PageHero
         eyebrow="PRODUCT CATALOG"
         title="羽绒原料目录"
-        description="按种类、颜色与定制能力筛选原料。演示条目不代表真实库存、参数、价格或供货承诺。"
+        description="按种类、颜色与定制能力筛选原料，具体规格、价格和供货条件请联系业务人员确认。"
       />
       <Container className="py-14 sm:py-20">
         <ProductFilter products={products} />

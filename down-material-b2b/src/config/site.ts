@@ -29,7 +29,6 @@ export const siteConfig = {
     { href: "/", label: "首页" },
     { href: "/products", label: "羽绒原料" },
     { href: "/market", label: "今日行情" },
-    { href: "/factory", label: "工厂实力" },
     { href: "/process", label: "生产工艺" },
     { href: "/quality", label: "质量检测" },
     { href: "/media", label: "图片中心" },

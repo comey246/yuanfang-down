@@ -6,7 +6,7 @@ import type { DemoProduct } from "@/types";
 
 const shared = {
   description:
-    "本条目为网站结构演示数据。原料来源、具体规格、质量指标、包装、起订量、供货能力和交付周期均须由工厂核实后在后台填写。",
+    "产品规格、质量指标、包装、起订量、供货能力与交付周期以双方确认的样品、检测文件、报价单及合同为准。",
   customization: true,
   sampleAvailable: true,
   showPrice: false,
@@ -26,7 +26,7 @@ const shared = {
   customItems: [],
   qualityNote: `${legacyDataNotice}；实际质量参数以双方确认的样品、合同及检测文件为准。`,
   specifications: [],
-  demo: true as const
+  demo: false as const
 };
 
 export const demoProducts: DemoProduct[] = [

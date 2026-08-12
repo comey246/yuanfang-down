@@ -1,15 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { demoProducts } from "@/lib/demo-data";
 import {
-  legacyDemoNotice,
   legacyHistoricalClaims,
   legacySiteContent
 } from "@/config/legacy-content";
 
-describe("演示产品数据安全", () => {
-  it("四个演示产品均明确标记为示例", () => {
+describe("初始化产品数据安全", () => {
+  it("四个初始化产品不在前台显示示例标记", () => {
     expect(demoProducts).toHaveLength(4);
-    expect(demoProducts.every((product) => product.demo)).toBe(true);
+    expect(demoProducts.every((product) => !product.demo)).toBe(true);
   });
 
   it("只迁移旧站明确出现的绒子含量区间", () => {
@@ -28,11 +27,10 @@ describe("演示产品数据安全", () => {
     }
   });
 
-  it("演示产品使用独立的本地图片目录", () => {
+  it("初始化产品使用独立的本地图片目录", () => {
     for (const product of demoProducts) {
       expect(product.coverImage).toMatch(/^\/generated\/products\//);
     }
-    expect(legacyDemoNotice).toContain("演示素材");
   });
 
   it("旧站历史经营与质量声明保持未核验状态", () => {

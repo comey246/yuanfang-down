@@ -108,8 +108,8 @@ export default async function ProductDetailPage({ params }: Props) {
                     key={image}
                     label={
                       index === 0
-                        ? `${product.name}原料检视示意`
-                        : `${product.name}无品牌样品包装示意`
+                        ? `${product.name}原料检视`
+                        : `${product.name}样品包装`
                     }
                     src={image}
                     className="min-h-28 rounded-xl"
@@ -125,11 +125,6 @@ export default async function ProductDetailPage({ params }: Props) {
                 <h1 className="text-4xl font-bold tracking-tight text-ink">
                   {product.name}
                 </h1>
-                {product.demo ? (
-                  <span className="rounded-full bg-amber-50 px-3 py-1 text-xs font-bold text-amber-700">
-                    示例数据，发布前需替换
-                  </span>
-                ) : null}
               </div>
               <p className="mt-5 text-lg leading-8 text-slate-600">
                 {product.summary}
@@ -280,10 +275,7 @@ export default async function ProductDetailPage({ params }: Props) {
               </OnlineServiceButton>
               <div className="mt-6 flex items-start gap-3 rounded-xl bg-slate-50 p-4 text-xs leading-5 text-slate-600">
                 <ShieldCheck className="mt-0.5 size-4 shrink-0 text-forest-700" />
-                <p>
-                  本站不保存聊天内容，也不会把你主动提供的联系方式写入
-                  Supabase。
-                </p>
+                <p>本站不保存在线客服聊天内容或你主动提供的联系方式。</p>
               </div>
             </aside>
           </div>
